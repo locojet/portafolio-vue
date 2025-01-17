@@ -74,7 +74,7 @@
     top: 0; /* Fija el elemento en la parte superior */
     height: 100vh; /* El video ocupa toda la altura del viewport */
     background-color: black; /* Fondo negro */
-    z-index: 10; /* Asegura que el sticky esté sobre otros elementos */
+    z-index: -2; /* Asegura que el sticky esté sobre otros elementos */
   }
   
   .sticky-child video {
