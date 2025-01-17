@@ -6,6 +6,7 @@ import VideoInicio from './components/VideoInicio.vue';
 import Whatup from './components/Whatup.vue';
 import Mevideo from './components/Mevideo.vue';
 import Services from './components/Services.vue';
+
 </script>
 
 <template>
@@ -16,7 +17,8 @@ import Services from './components/Services.vue';
     <Navdesktop />
     <Whatup />
     <Mevideo />
-    <Services />
+    
+    
     
     
     

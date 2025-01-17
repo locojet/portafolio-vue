@@ -1,5 +1,4 @@
 /* Variables de colores */
-/* ./src/index.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,11 +7,13 @@
   --primary-color: #fff;
   --secondary-color: #74f6fd;
   --tertiary-color: #000;
-  --quaternary-color: #d69393; /*#d69393  #cbcd57 #FFEB0*/
+  --quaternary-color: #d69393; /* #d69393  #cbcd57 #FFEB0 */
 }
 
 /* Reset y estilos globales */
 * {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
   font-family: 'Orbitron', sans-serif;
   user-select: none;
@@ -27,31 +28,25 @@
 html {
   position: relative;
   min-width: 100%;
+  scroll-behavior: smooth;
 }
 
 body {
-  
   background-size: 80% auto;
   background-position-y: -100%;
-  overflow:scroll;
   overflow-x: hidden;
   margin: 0;
   color: #fff;
   font-family: 'Orbitron', 'Bebas Neue', 'PT Sans Narrow', 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Oxygen', 'Ubuntu', 'Cantarell', 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
-
-
-
-
-
+/* Media Queries */
 @media screen and (max-width: 1024px) {
   body {
     background-size: contain;
     background-repeat: no-repeat;
     background-position-y: 50%;
-    overflow: hidden;
-   
+    overflow: auto; /* Asegura que Safari Mobile no bloquee scroll */
   }
 }
 
@@ -66,8 +61,6 @@ body {
   display: flex;
   transition: opacity 1s ease-out;
 }
-
-
 
 @media screen and (max-width: 768px) {
   #preloader {
@@ -108,7 +101,6 @@ nav {
   font-size: calc(2vw + 1.5vh);
   text-transform: uppercase;
   margin: 0;
-  
 }
 
 ul {
@@ -125,88 +117,32 @@ li {
   text-align: center;
 }
 
-.bild {
-  position: relative;
-  border-radius: 1.5rem;
-  top: 2.2rem;
+/* Sticky Container */
+.sticky-container {
+  position: relative; /* Necesario para que sticky funcione */
+  height: 3000px; /* Espacio para scroll */
+  overflow: visible; /* Asegura compatibilidad con Safari */
 }
 
-.bild img {
+.holder {
+  position: -webkit-sticky; /* Soporte para Safari */
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  z-index: 10;
+  background-color: black;
+}
+
+/* Video Styles */
+.sticky-container video {
   width: 100%;
-  height: 6rem;
+  height: 100%;
   object-fit: cover;
-  margin: 0;
-  opacity: 0;
-  margin-bottom: 8px;
-  transition: all 0.5s ease-in-out;
-}
-
-
-
-.bild:hover .text {
-  rotate: 0deg;
-  margin-top: -0.2rem;
-  scale: 1.1;
-  margin-left: 1rem;
-  background: rgba(102, 31, 23, 0);
-  filter: blur(0);
-  text-shadow: #000 2px 7px 8px;
-}
-
-.bild img {
-  opacity: 0;
-}
-
-.bild:hover img {
+  display: block;
+  border-radius: 1.5rem;
+  filter: none;
+  transition: none;
   opacity: 1;
-}
-
-@media screen and (max-width: 1000px) {
-  .bild:hover .text {
-    rotate: -6deg;
-    top: 45px;
-  }
-  body,
-  html {
-    overflow-x: hidden;
-  }
-  body {
-    background-position-y: 80%;
-    background-attachment: fixed;
-  }
-  .text {
-    filter: blur(0);
-    text-shadow: #000 2px 7px 8px;
-    border-radius: 0.6rem;
-    transform: rotate(-6deg);
-  }
-  .bild:hover img {
-    opacity: 0;
-  }
-  ul {
-    display: block;
-    margin-top: 0rem;
-  }
-  #holder {
-    height: 100vh;
-  }
-  li {
-    height: auto;
-    margin: 0 auto;
-    text-align: center;
-  }
-  nav {
-    font-size: calc(2vw + 3vh);
-  }
-  li:nth-child(1) {
-    margin-left: 4rem;
-  }
-  li:nth-child(2) {
-    margin-left: 0rem;
-  }
-  li:nth-child(3) {
-    margin-left: -3rem;
-  }
 }
 
 /* Main Section */
@@ -217,16 +153,13 @@ main {
   height: 40vh;
   position: relative;
   transition: all 0.5s ease-in-out;
-  /*box-shadow: #000 1px 2px 15px;*/
   transform: scale(140%);
   top: -5rem;
-  
 }
 
 main:hover {
   margin-top: 0rem;
   height: 48vh;
-  
 }
 
 main video {
@@ -234,32 +167,25 @@ main video {
   height: 100%;
   object-fit: cover;
   border-radius: 1.5rem;
-  filter: blur(3px) grayscale(0.8) brightness(0.6); /* Agregado el filtro brightness */
-  opacity: 0.7;
+  filter: none;
+  opacity: 1;
   transition: all 0.3s ease-in-out;
-  
-  top: -5rem;
 }
-
 
 .video-container {
   position: relative;
   height: 100%;
-  
 }
 
 .video-text {
   position: absolute;
   top: 50%;
   left: 50%;
-  padding-top: 7rem;
   transform: translate(-50%, -50%);
   color: #fff;
   z-index: 1;
   font-family: myFont, sans-serif;
   font-size: calc(5.5vw + 2.5vh);
-  width: 100%;
-  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -274,8 +200,7 @@ main video {
 
 .video-container:hover video {
   opacity: 1;
-  filter: blur(0) grayscale(0)brightness(0.8);
-
+  filter: blur(0);
 }
 
 @media screen and (max-width: 1024px) {
@@ -288,28 +213,10 @@ main video {
     scale: 1.1;
   }
   main video {
-    filter: blur(0) grayscale(0);
-    box-shadow: 0 0 0 0 #78ced1;
-    margin-left: 0rem;
-    border-radius: 0;
+    filter: none;
     opacity: 1;
-    
-  }
-  .video-text {
-    opacity: 0;
-  }
-  main:hover {
-    margin-top: -8rem;
-    transform: scale(1.15);
-  }
-  main:hover {
-    margin-top: 0rem;
-    height: 45;
-    top: rem;
   }
 }
-
-
 
 /* Footer */
 .rechte {
@@ -333,11 +240,3 @@ div a {
     margin: 2px 10px 2px 10px;
   }
 }
-
-@media screen and (min-width: 1024px){
-  .video-container{
-    top: 8rem;
-  }
-}
-
- 
