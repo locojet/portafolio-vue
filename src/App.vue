@@ -16,6 +16,7 @@ import Services from './components/Services.vue';
     <Navdesktop />
     <Whatup />
     <Mevideo />
+    <Services />
     
     
     

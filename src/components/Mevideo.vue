@@ -62,9 +62,9 @@
   <style>
   /* Contenedor Padre */
   .parent-element {
-    position: absolute; /* Proporciona contexto para el sticky */
-    overflow: visible; /* Permite que el hijo sticky sea visible */
-    height: 3000px; /* Espacio suficiente para scroll */
+    /*position: absolute;
+    overflow: visible;
+    height: 3000px; */
     width: 100%; /* Asegura que el contenedor ocupe el ancho completo */
     margin-top: -8rem;
     
@@ -88,7 +88,7 @@
   /* Ajustes para Pantallas Pequeñas */
 @media (max-width: 1024px) {
   .parent-element {
-    height: 2000px; /* Ajusta la altura para móviles */
+   /* height: 2000px; /* Ajusta la altura para móviles */
     margin-top: -9rem;
     
   }
