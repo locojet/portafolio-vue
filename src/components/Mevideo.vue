@@ -76,15 +76,34 @@ export default {
   position: sticky; /* Activa el comportamiento sticky */
   top: 0; /* Fija el elemento en la parte superior */
   height: 100vh; /* El video ocupa toda la altura del viewport */
+  width: 100vw; /* Volle Breite des Viewports */
   background-color: black; /* Fondo negro */
   z-index: -1; /* El video está detrás del contenido */
+  aspect-ratio: 16 / 9; /* Falls das Video 16:9 ist */
+  overflow: hidden;
+  
 }
 
 .sticky-child video {
-  width: 100%; /* El video ocupa todo el ancho del contenedor */
-  height: 100%; /* El video ocupa toda la altura del sticky */
+  width: 100vw; /* El video ocupa todo el ancho del contenedor */
+  height: 100vh; /* El video ocupa toda la altura del sticky */
   object-fit: cover; /* Ajusta el video para llenar el contenedor */
+  object-position: center; /* Zentriert das Video */
+  z-index: 1;
+  position: relative;
   
+  
+}
+.sticky-child::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none; /* Kein Blockieren der Interaktion */
+  background: radial-gradient(circle, transparent, rgba(0, 0, 0, 1) 85%);
 }
 
 /* Sección de Contenido */
@@ -113,6 +132,9 @@ export default {
 
 /* Ajustes para Pantallas Pequeñas */
 @media (max-width: 1024px) {
+  .sticky-child::before{
+    background: radial-gradient(circle, transparent, rgba(0, 0, 0, 1) 100%);
+  }
   .parent-element {
     height: 520vh; /* Ajusta la altura para móviles */
     margin-top: -50rem;
