@@ -1,8 +1,18 @@
+
+
+
 /* Variables de colores */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+
+@media (hover: none) and (pointer: coarse) {
+  /* Hover deaktivieren für Touch-Geräte */
+  .video-container {
+    pointer-events: none; /* Hover ignorieren */
+  }
+}
 :root {
   --primary-color: #fff;
   --secondary-color: #74f6fd;
