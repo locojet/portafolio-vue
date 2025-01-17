@@ -1,5 +1,5 @@
 <template>
-  <section class="parent-element wraperr">
+  <section class="parent-element wraperr container-1">
     <!-- Sticky Video Element -->
     <div class="sticky-child">
       <video ref="video" autoplay muted playsinline loop preload="auto">
@@ -9,7 +9,7 @@
     </div>
 
     <!-- Content Section -->
-    <div class="content-section">
+    <div class="content-section container-2">
       <div class="text-container">
         <h3 class="text-3xl font-semibold text-white mb-8 text-center">What I Can Do for You</h3>
         <div class="grid grid-cols-1 gap-x-8 gap-y-6 text-lg font-medium text-gray-300 sm:grid-cols-2 md:grid-cols-3 lg:gap-x-10">
@@ -55,17 +55,19 @@ export default {
 };
 </script>
 
+
+
 <style scoped>
 .wraperr{
   overflow-x: hidden;
 }
 /* Contenedor Padre */
 .parent-element {
-  min-height: 650vh; /* Suficiente altura para scroll */
+  min-height: 320vh; /* Suficiente altura para scroll */
   position: relative;
   overflow: visible;
   width: 100%; /* Asegura que el contenedor ocupe el ancho completo */
-  margin-top: -8rem;
+  margin-top: -80rem;
 }
 
 /* Elemento Sticky con Video */
@@ -91,6 +93,8 @@ export default {
   background: rgba(0, 0, 0, 0.7); /* Fondo semitransparente para mejorar visibilidad */
   padding-top: 2rem;
   top: 70rem;
+  
+  
 }
 
 .text-container {
@@ -119,8 +123,7 @@ export default {
     padding: 1rem;
   }
   .text-container {
-  padding: 2rem;
-  
-}
+    padding: 2rem;
+  }
 }
 </style>

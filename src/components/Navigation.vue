@@ -78,7 +78,7 @@
     height: 7rem;
     background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(5px);
-    z-index: 1;
+    z-index: 1900;
     opacity: 0;
     transform: rotate(-6deg);
     pointer-events: none;

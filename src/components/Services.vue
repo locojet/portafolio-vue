@@ -1,62 +1,63 @@
 <template>
-    <div class="container-about relative isolate overflow-hidden bg-gray-900">
-      <!-- Video Background -->
-      <VideoBackground />
-  
-      <!-- Centered Text -->
-      <CenteredText />
-  
-      <!-- Content Below the Video -->
-      <div class="bg-gray-900 pt-24 pb-16 sm:pt-32 sm:pb-24">
-        <!-- Main Content -->
-        <div class="text-container mx-auto max-w-7xl px-6 lg:px-8">
-          <div class="mx-auto mt-16 max-w-2xl lg:mx-0 lg:max-w-none">
-            <h3 class="text-3xl font-semibold text-white mb-8 text-center">What I Can Do for You</h3>
-            <div class="grid grid-cols-1 gap-x-8 gap-y-6 text-lg font-medium text-gray-300 sm:grid-cols-2 md:grid-cols-3 lg:gap-x-10">
-              <div class="service-card text-center">
-                <i class="fas fa-laptop-code text-4xl text-white mb-4 animate-bounce"></i>
-                <h4 class="text-xl font-semibold text-white">Frontend Wizardry</h4>
-                <p>Crafting sleek and responsive user interfaces with HTML, CSS, and JavaScript that feel like magic.</p>
-              </div>
-              <div class="service-card text-center">
-                <i class="fas fa-server text-4xl text-white mb-4 animate-spin"></i>
-                <h4 class="text-xl font-semibold text-white">Backend Mastery</h4>
-                <p>Building strong, reliable server solutions with Node.js, Express, and MongoDB to keep things running smoothly.</p>
-              </div>
-              <div class="service-card text-center">
-                <i class="fas fa-chart-line text-4xl text-white mb-4 animate-bounce"></i>
-                <h4 class="text-xl font-semibold text-white">SEO Optimization</h4>
-                <p>Making your website a search engine’s best friend and ensuring it gets the spotlight it deserves.</p>
-              </div>
-              <div class="service-card text-center">
-                <i class="fas fa-video text-4xl text-white mb-4 animate-pulse"></i>
-                <h4 class="text-xl font-semibold text-white">Video Storytelling</h4>
-                <p>Creating captivating videos that tell your story with style, energy, and unforgettable visuals.</p>
-              </div>
-              <div class="service-card text-center">
-                <i class="fas fa-camera text-4xl text-white mb-4 animate-bounce"></i>
-                <h4 class="text-xl font-semibold text-white">Photography</h4>
-                <p>Capturing stunning moments and translating them into timeless visual art for brands and individuals alike.</p>
-              </div>
-              <div class="service-card text-center">
-                <i class="fas fa-music text-4xl text-white mb-4 animate-pulse"></i>
-                <h4 class="text-xl font-semibold text-white">Music Magic</h4>
-                <p>Composing and producing music that hits the right notes and perfectly complements your vision.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+  <div class="example-component">
+    <h1>{{ title }}</h1>
+    <h2>{{ subtitle }}</h2>
+    <p>{{ description }}</p>
+
+    <div class="section" v-for="(section, index) in sections" :key="index">
+      <h3>{{ section.title }}</h3>
+      <p>{{ section.text }}</p>
     </div>
-  </template>
-  
-  <script>
-  
-  </script>
-  
-  <style scoped>
-  .container-about {
-    top: -7.5rem;
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'ExampleComponent',
+  data() {
+    return {
+      title: 'Bienvenido a Vue',
+      subtitle: 'Este es un ejemplo básico',
+      description: 'Vue es un framework progresivo para construir interfaces de usuario de forma eficiente y sencilla.',
+      sections: [
+        { title: 'Sección 1', text: 'Este es el texto de la primera sección. En esta sección exploraremos cómo Vue puede ayudarte a estructurar tu aplicación de manera eficiente, utilizando componentes reutilizables y una sintaxis clara. Con Vue, puedes crear aplicaciones robustas y escalables con facilidad, centrándote en las necesidades específicas de tus usuarios.' },
+        { title: 'Sección 2', text: 'Aquí hay algo de información adicional en la segunda sección. En este apartado, discutiremos cómo integrar Vue con otras herramientas modernas como Vuex para la gestión del estado y Vue Router para la navegación entre vistas. Esto te permitirá mantener tu aplicación organizada y modular, incluso cuando crezca en complejidad.' },
+        { title: 'Sección 3', text: 'Finalmente, esta es la tercera sección con más contenido. En esta sección final, nos centraremos en las mejores prácticas para optimizar el rendimiento de tu aplicación Vue. Esto incluye el uso adecuado de directivas, la optimización de componentes y estrategias de carga diferida para mejorar la experiencia del usuario y la velocidad general de la aplicación.' }
+      ]
+    };
   }
-  </style>
-  
+};
+</script>
+
+<style scoped>
+.example-component {
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  color: #42b983;
+}
+
+h2 {
+  color: #35495e;
+}
+
+h3 {
+  color: #2c3e50;
+  margin-top: 20px;
+}
+
+p {
+  color: #606060;
+  font-size: 16px;
+  margin: 10px 0;
+}
+
+.section {
+  margin: 20px 0;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+</style>

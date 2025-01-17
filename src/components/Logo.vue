@@ -12,7 +12,7 @@
 img {
   position: absolute;
   left: 5rem;
-  z-index: 1000;
+  z-index: 2100;
   width: 12vw; /* Incrementa el tamaño cambiando el valor */
   margin: 2rem 0 4rem -3rem;
   min-width: 8rem; /* Ajusta el tamaño mínimo */
