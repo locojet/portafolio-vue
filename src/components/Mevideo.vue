@@ -83,6 +83,7 @@ export default {
   width: 100%; /* El video ocupa todo el ancho del contenedor */
   height: 100%; /* El video ocupa toda la altura del sticky */
   object-fit: cover; /* Ajusta el video para llenar el contenedor */
+  scale: 1.2;
 }
 
 /* Sección de Contenido */
@@ -108,11 +109,12 @@ export default {
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
 }
 
+
 /* Ajustes para Pantallas Pequeñas */
 @media (max-width: 1024px) {
   .parent-element {
     height: 520vh; /* Ajusta la altura para móviles */
-    margin-top: -80rem;
+    margin-top: -50rem;
   }
 
   .sticky-child {
