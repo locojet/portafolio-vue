@@ -17,7 +17,7 @@ img {
   margin: 2rem 0 4rem -3rem;
   min-width: 8rem; /* Ajusta el tamaño mínimo */
   transition: transform 0.2s ease-in-out;
-  transform: scale(1) rotate(0deg); /* Ajusta scale si deseas agrandarlo más */
+  
 }
 
 img:hover {
