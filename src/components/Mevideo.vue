@@ -1,5 +1,5 @@
 <template>
-  <section class="parent-element">
+  <section class="parent-element wraperr">
     <!-- Sticky Video Element -->
     <div class="sticky-child">
       <video ref="video" autoplay muted playsinline loop preload="auto">
@@ -56,6 +56,9 @@ export default {
 </script>
 
 <style scoped>
+.wraperr{
+  overflow-x: hidden;
+}
 /* Contenedor Padre */
 .parent-element {
   min-height: 500vh; /* Suficiente altura para scroll */

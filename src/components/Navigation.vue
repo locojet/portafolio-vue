@@ -1,7 +1,7 @@
 <template>
     <div>
       <!-- Fondo detrás del ícono de hamburguesa -->
-      <div class="fondo" :class="{ active: isTopActive }"></div>
+      <div class=" wraperr fondo" :class="{ active: isTopActive }"></div>
   
       <!-- Contenedor de navegación -->
       <div :class="{ navkorb: true, active: isNavActive, fixed: isFixed }" @click="toggleNav">
@@ -65,6 +65,9 @@
     --tertiary-color: #000;
     --quaternary-color: rgba(27, 87, 87, 0.5);
   }
+  .wraperr{
+  overflow-x: hidden;
+}
   
   /* Fondo detrás del ícono de hamburguesa */
   .fondo {

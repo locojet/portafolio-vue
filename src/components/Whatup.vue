@@ -26,7 +26,7 @@ onMounted(() => {
 <template>
   
     <!-- Saludo animado y flecha hacia abajo -->
-    <div class="greeting-container" :style="{ opacity: greetingOpacity }">
+    <div class="greeting-container wraperr" :style="{ opacity: greetingOpacity }">
       <p class="greeting">Hey, what up!</p>
       <div class="arrow-container" :style="{ opacity: arrowOpacity }">
         <div class="arrow"></div>
@@ -40,6 +40,9 @@ onMounted(() => {
 
 :root {
   --primary-color: #fff;
+}
+.wraperr{
+  overflow-x: hidden;
 }
 
 

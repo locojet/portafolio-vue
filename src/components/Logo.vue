@@ -1,10 +1,13 @@
 <template>
-  <a tabindex="0" href="#">
+  <a tabindex="0" href="#" class="wraperr">
     <img src="/src/assets/img/firma.png" alt="Logo de la web" />
   </a>
 </template>
 
 <style scoped>
+.wraperr{
+  overflow-x: hidden;
+}
 /* Estilos del logo */
 img {
   position: absolute;
