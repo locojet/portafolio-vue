@@ -61,7 +61,7 @@ export default {
 }
 /* Contenedor Padre */
 .parent-element {
-  min-height: 500vh; /* Suficiente altura para scroll */
+  min-height: 650vh; /* Suficiente altura para scroll */
   position: relative;
   overflow: visible;
   width: 100%; /* Asegura que el contenedor ocupe el ancho completo */
