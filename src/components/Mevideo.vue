@@ -67,6 +67,7 @@ export default {
   position: relative;
   overflow: visible;
   width: 100%; /* Asegura que el contenedor ocupe el ancho completo */
+  height: 100%;
   margin-top: -80rem;
 }
 
@@ -83,6 +84,7 @@ export default {
   width: 100%; /* El video ocupa todo el ancho del contenedor */
   height: 100%; /* El video ocupa toda la altura del sticky */
   object-fit: cover; /* Ajusta el video para llenar el contenedor */
+  
 }
 
 /* Sección de Contenido */
@@ -122,6 +124,7 @@ export default {
 
   .content-section {
     padding: 1rem;
+    top: 95vh;
   }
   .text-container {
     padding: 2rem;
