@@ -36,7 +36,7 @@ img:hover {
   img {
     position: fixed;
     left: 0rem;
-    top: 20px;
+    top: 10px;
     width: 10vw; /* Ajusta el tamaño en dispositivos más pequeños */
     transform: scale(0.9) rotate(-2.3deg); 
     transition: all 0.3s ease-in-out;

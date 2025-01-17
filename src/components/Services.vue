@@ -33,6 +33,7 @@ export default {
 .example-component {
   text-align: center;
   font-family: Arial, sans-serif;
+  background: white;
 }
 
 h1 {
