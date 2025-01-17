@@ -59,6 +59,7 @@ body {
     background-repeat: no-repeat;
     background-position-y: 50%;
     overflow-y: auto; /* Asegura scroll funcional */
+    background: var(--quaternary-color);
   }
 }
 
@@ -131,7 +132,7 @@ a:active {
   height: 100%;
   object-fit: cover;
   display: block;
-  border-radius: 1.5rem;
+  
   filter: none;
   transition: none;
   opacity: 1;

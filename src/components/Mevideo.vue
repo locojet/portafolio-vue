@@ -83,7 +83,6 @@ export default {
   width: 100%; /* El video ocupa todo el ancho del contenedor */
   height: 100%; /* El video ocupa toda la altura del sticky */
   object-fit: cover; /* Ajusta el video para llenar el contenedor */
-  scale: 1.2;
 }
 
 /* Sección de Contenido */

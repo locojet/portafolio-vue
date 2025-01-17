@@ -42,13 +42,14 @@ onMounted(() => {
 </script>
 
 <template>
+  <div class="video-inicio-container">
   <div class="banner-container wraperr">
     <!-- Preloader -->
     <div
       id="preloader"
       :class="{ hidden: !isPreloaderVisible }"
     ></div>
-
+    <div class="espacio"></div>
     <!-- Holder Container -->
     <div id="holder" v-if="!isPreloaderVisible">
       <!-- Main Section -->
@@ -67,9 +68,11 @@ onMounted(() => {
      
     </div>
   </div>
+</div>
 </template>
 
 <style scoped>
+
 /* Variables de colores */
 .wraperr{
   overflow-x: hidden;
@@ -115,6 +118,7 @@ onMounted(() => {
   transition: all 1s ease-in-out;
   position: relative;
   z-index: 2;
+ 
  
 }
 
@@ -195,10 +199,14 @@ main video {
 }
 
 @media screen and (max-width: 1024px) {
+  
+  .video-inicio-container{
+    top: -3rem;
+  }
   main {
     
     width: 150%;
-    height: 40vh;
+    height: 50vh;
     margin-top: 5rem;
     margin-left: -5rem;
     rotate: -6deg;
