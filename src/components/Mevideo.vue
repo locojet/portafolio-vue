@@ -11,7 +11,7 @@
   </template>
   
   <script>
-  export default {
+ /* export default {
     name: "StickyVideoExample",
     mounted() {
       const section = this.$el; // Referencia al contenedor principal
@@ -56,7 +56,7 @@
         window.removeEventListener("scroll", handleScroll);
       });
     },
-  };
+  };*/
   </script>
   
   <style>
