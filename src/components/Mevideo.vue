@@ -89,7 +89,7 @@
 @media (max-width: 1024px) {
   .parent-element {
     height: 2000px; /* Ajusta la altura para móviles */
-    margin-top: -8rem;
+    margin-top: -9rem;
     
   }
 
