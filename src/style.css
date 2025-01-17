@@ -90,7 +90,7 @@ body {
   position: relative;
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1024px) {
   #holder {
     max-width: 100%;
     margin: 0 auto;
@@ -107,27 +107,6 @@ a:active {
   transition: all 0.3s ease-in-out;
 }
 
-/* Navegación */
-nav {
-  order: 3;
-  font-size: calc(2vw + 1.5vh);
-  text-transform: uppercase;
-  margin: 0;
-}
-
-ul {
-  list-style: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 3rem;
-  margin-right: 3rem;
-}
-
-li {
-  width: 100%;
-  text-align: center;
-}
 
 /* Sticky Container */
 .sticky-container {
@@ -158,94 +137,10 @@ li {
   opacity: 1;
 }
 
-/* Main Section */
-main {
-  order: 2;
-  width: 100%;
-  margin: 0 auto;
-  height: 40vh;
-  position: relative;
-  transition: all 0.5s ease-in-out;
-  transform: scale(140%);
-  top: -5rem;
-}
 
-main:hover {
-  margin-top: 0rem;
-  height: 48vh;
-}
 
-main video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 1.5rem;
-  filter: none;
-  opacity: 1;
-  transition: all 0.3s ease-in-out;
-}
 
-.video-container {
-  position: relative;
-  height: 100%;
-}
 
-.video-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: #fff;
-  z-index: 1;
-  font-family: myFont, sans-serif;
-  font-size: calc(5.5vw + 2.5vh);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0.6;
-  transition: opacity 2s ease-in-out;
-  filter: blur(2px);
-}
-
-.video-container:hover .video-text {
-  opacity: 0;
-}
-
-.video-container:hover video {
-  opacity: 1;
-  filter: blur(0);
-}
-
-@media screen and (max-width: 1024px) {
-  main {
-    width: 150%;
-    height: 35vh;
-    margin-top: 15.5rem;
-    margin-left: -5rem;
-    rotate: -6deg;
-    scale: 1.1;
-  }
-  main video {
-    filter: none;
-    opacity: 1;
-  }
-}
-
-/* Footer */
-.rechte {
-  order: 4;
-  width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  bottom: -8rem;
-  position: absolute;
-  font-size: 0.8rem;
-}
-
-div a {
-  scale: 0.8;
-  margin: 20px 20px 2px 20px;
-}
 
 @media screen and (max-width: 1000px) {
   div a {
