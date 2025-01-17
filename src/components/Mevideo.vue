@@ -62,9 +62,10 @@
   <style>
   /* Contenedor Padre */
   .parent-element {
-    /*position: absolute;
+    min-height: 100vh;
+    position: absolute;
     overflow: visible;
-    height: 3000px; */
+    height: 2000px;
     width: 100%; /* Asegura que el contenedor ocupe el ancho completo */
     margin-top: -8rem;
     
@@ -73,6 +74,7 @@
   /* Elemento Sticky con Video */
   .sticky-child {
     position: sticky; /* Activa el comportamiento sticky */
+    position: -webkit-sticky; 
     top: 0; /* Fija el elemento en la parte superior */
     height: 100vh; /* El video ocupa toda la altura del viewport */
     background-color: black; /* Fondo negro */
@@ -88,14 +90,14 @@
   /* Ajustes para Pantallas Pequeñas */
 @media (max-width: 1024px) {
   .parent-element {
-   /* height: 2000px; /* Ajusta la altura para móviles */
+   height: 1500px; /* Ajusta la altura para móviles */
     margin-top: -9rem;
     
   }
 
   .sticky-child {
     height: 100vh; /* Asegura que el sticky siga ocupando el viewport completo */
-    
+    position: -webkit-sticky; 
   }
 
   .content {
