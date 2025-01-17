@@ -1,5 +1,5 @@
 <template>
-    <nav class="vertical-nav">
+    <nav class="vertical-nav wraperr">
       <ul>
         <li :class="{ active: activeItem === 0 }" @click="setActive(0)">
           <a href="#aboutme">About Me</a>
@@ -27,6 +27,9 @@
   </script>
   
   <style scoped>
+  .wraperr{
+  overflow-x: hidden;
+}
   /* Barra de navegación vertical al lado derecho */
   .vertical-nav {
     position:absolute; /* Fija la barra en el lado derecho */

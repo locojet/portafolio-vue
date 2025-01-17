@@ -42,7 +42,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="banner-container">
+  <div class="banner-container wraperr">
     <!-- Preloader -->
     <div
       id="preloader"
@@ -71,10 +71,14 @@ onMounted(() => {
 
 <style scoped>
 /* Variables de colores */
+.wraperr{
+  overflow-x: hidden;
+}
 main{
   background: var(--quaternary-color);
   
 }
+
 .banner-container {
   
   height: 105vh;
