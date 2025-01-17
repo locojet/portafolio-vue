@@ -111,7 +111,7 @@ export default {
 /* Ajustes para Pantallas Pequeñas */
 @media (max-width: 1024px) {
   .parent-element {
-    height: 150vh; /* Ajusta la altura para móviles */
+    height: 520vh; /* Ajusta la altura para móviles */
     margin-top: -80rem;
   }
 
