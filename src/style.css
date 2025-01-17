@@ -9,7 +9,7 @@
 
 @media (hover: none) and (pointer: coarse) {
   /* Hover deaktivieren für Touch-Geräte */
-  .video-container {
+  .video-container img{
     pointer-events: none; /* Hover ignorieren */
   }
 }
