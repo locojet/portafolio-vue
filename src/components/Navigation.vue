@@ -224,6 +224,11 @@
     .navkorb {
       display: none;
     }
+    .fondo{
+      top: -30rem;
+      transition: opacity 0s ease-in-out, transform 0s ease-in-out;
+      
+    }
   }
   </style>
   

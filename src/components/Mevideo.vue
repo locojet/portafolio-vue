@@ -66,6 +66,8 @@
     overflow: visible; /* Permite que el hijo sticky sea visible */
     height: 3000px; /* Espacio suficiente para scroll */
     width: 100%; /* Asegura que el contenedor ocupe el ancho completo */
+    margin-top: -8rem;
+    
   }
   
   /* Elemento Sticky con Video */
@@ -82,5 +84,23 @@
     height: 100%; /* El video ocupa toda la altura del sticky */
     object-fit: cover; /* Ajusta el video para llenar el contenedor */
   }
+
+  /* Ajustes para Pantallas Pequeñas */
+@media (max-width: 1024px) {
+  .parent-element {
+    height: 2000px; /* Ajusta la altura para móviles */
+    margin-top: -8rem;
+    
+  }
+
+  .sticky-child {
+    height: 100vh; /* Asegura que el sticky siga ocupando el viewport completo */
+    
+  }
+
+  .content {
+    padding: 15px; /* Reduce el espaciado en pantallas pequeñas */
+  }
+}
   </style>
   
