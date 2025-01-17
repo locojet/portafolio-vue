@@ -3,7 +3,7 @@
       <!-- Elemento Sticky con Video -->
       <div class="sticky-child">
         <video ref="video" autoplay muted playsinline loop preload="auto">
-          <source src="../assets/Videos/timeline2.mp4" type="video/mp4" />
+          <source src="../assets/Videos/timeline1.mp4" type="video/mp4" />
           Your browser does not support videos.
         </video>
       </div>
