@@ -95,7 +95,7 @@
   .navkorb {
     z-index: 2000;
     position: absolute;
-    top: 15.5rem;
+    top: 16rem;
     right: 0;
     margin: 1.9rem;
     margin-right: 7vw;
