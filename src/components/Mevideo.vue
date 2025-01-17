@@ -87,6 +87,7 @@ export default {
   color: white;
   background: rgba(0, 0, 0, 0.7); /* Fondo semitransparente para mejorar visibilidad */
   padding-top: 2rem;
+  top: 70rem;
 }
 
 .text-container {
@@ -104,7 +105,7 @@ export default {
 @media (max-width: 1024px) {
   .parent-element {
     height: 150vh; /* Ajusta la altura para móviles */
-    margin-top: -9rem;
+    margin-top: -80rem;
   }
 
   .sticky-child {
@@ -114,5 +115,9 @@ export default {
   .content-section {
     padding: 1rem;
   }
+  .text-container {
+  padding: 2rem;
+  
+}
 }
 </style>
