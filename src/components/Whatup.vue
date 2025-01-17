@@ -51,7 +51,7 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   position: relative;
-  top: -14rem;
+  top: -18rem;
 }
 
 .greeting {
