@@ -54,7 +54,9 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   position: relative;
-  top: -18rem;
+  top: -20rem;
+  z-index: 10000;
+  overflow: hidden;
 }
 
 .greeting {
@@ -63,7 +65,7 @@ onMounted(() => {
   font-weight: bold;
   color: var(--primary-color);
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 0px;
   font-style: italic;
   transform: rotate(-6deg);
   
@@ -74,6 +76,8 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   animation: moveArrow 2s infinite alternate;
+  padding: 3rem;
+  
 }
 
 .arrow {
@@ -82,7 +86,9 @@ onMounted(() => {
   border-left: 4px solid var(--primary-color);
   border-bottom: 4px solid var(--primary-color);
   transform: rotate(0deg);
-  margin-top: 10px;
+  margin-top: 0;
+  
+
 }
 
 /* Animación de la flecha */

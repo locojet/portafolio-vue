@@ -14,4 +14,8 @@ const setVH = () => {
   // Configurar la altura dinámica al cargar la página y en redimensionamientos
   window.addEventListener('resize', setVH);
   setVH();
+
+
+
+  
   
