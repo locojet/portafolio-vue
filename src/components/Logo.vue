@@ -21,7 +21,7 @@ img {
 }
 
 img:hover {
-  transform: scale(1.1) rotate(10deg); /* Incrementa el efecto hover si quieres un cambio más notorio */
+  transform: scale(1.1); /* Incrementa el efecto hover si quieres un cambio más notorio */
 }
 
 @media screen and (max-width: 1024px) {
