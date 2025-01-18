@@ -9,6 +9,12 @@
     </div>
 
     <!-- Content Section -->
+
+    <div class="hello-container">
+      <div class="nicetomeetyou"><h2>Nice to meet you!</h2></div>
+    <div class="nicetomeetyou1"><h2>I'm a Webdeveloper</h2></div>
+  </div>
+
     <div class="content-section container-2">
       <div class="text-container">
         <h3 class="text-3xl font-semibold text-white mb-8 text-center">What I Can Do for You</h3>
@@ -46,6 +52,10 @@
         </div>
       </div>
     </div>
+    
+      <div class="inspiration"><h2>Get inspired</h2></div>
+    
+  
   </section>
 </template>
 
@@ -60,6 +70,25 @@ export default {
 <style scoped>
 .wraperr{
   overflow-x: hidden;
+}
+.hello-container{
+  width: 100wh;
+  height: 100vh;
+}
+.nicetomeetyou {
+  font-size: 2rem;
+margin-top: 20rem;
+text-align: center;
+}
+.nicetomeetyou1 {
+  font-size: 2rem;
+margin-top: 30rem;
+text-align: center;
+}
+.inspiration{
+  font-size: 2rem;
+margin-top: 70rem;
+text-align: center;
 }
 /* Contenedor Padre */
 .parent-element {
@@ -136,7 +165,7 @@ export default {
     background: radial-gradient(circle, transparent, rgba(0, 0, 0, 1) 100%);
   }
   .parent-element {
-    height: 520vh; /* Ajusta la altura para móviles */
+    height: 700vh; /* Ajusta la altura para móviles */
     margin-top: -50rem;
   }
 
@@ -146,7 +175,8 @@ export default {
 
   .content-section {
     padding: 1rem;
-    top: 95vh;
+    top: 90vh;
+    margin-top: -10rem;
   }
   .text-container {
     padding: 2rem;
