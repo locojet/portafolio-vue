@@ -1,13 +1,6 @@
 <template>
   <div class="example-component">
-    <h1>{{ title }}</h1>
-    <h2>{{ subtitle }}</h2>
-    <p>{{ description }}</p>
-
-    <div class="section" v-for="(section, index) in sections" :key="index">
-      <h3>{{ section.title }}</h3>
-      <p>{{ section.text }}</p>
-    </div>
+    
   </div>
 </template>
 
@@ -33,7 +26,9 @@ export default {
 .example-component {
   text-align: center;
   font-family: Arial, sans-serif;
-  background: white;
+  background: rgb(0, 0, 0);
+  width: 100wh;
+  height: 100vh;
 }
 
 h1 {
