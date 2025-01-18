@@ -101,7 +101,7 @@ background-color: rgba(0, 0, 0, 0.5); /* Rosa seno transparente */
 
 .inspiration{
   font-size: 4rem;
-margin-top: 80rem;
+margin-top: 95rem;
 text-align: center;
 text-transform: uppercase;
 background-color: rgba(232, 115, 134, 0.5); /* Rosa seno transparente */
