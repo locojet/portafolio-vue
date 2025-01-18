@@ -112,7 +112,7 @@ background-color: rgba(0, 0, 0, 0.5); /* Rosa seno transparente */
 
 .inspiration{
   font-size: 4rem;
-margin-top: 70rem;
+margin-top: 85rem;
 text-align: center;
 text-transform: uppercase;
 background-color: rgba(232, 115, 134, 0.5); /* Rosa seno transparente */
@@ -206,7 +206,7 @@ width: 95%;
     background: radial-gradient(circle, transparent, rgba(0, 0, 0, 1) 100%);
   }
   .parent-element {
-    height: 700vh; /* Ajusta la altura para móviles */
+    height: 630vh; /* Ajusta la altura para móviles */
     margin-top: -50rem;
   }
 
