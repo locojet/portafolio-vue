@@ -12,7 +12,7 @@
 
     <div class="hello-container">
       <div class="nicetomeetyou"><h2>Nice to meet you!</h2></div>
-    <div class="nicetomeetyou1"><h2>I'm a Webdeveloper</h2></div>
+    <div class="nicetomeetyou1"><h2>I'm a <br> WEBDEVELOPER</h2></div>
   </div>
 
     <div class="content-section container-2">
@@ -53,7 +53,7 @@
       </div>
     </div>
     
-      <div class="inspiration"><h2>Get inspired</h2></div>
+      <div class="inspiration-container"><div class="inspiration"><h2>Get Inspired</h2></div></div>
     
   
   </section>
@@ -79,16 +79,40 @@ export default {
   font-size: 2rem;
 margin-top: 20rem;
 text-align: center;
+background-color: rgba(0, 0, 0, 0.5); /* Rosa seno transparente */
 }
 .nicetomeetyou1 {
   font-size: 2rem;
 margin-top: 30rem;
 text-align: center;
+background-color: rgba(0, 0, 0, 0.5); /* Rosa seno transparente */
+
+
 }
+.inspiration-container{
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 100vh; /* Ajusta según el espacio disponible */
+  flex-direction: column;
+}
+
 .inspiration{
-  font-size: 2rem;
+  font-size: 4rem;
 margin-top: 70rem;
 text-align: center;
+text-transform: uppercase;
+background-color: rgba(232, 115, 134, 0.5); /* Rosa seno transparente */
+width: 95%;
+
+
+  writing-mode: vertical-lr; /* O vertical-rl para el otro lado */
+  text-orientation: upright; /* Mantiene las letras derechas */
+  
+               /* Ajusta el ancho según sea necesario */
+
 }
 /* Contenedor Padre */
 .parent-element {
