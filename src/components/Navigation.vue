@@ -42,7 +42,7 @@
   // Manejar el scroll para activar la clase "fixed"
   const handleScroll = () => {
     const scrollPosition = window.scrollY;
-    isFixed.value = scrollPosition >= 275;
+    isFixed.value = scrollPosition >= 330;
   };
   
   // Computada: Fondo negro solo activo cuando el menú es fijo y está activo
@@ -95,7 +95,7 @@
   .navkorb {
     z-index: 2000;
     position: absolute;
-    top: 19rem;
+    top: 17.5rem;
     right: 0;
     margin: 1.9rem;
     margin-right: 7vw;
