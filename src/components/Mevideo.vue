@@ -79,14 +79,14 @@ export default {
   font-size: 2rem;
 margin-top: 20rem;
 text-align: center;
-
+background-color: rgba(0, 0, 0, 0.5); /* Rosa seno transparente */
 
 }
 .nicetomeetyou1 {
   font-size: 2rem;
 margin-top: 30rem;
 text-align: center;
-
+background-color: rgba(0, 0, 0, 0.5); /* Rosa seno transparente */
 
 
 }
