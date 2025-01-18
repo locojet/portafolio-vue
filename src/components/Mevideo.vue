@@ -74,6 +74,7 @@ export default {
 .hello-container{
   width: 100wh;
   height: 100vh;
+  font-style: italic;
 }
 .nicetomeetyou {
   font-size: 2rem;
@@ -168,12 +169,15 @@ width: 95%;
   background: rgba(0, 0, 0, 0.7); /* Fondo semitransparente para mejorar visibilidad */
   padding-top: 2rem;
   top: 70rem;
+  font-style: italic;
+  
   
   
 }
 
 .text-container {
   padding: 2rem;
+  
 }
 
 .service-card {
