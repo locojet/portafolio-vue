@@ -117,6 +117,7 @@ text-align: center;
 text-transform: uppercase;
 background-color: rgba(232, 115, 134, 0.5); /* Rosa seno transparente */
 width: 95%;
+padding: 1rem;
 
 
   writing-mode: vertical-lr; /* O vertical-rl para el otro lado */
