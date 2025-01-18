@@ -11,41 +11,41 @@
     <!-- Content Section -->
 
     <div class="hello-container">
-      <div class="nicetomeetyou"><h2>Nice to meet you!</h2></div>
-    <div class="nicetomeetyou1"><h2>I'm <br> Juan Mejia</h2></div>
+      <div class="nicetomeetyou"><h2 style="font-family: 'myFont2', sans-serif;">Nice to meet you!</h2></div>
+    <div class="nicetomeetyou1"><h2 style="font-family: 'myFont2', sans-serif;">I'm a <br> WEBDEVELOPER</h2></div>
   </div>
 
     <div class="content-section container-2">
       <div class="text-container">
-        <h3 class="text-3xl font-semibold text-white mb-8 text-center">What I Can Do for You</h3>
+        <h3 class="text-3xl  text-white mb-8 text-center">What I Can Do for You</h3>
         <div class="grid grid-cols-1 gap-x-8 gap-y-6 text-lg font-medium text-gray-300 sm:grid-cols-2 md:grid-cols-3 lg:gap-x-10">
-          <div class="service-card text-center">
-            <i class="fas fa-laptop-code text-2xl text-white mb-4 animate-bounce"></i>
+          <div class=" text-center">
+            <i class="fas fa-laptop-code text-4xl text-white mb-4 animate-bounce"></i>
             <h4 class="text-xl font-semibold text-white">Frontend Wizardry</h4>
             <p>Crafting sleek and responsive user interfaces with HTML, CSS, and JavaScript that feel like magic.</p>
           </div>
-          <div class="service-card text-center">
-            <i class="fas fa-server text-2xl text-white mb-4 animate-spin"></i>
+          <div class=" text-center">
+            <i class="fas fa-server text-4xl text-white mb-4 animate-spin"></i>
             <h4 class="text-xl font-semibold text-white">Backend Mastery</h4>
             <p>Building strong, reliable server solutions with Node.js, Express, and MongoDB to keep things running smoothly.</p>
           </div>
-          <div class="service-card text-center">
-            <i class="fas fa-chart-line text-2xl text-white mb-4 animate-bounce"></i>
+          <div class=" text-center">
+            <i class="fas fa-chart-line text-4xl text-white mb-4 animate-bounce"></i>
             <h4 class="text-xl font-semibold text-white">SEO Optimization</h4>
             <p>Making your website a search engine’s best friend and ensuring it gets the spotlight it deserves.</p>
           </div>
-          <div class="service-card text-center">
-            <i class="fas fa-video text-2xl text-white mb-4 animate-pulse"></i>
+          <div class=" text-center">
+            <i class="fas fa-video text-4xl text-white mb-4 animate-pulse"></i>
             <h4 class="text-xl font-semibold text-white">Video Storytelling</h4>
             <p>Creating captivating videos that tell your story with style, energy, and unforgettable visuals.</p>
           </div>
-          <div class="service-card text-center">
-            <i class="fas fa-camera text-2xl text-white mb-4 animate-bounce"></i>
+          <div class=" text-center">
+            <i class="fas fa-camera text-4xl text-white mb-4 animate-bounce"></i>
             <h4 class="text-xl font-semibold text-white">Photography</h4>
             <p>Capturing stunning moments and translating them into timeless visual art for brands and individuals alike.</p>
           </div>
-          <div class="service-card text-center">
-            <i class="fas fa-music text-2xl text-white mb-4 animate-pulse"></i>
+          <div class=" text-center">
+            <i class="fas fa-music text-4xl text-white mb-4 animate-pulse"></i>
             <h4 class="text-xl font-semibold text-white">Music Magic</h4>
             <p>Composing and producing music that hits the right notes and perfectly complements your vision.</p>
           </div>
@@ -68,23 +68,32 @@ export default {
 
 
 <style scoped>
+
+@font-face {
+  font-family: myFont2;
+  src: url(../assets/fonts/PressStart2P-Regular.ttf);
+  font-display: swap;
+}
+
 .wraperr{
   overflow-x: hidden;
 }
 .hello-container{
   width: 100wh;
   height: 100vh;
-  font-style: italic;
+  
 }
 .nicetomeetyou {
-  font-size: 2rem;
+  font-size: 1rem;
 margin-top: 20rem;
 text-align: center;
 background-color: rgba(0, 0, 0, 0.5); /* Rosa seno transparente */
+font-family: myFont2 !important;
+
 
 }
 .nicetomeetyou1 {
-  font-size: 2rem;
+  font-size: 1rem;
 margin-top: 30rem;
 text-align: center;
 background-color: rgba(0, 0, 0, 0.5); /* Rosa seno transparente */
@@ -103,7 +112,7 @@ background-color: rgba(0, 0, 0, 0.5); /* Rosa seno transparente */
 
 .inspiration{
   font-size: 4rem;
-margin-top: 90rem;
+margin-top: 70rem;
 text-align: center;
 text-transform: uppercase;
 background-color: rgba(232, 115, 134, 0.5); /* Rosa seno transparente */
@@ -169,15 +178,18 @@ width: 95%;
   background: rgba(0, 0, 0, 0.7); /* Fondo semitransparente para mejorar visibilidad */
   padding-top: 2rem;
   top: 70rem;
-  font-style: italic;
-  
+ 
   
   
 }
 
+
+.content-section p{
+  text-align: start;
+}
+
 .text-container {
   padding: 2rem;
-  
 }
 
 .service-card {
@@ -194,7 +206,7 @@ width: 95%;
     background: radial-gradient(circle, transparent, rgba(0, 0, 0, 1) 100%);
   }
   .parent-element {
-    height: 680vh; /* Ajusta la altura para móviles */
+    height: 700vh; /* Ajusta la altura para móviles */
     margin-top: -50rem;
   }
 
@@ -209,6 +221,31 @@ width: 95%;
   }
   .text-container {
     padding: 2rem;
+  }
+  .service-card {
+    width: 100%; /* Ocupa el 95% del ancho de la pantalla */
+    margin: 0 auto; /* Centra la tarjeta */
+    padding: 0px; /* Incrementa el padding para hacerla más grande */
+  }
+}
+@media (min-width: 1024px) {
+  .content-section{
+    top: 0;
+
+  }
+  .inspiration-container{
+    position: relative;
+    display: flex;
+    justify-content: flex-end; 
+    
+  }
+  .inspiration{
+    margin-top: 0rem;
+    position: absolute;
+  }
+  .inspiration h2{
+    right: 0;
+    
   }
 }
 </style>
