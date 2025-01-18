@@ -12,7 +12,7 @@
 
     <div class="hello-container">
       <div class="nicetomeetyou"><h2>Nice to meet you!</h2></div>
-    <div class="nicetomeetyou1"><h2>I'm a <br> Juan Mejia</h2></div>
+    <div class="nicetomeetyou1"><h2>I'm <br> Juan Mejia</h2></div>
   </div>
 
     <div class="content-section container-2">
