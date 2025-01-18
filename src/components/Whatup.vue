@@ -54,7 +54,7 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   position: relative;
-  top: -16rem;
+  top: -13rem;
   z-index: 2;
   overflow: hidden;
 }
