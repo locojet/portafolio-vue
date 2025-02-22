@@ -1,6 +1,9 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 
+
+
+
 // Controla la visibilidad del preloader
 const isPreloaderVisible = ref(true);
 
@@ -55,7 +58,7 @@ onMounted(() => {
       <!-- Main Section -->
       <main>
         <div tabindex="1" class="video-container">
-          <video autoplay muted loop playsinline src="../assets/Videos/videos:video-leute-tanzen.mp4">
+          <video autoplay muted loop playsinline src="../assets/Videos/leute-tanzen.mp4">
             Tu navegador no soporta videos HTML5.
           </video>
           
@@ -245,9 +248,7 @@ main video {
   cursor: pointer; /* Para indicar interactividad */
 }
 
-.video-container:hover video {
-  animation: hologram-glitch 0.5s steps(10) forwards;
-}
+
 
 /* Video Base */
 video {
@@ -257,97 +258,8 @@ video {
   transition: none; /* Sin transiciones suaves */
 }
 
-/* Efecto de Glitch */
-.video-container::before,
-.video-container::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: inherit;
-  mix-blend-mode: screen;
-  pointer-events: none;
-  opacity: 0.6;
-}
 
-.video-container::before {
-  filter: drop-shadow(-3px 0 red);
-  clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);
-  animation: glitch-top 0.5s steps(10) forwards;
-}
 
-.video-container::after {
-  filter: drop-shadow(3px 0 blue);
-  clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%);
-  animation: glitch-bottom 0.5s steps(10) forwards;
-}
-
-/* Animaciones del Glitch */
-@keyframes hologram-glitch {
-  0% {
-    transform: translate(0, 0);
-    filter: none;
-    opacity: 1;
-  }
-  25% {
-    transform: translate(-5px, 5px);
-    filter: hue-rotate(20deg);
-    opacity: 0.9;
-  }
-  50% {
-    transform: translate(5px, -5px);
-    filter: hue-rotate(-20deg);
-    opacity: 0.8;
-  }
-  75% {
-    transform: translate(-5px, -5px);
-    filter: hue-rotate(40deg);
-    opacity: 0.7;
-  }
-  100% {
-    transform: translate(0, 0);
-    filter: none;
-    opacity: 1;
-  }
-}
-
-@keyframes glitch-top {
-  0% {
-    transform: translate(0, 0);
-  }
-  25% {
-    transform: translate(-3px, 3px);
-  }
-  50% {
-    transform: translate(3px, -3px);
-  }
-  75% {
-    transform: translate(-3px, -3px);
-  }
-  100% {
-    transform: translate(0, 0);
-  }
-}
-
-@keyframes glitch-bottom {
-  0% {
-    transform: translate(0, 0);
-  }
-  25% {
-    transform: translate(3px, -3px);
-  }
-  50% {
-    transform: translate(-3px, 3px);
-  }
-  75% {
-    transform: translate(3px, 3px);
-  }
-  100% {
-    transform: translate(0, 0);
-  }
-}
 
 @media screen and (max-width: 1024px) {
   /* Remueve filtros en video */
@@ -356,24 +268,6 @@ video {
     animation: none !important;
   }
 
-  .video-container:hover {
-    filter: none !important;
-    animation: none !important;
-  }
-
-  /* Pseudo-elementos glitch */
-  .video-container::before,
-  .video-container::after {
-    content: none; /* Elimina los pseudo-elementos */
-  }
-
-  /* Video Base */
-  main video {
-    filter: none !important; /* Remueve cualquier filtro */
-    opacity: 1 !important;
-    animation: none !important; /* Remueve animaciones */
-    transition: none; /* Sin transiciones */
-  }
 }
 
 
