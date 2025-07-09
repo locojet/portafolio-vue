@@ -5,7 +5,7 @@ import Navdesktop from './components/Navdesktop.vue';
 import VideoInicio from './components/VideoInicio.vue';
 import Whatup from './components/Whatup.vue';
 import Mevideo from './components/Mevideo.vue';
-import Webgi from './components/Webgi.vue';
+import ThreeDViewer from './components/ThreeDViewer.vue';
 
 
 </script>
@@ -17,7 +17,8 @@ import Webgi from './components/Webgi.vue';
     <VideoInicio />
     <Whatup />
     <Mevideo />
-    <Webgi />
+    <ThreeDViewer />
+    
     
    
     

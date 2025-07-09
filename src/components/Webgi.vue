@@ -66,13 +66,116 @@ export default {
           trigger: this.$refs.sceneContainer,
           start: "top top",
           end: "bottom top",
-          scrub: 1
-        }
+          scrub: 1,
+        },
       })
-      .to(this.camera.position, { x: 1, y: 2, z: 3 })  // Mover a la derecha y arriba
-      .to(this.camera.position, { x: 0, y: 1, z: 5 }) // Mover a la izquierda
-      .to(this.camera.position, { x: 0, y: 3, z: 20 })  // Subir y alejarse
-      .to(this.camera.rotation, { x: Math.PI / 50, y: Math.PI / -20 }); // Girar la cámara suavemente
+        // Primera posición de la cámara (inicial)
+        .to(this.camera.position, {
+          x: -2.25542,
+          y: 0.041308,
+          z: 0.565418,
+          duration: 1,
+        })
+        .to(this.camera.quaternion, {
+          _x: -0.007,
+          _y: -0.6151,
+          _z: -0.005,
+          _w: 0.7883,
+          duration: 1,
+          onUpdate: () => {
+            this.camera.quaternion.set(this.camera.quaternion._x, this.camera.quaternion._y, this.camera.quaternion._z, this.camera.quaternion._w);
+          },
+        })
+
+        // Segunda posición de la cámara
+        .to(this.camera.position, {
+          x: -2.134245, // Nueva posición en X
+          y: 0.776005,  // Nueva posición en Y
+          z: -0.501159, // Nueva posición en Z
+          duration: 1,
+        })
+        .to(this.camera.quaternion, {
+          _x: -0.1051, // Nuevo quaternion X
+          _y: -0.772,  // Nuevo quaternion Y
+          _z: -0.1326, // Nuevo quaternion Z
+          _w: 0.61216, // Nuevo quaternion W
+          duration: 1,
+          onUpdate: () => {
+            this.camera.quaternion.set(this.camera.quaternion._x, this.camera.quaternion._y, this.camera.quaternion._z, this.camera.quaternion._w);
+          },
+        })
+
+        // Tercera posición de la cámara
+        .to(this.camera.position, {
+          x: 0.008290,  // Nueva posición en X
+          y: 0.378224,  // Nueva posición en Y
+          z: -0.856137, // Nueva posición en Z
+          duration: 1,
+        })
+        .to(this.camera.quaternion, {
+          _x: 0.0695,  // Nuevo quaternion X
+          _y: 0.9252,  // Nuevo quaternion Y
+          _z: 0.2077,  // Nuevo quaternion Z
+          _w: -0.309,  // Nuevo quaternion W
+          duration: 1,
+          onUpdate: () => {
+            this.camera.quaternion.set(this.camera.quaternion._x, this.camera.quaternion._y, this.camera.quaternion._z, this.camera.quaternion._w);
+          },
+        })
+
+        // Cuarta posición de la cámara
+        .to(this.camera.position, {
+          x: 0.325696,  // Nueva posición en X
+          y: 0.7169312, // Nueva posición en Y
+          z: -0.28019,  // Nueva posición en Z
+          duration: 1,
+        })
+        .to(this.camera.quaternion, {
+          _x: 0.3014,  // Nuevo quaternion X
+          _y: 0.6412,  // Nuevo quaternion Y
+          _z: 0.6371,  // Nuevo quaternion Z
+          _w: -0.303,  // Nuevo quaternion W
+          duration: 1,
+          onUpdate: () => {
+            this.camera.quaternion.set(this.camera.quaternion._x, this.camera.quaternion._y, this.camera.quaternion._z, this.camera.quaternion._w);
+          },
+        })
+
+        // Quinta posición de la cámara
+        .to(this.camera.position, {
+          x: 0.662931,  // Nueva posición en X
+          y: 0.264456,  // Nueva posición en Y
+          z: -0.49257,  // Nueva posición en Z
+          duration: 1,
+        })
+        .to(this.camera.quaternion, {
+          _x: -0.0812, // Nuevo quaternion X
+          _y: 0.8793,  // Nuevo quaternion Y
+          _z: 0.1623,  // Nuevo quaternion Z
+          _w: 0.4402,  // Nuevo quaternion W
+          duration: 1,
+          onUpdate: () => {
+            this.camera.quaternion.set(this.camera.quaternion._x, this.camera.quaternion._y, this.camera.quaternion._z, this.camera.quaternion._w);
+          },
+        })
+
+        // Sexta posición de la cámara
+        .to(this.camera.position, {
+          x: 0.643909,  // Nueva posición en X
+          y: -0.05698,  // Nueva posición en Y
+          z: -0.29467,  // Nueva posición en Z
+          duration: 1,
+        })
+        .to(this.camera.quaternion, {
+          _x: 0.1589,  // Nuevo quaternion X
+          _y: 0.7588,  // Nuevo quaternion Y
+          _z: -0.201,  // Nuevo quaternion Z
+          _w: 0.5985,  // Nuevo quaternion W
+          duration: 1,
+          onUpdate: () => {
+            this.camera.quaternion.set(this.camera.quaternion._x, this.camera.quaternion._y, this.camera.quaternion._z, this.camera.quaternion._w);
+          },
+        });
     },
   },
 };
@@ -81,7 +184,7 @@ export default {
 <style>
 .scene-container {
   width: 100%;
-  height: 300vh; /* Asegura scroll largo para probar */
+  height: 200vh; /* Asegura scroll largo para probar */
   overflow: hidden;
   margin-top: 10rem;
 }
