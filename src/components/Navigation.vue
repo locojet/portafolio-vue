@@ -105,7 +105,7 @@ onUnmounted(() => {
   top: 0;
   left: 0;
   width: 100%;
-  height: 12rem;
+  height: 7rem;
   z-index: 1900;
   opacity: 0;
   transform: rotate(-6deg);
@@ -116,20 +116,29 @@ onUnmounted(() => {
     height 0.3s ease-in-out;
 }
 
-/* Fondo visible con degradado de color */
+/* Activar fondo */
+.fondo.active {
+  opacity: 1;
+  
+}
+
+/* Pseudo-elemento con blur y degradado */
 .fondo::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.7) 120%);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.7) 100%);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
   -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
   pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.7s ease-in-out;
 }
 
-.fondo.active {
+/* Activar el blur con transición */
+.fondo.active::before {
   opacity: 1;
 }
 

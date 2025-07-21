@@ -5,11 +5,13 @@ export default defineConfig({
   plugins: [vue({
     template: {
       compilerOptions: {
-        // Excluir elementos personalizados como webgi-viewer
-        isCustomElement: (tag) => tag.startsWith('webgi-')
+        isCustomElement: (tag) => tag.startsWith('webgi-') || tag === 'parallax'
       }
     }
   })],
-  base: '/portafolio-vue/',  // Ajusta la base si es necesario para producción
-  assetsInclude: ['**/*.gltf', '**/*.glb'] // Incluye archivos GLTF y GLB como assets
+  base: '/portafolio-vue/',
+  assetsInclude: ['**/*.gltf', '**/*.glb', '**/*.webp', '**/*.png'],
+  optimizeDeps: {
+    exclude: ['vue-parallax-js']
+  }
 });
