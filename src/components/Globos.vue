@@ -92,12 +92,12 @@ header {
 
 .cloud-one {
   transform: translateZ(-10px) scale(2);
-  top: -3rem;
+  top: -10rem;
 }
 
 .cloud-two {
   transform: translateZ(-4px) scale(2.3);
-  top: -3rem;
+  top: 10rem;
   left: 6rem;
   opacity: 100%;
 }
@@ -127,6 +127,7 @@ section {
   .titel {
     margin-top: 10rem;
     font-size: 3rem;
+    transform: translateZ(-10px) scale(2);
     
   }
 
@@ -140,12 +141,15 @@ section {
   .cloud-one{
     transform: translateZ(-10px) scale(4);
     height: auto;
+    top: 15rem;
+   
     
   }
   .cloud-two{
     transform: translateZ(-5px) scale(2.3);
     height: auto;
     top: 30rem;
+    opacity: 70%;
   }
   
   
