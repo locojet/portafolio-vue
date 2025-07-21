@@ -8,6 +8,7 @@ import Mevideo from './components/Mevideo.vue';
 import Globos from './components/Globos.vue';
 
 
+
 </script>
 
 <template>
@@ -34,7 +35,22 @@ import Globos from './components/Globos.vue';
 </template>
 
 <style scoped>
-/* Estilos adicionales específicos para App.vue si son necesarios */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.parallax-container {
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  perspective: 10px;
+  background: var(--quaternary-color, #222); /* Fallback por si no defines la variable */
+  scroll-behavior: smooth;
+}
+
 </style>
 
 

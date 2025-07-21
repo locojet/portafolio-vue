@@ -71,7 +71,7 @@ position: absolute;
 height: 100%;
 width: 100%;
 object-fit: cover;z-index: 0;
-transform: translateZ(-8px) scale(2.3);
+transform: translateZ(-4px) scale(2.3);
 top: 6rem;
 left: 6rem;
 opacity: 100%;
