@@ -86,6 +86,7 @@ opacity: 100%;
   font-size: 5rem;
   color: var(--quaternary-color);
   position: absolute;
+  top: 15rem;
   
 }
 
@@ -112,7 +113,7 @@ section{
   bottom: -5rem;
 }
 .titel{
-  margin-top: -5rem;
+  margin-top: 2rem;
   
 }
 
