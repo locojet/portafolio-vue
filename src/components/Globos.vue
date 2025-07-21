@@ -6,13 +6,19 @@
       <img src="" class="ballon-one">
       <img src="../assets/img/elefanterosa.PNG" class="ballon-two">
       <img src="" class="ballon-three">
-      <h1 class="titel">FLY to the Moond</h1>
+      <h1 class="titel">That’s yours truly</h1>
     </header>
     <section>
-      Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.  
+      Like the pink elephant floating above, I’ve always had a thing for defying gravity.  
+I was born to walk, but all I want is to fly.
 
-Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer
-    </section>
+I’m a web developer with solid experience building modern, responsive websites that not only work great — they feel alive. On top of that, I currently work as a materials inspector, where attention to detail isn’t just a skill — it’s a must.
+
+Between code and construction sites, I’ve found a passion for solving problems in unexpected ways. Whether it’s designing an interactive landing page or inspecting a weld with precision, I bring the same energy: curious, creative, and always looking for lift-off.
+
+If you’re into bold ideas, flying elephants, or just want to build something cool —  
+you’re in the right place.
+        </section>
   </div>
 </template>
 <style scoped>

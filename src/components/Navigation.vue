@@ -105,7 +105,7 @@ onUnmounted(() => {
   top: 0;
   left: 0;
   width: 100%;
-  height: 7rem;
+  height: 12rem;
   z-index: 1900;
   opacity: 0;
   transform: rotate(-6deg);
@@ -119,6 +119,7 @@ onUnmounted(() => {
 /* Activar fondo */
 .fondo.active {
   opacity: 1;
+  
   
 }
 
@@ -135,6 +136,7 @@ onUnmounted(() => {
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.7s ease-in-out;
+  
 }
 
 /* Activar el blur con transición */
