@@ -58,9 +58,11 @@ onMounted(() => {
       <!-- Main Section -->
       <main>
         <div tabindex="1" class="video-container">
-          <video autoplay muted loop playsinline src="../assets/Videos/leute-tanzen.mp4">
-            Tu navegador no soporta videos HTML5.
-          </video>
+          <video autoplay muted loop playsinline>
+  <source src="../assets/Videos/leute-tanzen.webm" type="video/webm" />
+  <source src="../assets/Videos/leute-tanzen.mp4" type="video/mp4" />
+  Tu navegador no soporta videos HTML5.
+</video>
           
           <div class="gradient-overlay"></div> <!-- Gradiente sobre el video -->
         </div>

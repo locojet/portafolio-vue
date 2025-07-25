@@ -34,7 +34,7 @@ function handleScroll() {
   const rect = header.value.getBoundingClientRect()
 
   // Cuando el header toca el top, permitir scroll interno
-  if (rect.top <= 1) {
+  if (rect.top <= 0) {
     wrapper.value.style.overflowY = 'auto'
   } else {
     wrapper.value.style.overflowY = 'hidden'
