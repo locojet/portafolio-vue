@@ -6,6 +6,8 @@ import VideoInicio from './components/VideoInicio.vue';
 import Whatup from './components/Whatup.vue';
 import Mevideo from './components/Mevideo.vue';
 import Globos from './components/Globos.vue';
+import Web from './components/Web.vue';
+
 
 
 
@@ -19,7 +21,9 @@ import Globos from './components/Globos.vue';
     <Whatup />
     <Mevideo />
     <Globos />
+    <Web />
     
+   
     
    
     

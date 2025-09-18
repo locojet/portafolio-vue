@@ -89,10 +89,7 @@
       </div>
     </div>
 
-    <!-- Sección de Inspiración -->
-    <div class="inspiration-container">
-      <div class="inspiration"><h2>Get Inspired</h2></div>
-    </div>
+   
   </section>
 </template>
 
@@ -272,7 +269,7 @@ export default {
   }
 
   .parent-element {
-    height: 690vh;
+    height: 670vh;
     margin-top: -50rem;
   }
 
