@@ -9,12 +9,7 @@
         <h1 class="titel">That’s yours truly</h1>
       </header>
       <section>
-        Like the pink elephant floating above, I’ve always had a thing for defying gravity.  
-        I was born to walk, but all I want is to fly.
-
-        I’m a web developer with solid experience building modern, responsive websites that not only work great — they feel alive. On top of that, I currently work as a materials inspector, where attention to detail isn’t just a skill — it’s a must.
-
-       
+       I thrive on solving problems and helping others succeed. Learning new skills? Always up for it. I believe what makes me valuable is that same drive I help foster in others – that need for momentum and purpose every single day. I truly enjoy my work, and there's nothing more rewarding than being part of forward-moving processes.
       </section>
     </div>
   </div>

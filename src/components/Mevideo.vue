@@ -3,7 +3,7 @@
     <!-- Sticky Video Element -->
     <div class="sticky-child">
       <video ref="video" autoplay muted playsinline loop preload="auto">
-        <source src="../assets/Videos/timeline2.mp4" type="video/mp4" />
+        <source src="../assets/Videos/timeline5.mp4" type="video/mp4" />
         Your browser does not support videos.
       </video>
     </div>
@@ -14,7 +14,7 @@
         <h2 style="font-family: 'myFont2', sans-serif;">Nice to meet you!</h2>
       </div>
       <div ref="webDeveloper" class="nicetomeetyou1 fade-in">
-        <h2 style="font-family: 'myFont2', sans-serif;">I'm a <br> WEBDEVELOPER</h2>
+        <h2 style="font-family: 'myFont2', sans-serif;">I'm a Creator</h2>
       </div>
     </div>
 
@@ -75,7 +75,7 @@
           <!-- Tarjeta 8: Mobile App Development -->
           <div class="text-center">
             <i class="fas fa-mobile-alt text-4xl text-white mb-4 animate-spin"></i>
-            <h4 class="text-xl font-semibold text-white">Mobile App Development</h4>
+            <h4 class="text-xl font-semibold text-white">Artificial Inteligence</h4>
             <p>Building cross-platform mobile applications that deliver seamless performance and functionality.</p>
           </div>
 
@@ -153,6 +153,7 @@ export default {
   text-align: center;
   background-color: rgba(0, 0, 0, 0.5);
   font-family: myFont2 !important;
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
 .nicetomeetyou1 {
