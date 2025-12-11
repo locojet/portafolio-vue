@@ -132,7 +132,7 @@ section {
 
   .titel {
     font-size: 2.5rem;
-    margin-top: -230rem;
+    margin-top: -220rem;
   }
 
   section {
