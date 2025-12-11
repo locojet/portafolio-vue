@@ -267,6 +267,7 @@ export default {
 @media (max-width: 1024px) {
   .sticky-child::before {
     background: radial-gradient(circle, transparent, rgba(0, 0, 0, 1) 100%);
+    height: 110vh;
   }
 
   .parent-element {
