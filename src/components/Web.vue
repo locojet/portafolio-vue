@@ -185,6 +185,9 @@ button:hover {
   .right {
     transition-delay: 0s !important; /* Elimina el retraso en móvil */
   }
+  .hero{
+    height: 150vh;
+  }
 }
 
 /* Efecto escalonado en desktop */

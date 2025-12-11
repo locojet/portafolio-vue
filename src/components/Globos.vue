@@ -109,6 +109,7 @@ header {
   z-index: 1;
   margin: 0;
   margin-top: -90rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 section {
@@ -118,6 +119,8 @@ section {
   margin: 3rem auto;
   max-width: 800px;
   line-height: 1.6;
+  
+ 
 }
 
 @media (max-width: 639px) {
@@ -161,6 +164,8 @@ section {
   max-width: 100vw;
   z-index: 0;
   }
-  
+  .cloud-three{
+    top: -30rem;
+  }
 }
 </style>
