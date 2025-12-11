@@ -270,12 +270,12 @@ export default {
   }
 
   .parent-element {
-    height: 630vh;
+    height: 650vh;
     margin-top: -50rem;
   }
 
   .sticky-child {
-    height: 100vh;
+    height: 120vh;
   }
 
   .content-section {
