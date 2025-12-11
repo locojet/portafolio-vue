@@ -132,7 +132,7 @@ section {
 
   .titel {
     font-size: 2.5rem;
-    margin-top: -200rem;
+    margin-top: -170rem;
   }
 
   section {
@@ -144,8 +144,8 @@ section {
   }
   .cloud-one{
   position: absolute;
-  top: -90rem;
-  left: 50%;
+  top: -80rem;
+  left: 20%;
   transform: translateX(-50%);
   width: 80rem;
   max-width: 100vw;
@@ -154,7 +154,7 @@ section {
 
   .cloud-two{
     position: absolute;
-  top: -90rem;
+  top: 10rem;
   margin-left: 30rem;
   transform: translateX(-50%);
   width: 80rem;

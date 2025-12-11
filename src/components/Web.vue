@@ -174,6 +174,7 @@ button:hover {
     text-align: center;
     gap: 2rem;
     padding: 1rem;
+    top: 20rem;
   }
 
   .left, .right {

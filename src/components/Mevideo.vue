@@ -270,7 +270,7 @@ export default {
   }
 
   .parent-element {
-    height: 670vh;
+    height: 630vh;
     margin-top: -50rem;
   }
 
