@@ -148,7 +148,7 @@ section {
   .cloud-one{
   position: absolute;
   top: -80rem;
-  left: 20%;
+  left: 0%;
   transform: translateX(-50%);
   width: 80rem;
   max-width: 100vw;
@@ -157,15 +157,17 @@ section {
 
   .cloud-two{
     position: absolute;
-  top: 10rem;
-  margin-left: 30rem;
+  top: 0rem;
+  
   transform: translateX(-50%);
   width: 80rem;
   max-width: 100vw;
   z-index: 0;
+  left: 40%;
   }
   .cloud-three{
     top: -30rem;
+    left: 0%;
   }
 }
 </style>
