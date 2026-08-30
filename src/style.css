@@ -114,7 +114,7 @@ a:active {
 /* Sticky Container */
 .sticky-container {
   position: relative; /* Necesario para que sticky funcione */
-  height: 3000px; /* Espacio para scroll */
+  min-height: auto;
   overflow: visible; /* Asegura compatibilidad con todos los navegadores */
 }
 

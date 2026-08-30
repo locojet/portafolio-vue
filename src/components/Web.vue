@@ -1,5 +1,5 @@
 <template>
-  <div class="hero">
+  <div id="contact" class="hero">
     <img 
       class="background" 
       src="../assets/img/holo4.jpg " 
@@ -7,12 +7,12 @@
     >
     <div class="overlay">
       <div class="left">
-        <h1>Do you want to explore with me?</h1>
-        <p>Together we can find solutions for your business and take it to the next level.</p>
+        <h1>Ihr Unternehmen hat mehr zu zeigen.</h1>
+        <p>Wir machen diese Qualität digital sichtbar: mit Website, Fotografie, Film und Content, die zusammen funktionieren.</p>
       </div>
       <div class="right">
-        <p>Today, the only limits are the ones in our minds. Everything we can imagine is achievable. Just as science fiction movies wrote our future and it's no longer fiction, let's write our own future.</p>
-        <button>Learn More</button>
+        <p>Erzählen Sie uns von Ihrem Betrieb, Ihren Kunden und Ihren Zielen. Aus dem ersten Gespräch entsteht ein klares Konzept für einen modernen digitalen Auftritt.</p>
+        <button>Projekt besprechen</button>
       </div>
     </div>
   </div>

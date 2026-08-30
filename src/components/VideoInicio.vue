@@ -83,6 +83,28 @@ onMounted(() => {
   overflow-x: hidden;
 }
 
+.video-inicio-container {
+  background: #000;
+  position: relative;
+  z-index: 1;
+}
+
+.video-inicio-container::after {
+  background: linear-gradient(
+    to bottom,
+    #000 0%,
+    rgba(0, 0, 0, 0.78) 36%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  bottom: calc(-1 * clamp(5rem, 12dvh, 8rem));
+  content: "";
+  height: clamp(5rem, 12dvh, 8rem);
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  z-index: 3;
+}
 
 .banner-container {
   
@@ -90,7 +112,7 @@ onMounted(() => {
   width: 100vw;
   margin: 0;
   padding: 0;
-  background: var(--quaternary-color);
+  background: #000;
   
   
 
@@ -111,6 +133,7 @@ onMounted(() => {
 
 #preloader.hidden {
   opacity: 0;
+  pointer-events: none;
   visibility: hidden;
 }
 
@@ -133,7 +156,13 @@ onMounted(() => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, #000000 110%);
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 36%,
+    rgba(0, 0, 0, 0.28) 64%,
+    rgba(0, 0, 0, 0.75) 86%,
+    #000000 100%
+  );
   pointer-events: none;
 }
 
@@ -206,13 +235,26 @@ main video {
 @media screen and (max-width: 1024px) {
   
   .video-inicio-container{
+    --intro-logo-band: clamp(7.5rem, 13dvh, 10rem);
+    min-height: calc(100dvh + 6rem);
     top: -3rem;
   }
+
+  .banner-container {
+    background: linear-gradient(
+      to bottom,
+      var(--quaternary-color) 0 var(--intro-logo-band),
+      #000 var(--intro-logo-band) 100%
+    );
+    height: calc(100dvh + 6rem);
+    min-height: calc(100dvh + 6rem);
+  }
+
   main {
     
     width: 150%;
     height: 50vh;
-    margin-top: 5rem;
+    margin-top: calc(clamp(7rem, 10dvh, 9rem) + 11px);
     margin-left: -5rem;
     rotate: -6deg;
     scale: 1.1;
@@ -230,10 +272,21 @@ main video {
   
 }
 
+@media screen and (max-width: 639px) {
+  .video-inicio-container {
+    --intro-logo-band: clamp(7rem, 17dvh, 10rem);
+  }
+}
+
 
 @media (min-width: 1024px) {
   .gradient-overlay {
-    display: none;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 48%,
+      rgba(0, 0, 0, 0.32) 74%,
+      rgba(0, 0, 0, 0.82) 100%
+    );
   }
   
 }

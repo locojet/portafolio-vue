@@ -7,6 +7,8 @@ import Whatup from './components/Whatup.vue';
 import Mevideo from './components/Mevideo.vue';
 import Globos from './components/Globos.vue';
 import Web from './components/Web.vue';
+import MediaShowcase from './components/MediaShowcase.vue';
+import Footer from './components/Footer.vue';
 
 
 
@@ -21,7 +23,9 @@ import Web from './components/Web.vue';
     <Whatup />
     <Mevideo />
     <Globos />
+    <MediaShowcase />
     <Web />
+    <Footer />
     
    
     
@@ -57,5 +61,3 @@ html, body {
 }
 
 </style>
-
-

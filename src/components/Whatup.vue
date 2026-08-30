@@ -13,6 +13,16 @@ const handleScroll = () => {
   arrowOpacity.value = Math.max(1 - scrollPosition / 500, 0.1); // Lo mismo para la flecha
 };
 
+const scrollToNextState = () => {
+  const target = document.querySelector('#presence-state-wir');
+  if (!target) return;
+
+  window.scrollTo({
+    top: target.getBoundingClientRect().top + window.scrollY,
+    behavior: 'smooth',
+  });
+};
+
 onMounted(() => {
   window.addEventListener('scroll', handleScroll); // Añadir el evento de scroll
 
@@ -27,8 +37,17 @@ onMounted(() => {
   
     <!-- Saludo animado y flecha hacia abajo -->
     <div class="greeting-container wraperr" :style="{ opacity: greetingOpacity }">
-      <p class="greeting">Hey, what up!</p>
-      <div class="arrow-container" :style="{ opacity: arrowOpacity }">
+      <p class="greeting">Digitale Präsenz</p>
+      <div
+        class="arrow-container"
+        role="button"
+        tabindex="0"
+        aria-label="Zu Wir schaffen digitale Präsenz scrollen"
+        :style="{ opacity: arrowOpacity }"
+        @click="scrollToNextState"
+        @keydown.enter.prevent="scrollToNextState"
+        @keydown.space.prevent="scrollToNextState"
+      >
         <div class="arrow"></div>
       </div>
     </div>
@@ -76,7 +95,9 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   animation: moveArrow 2s infinite alternate;
+  cursor: pointer;
   padding: 3rem;
+  touch-action: manipulation;
   
 }
 
@@ -98,6 +119,18 @@ onMounted(() => {
   }
   100% {
     transform: translateY(20px) rotate(-45deg);
+  }
+}
+
+@media (max-width: 1024px) {
+  .greeting-container {
+    top: -20rem;
+  }
+}
+
+@media (max-width: 639px) {
+  .greeting-container {
+    top: -22rem;
   }
 }
 </style>

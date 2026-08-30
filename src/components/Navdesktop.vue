@@ -2,13 +2,13 @@
     <nav class="vertical-nav wraperr">
       <ul>
         <li :class="{ active: activeItem === 0 }" @click="setActive(0)">
-          <a href="#aboutme">About Me</a>
+          <a href="#presence">Präsenz</a>
         </li>
         <li :class="{ active: activeItem === 1 }" @click="setActive(1)">
-          <a href="#mywork">My Work</a>
+          <a href="#media">Medien</a>
         </li>
         <li :class="{ active: activeItem === 2 }" @click="setActive(2)">
-          <a href="#contact">Contact</a>
+          <a href="#contact">Kontakt</a>
         </li>
       </ul>
     </nav>
