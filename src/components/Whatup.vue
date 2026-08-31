@@ -73,7 +73,7 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   position: relative;
-  top: -13rem;
+  top: -12rem;
   z-index: 2;
   overflow: hidden;
 }
@@ -124,13 +124,13 @@ onMounted(() => {
 
 @media (max-width: 1024px) {
   .greeting-container {
-    top: -20rem;
+    top: -19rem;
   }
 }
 
 @media (max-width: 639px) {
   .greeting-container {
-    top: -22rem;
+    top: -21.25rem;
   }
 }
 </style>

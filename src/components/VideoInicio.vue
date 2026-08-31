@@ -235,7 +235,7 @@ main video {
 @media screen and (max-width: 1024px) {
   
   .video-inicio-container{
-    --intro-logo-band: clamp(7.5rem, 13dvh, 10rem);
+    --intro-logo-band: clamp(8.5rem, 16dvh, 12rem);
     min-height: calc(100dvh + 6rem);
     top: -3rem;
   }
@@ -274,7 +274,7 @@ main video {
 
 @media screen and (max-width: 639px) {
   .video-inicio-container {
-    --intro-logo-band: clamp(7rem, 17dvh, 10rem);
+    --intro-logo-band: clamp(9rem, 22dvh, 12rem);
   }
 }
 
