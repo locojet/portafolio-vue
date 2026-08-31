@@ -31,45 +31,62 @@
     </div>
 
     <!-- Resto del contenido -->
-    <div
-      id="presence-services"
-      ref="contentSection"
-      class="content-section container-2"
-      :class="{ 'content-section--services-active': serviceHeadingHidden }"
-    >
-      <div class="services-sticky">
-        <div class="text-container">
-          <h3 class="services-heading text-3xl text-white text-center">Digitale Auftritte für Unternehmen, die gesehen werden wollen</h3>
-          <div ref="servicesTrack" class="services-track">
-            <article class="service-slide" :class="{ 'service-slide--active': activeServiceIndex === 0 }">
+    <div id="presence-services" ref="contentSection" class="content-section container-2">
+      <div class="text-container">
+        <h3 class="text-3xl text-white mb-8 text-center">Digitale Auftritte für Unternehmen, die gesehen werden wollen</h3>
+        <div class="grid grid-cols-1 gap-x-8 gap-y-6 text-lg font-medium text-gray-300 sm:grid-cols-2 md:grid-cols-3 lg:gap-x-10">
+          <div class="text-center">
             <i class="fas fa-laptop-code text-4xl text-white mb-4 animate-bounce"></i>
             <h4 class="text-xl font-semibold text-white">Webdesign & Entwicklung</h4>
-            <p>Individuelle Websites mit klarer Benutzerführung, schnellem Aufbau, responsivem Design und einem Kontaktbereich, der Vertrauen schafft.</p>
-            </article>
+            <p>Individuelle Websites, klare Benutzerführung, schnelle Ladezeiten und ein Auftritt, der auf Desktop, Tablet und Smartphone funktioniert.</p>
+          </div>
 
-            <article class="service-slide" :class="{ 'service-slide--active': activeServiceIndex === 1 }">
+          <div class="text-center">
             <i class="fas fa-camera text-4xl text-white mb-4 animate-bounce"></i>
-            <h4 class="text-xl font-semibold text-white">Foto & Bildsprache</h4>
-            <p>Echte Mitarbeiter, Räume, Produkte, Maschinen und Prozesse statt austauschbarer Stockfotos, abgestimmt auf Ihre Positionierung.</p>
-            </article>
+            <h4 class="text-xl font-semibold text-white">Professionelle Fotografie</h4>
+            <p>Echte Mitarbeiter, Räume, Produkte, Maschinen und Prozesse statt austauschbarer Stockfotos.</p>
+          </div>
 
-            <article class="service-slide" :class="{ 'service-slide--active': activeServiceIndex === 2 }">
+          <div class="text-center">
             <i class="fas fa-video text-4xl text-white mb-4 animate-pulse"></i>
-            <h4 class="text-xl font-semibold text-white">Video & Reels</h4>
-            <p>Imagefilme, Recruiting-Videos, Produktclips, Reels und kurze Formate, die mit Bewegung, Stimme und Atmosphäre sichtbar machen.</p>
-            </article>
+            <h4 class="text-xl font-semibold text-white">Videoproduktion</h4>
+            <p>Imagefilme, Recruiting-Videos, Produktclips, Reels und kurze Formate, die in Sekunden Vertrauen schaffen.</p>
+          </div>
 
-            <article class="service-slide" :class="{ 'service-slide--active': activeServiceIndex === 3 }">
+          <div class="text-center">
             <i class="fas fa-magic text-4xl text-white mb-4 animate-pulse"></i>
             <h4 class="text-xl font-semibold text-white">Content Creation</h4>
-            <p>Aus einem Produktionstag entstehen Inhalte für Website, Social Media, Google Profile, Recruiting, Präsentationen und laufende Kommunikation.</p>
-            </article>
+            <p>Aus einem Produktionstag entstehen Inhalte für Website, Social Media, Google Profile, Recruiting und Präsentationen.</p>
+          </div>
 
-            <article ref="lastServiceCard" class="service-slide" :class="{ 'service-slide--active': activeServiceIndex === 4 }">
+          <div class="text-center">
+            <i class="fas fa-fingerprint text-4xl text-white mb-4 animate-bounce"></i>
+            <h4 class="text-xl font-semibold text-white">Authentische Positionierung</h4>
+            <p>Wir zeigen digital, was Ihr Unternehmen in der Realität ausmacht: Menschen, Arbeit, Qualität und Haltung.</p>
+          </div>
+
+          <div class="text-center">
             <i class="fas fa-route text-4xl text-white mb-4 animate-pulse"></i>
-            <h4 class="text-xl font-semibold text-white">Strategie & Komplettauftritt</h4>
-            <p>Kennenlernen, Konzept, Produktion, Entwicklung, Launch und ein fertiger digitaler Auftritt aus einer Hand.</p>
-            </article>
+            <h4 class="text-xl font-semibold text-white">Ein klarer Prozess</h4>
+            <p>Kennenlernen, Konzept, Produktion, Entwicklung, Launch und auf Wunsch langfristige Weiterentwicklung.</p>
+          </div>
+
+          <div class="text-center">
+            <i class="fas fa-store-alt text-4xl text-white mb-4 animate-bounce"></i>
+            <h4 class="text-xl font-semibold text-white">Für echte Betriebe</h4>
+            <p>Handwerk, Gastronomie, Fitness, Immobilien, Industrie, Dienstleister und lokale Unternehmen mit sichtbarer Qualität.</p>
+          </div>
+
+          <div class="text-center">
+            <i class="fas fa-layer-group text-4xl text-white mb-4 animate-spin"></i>
+            <h4 class="text-xl font-semibold text-white">Alles aus einer Hand</h4>
+            <p>Eine Strategie, eine Bildsprache, ein Design, ein Ansprechpartner und ein fertiger digitaler Auftritt.</p>
+          </div>
+
+          <div ref="lastServiceCard" class="text-center">
+            <i class="fas fa-comments text-4xl text-white mb-4 animate-pulse"></i>
+            <h4 class="text-xl font-semibold text-white">Erstgespräch statt Preisliste</h4>
+            <p>Wir starten mit einem Gespräch über Ziele, Wirkung und das Material, das Ihr Unternehmen wirklich sichtbar macht.</p>
           </div>
         </div>
       </div>
@@ -86,39 +103,22 @@ export default {
     return {
       fadeObserver: null,
       resizeObserver: null,
-      serviceResizeObserver: null,
       stickyHeightFrame: 0,
-      serviceScrollFrame: 0,
-      serviceStartTranslate: 0,
-      serviceEndTranslate: 0,
-      serviceTranslateDistance: 0,
-      activeServiceIndex: 0,
-      serviceHeadingHidden: false,
     };
   },
   mounted() {
     this.setupFadeObserver();
     this.setupStickyHeight();
-    this.setupServiceScroll();
   },
   beforeUnmount() {
     this.fadeObserver?.disconnect();
     this.resizeObserver?.disconnect();
-    this.serviceResizeObserver?.disconnect();
     window.removeEventListener("resize", this.scheduleStickyHeightUpdate);
     window.removeEventListener("load", this.scheduleStickyHeightUpdate);
-    window.removeEventListener("scroll", this.scheduleServiceScrollPosition);
-    window.removeEventListener("resize", this.updateServiceMeasurements);
-    window.removeEventListener("load", this.updateServiceMeasurements);
 
     if (this.stickyHeightFrame) {
       cancelAnimationFrame(this.stickyHeightFrame);
     }
-
-    if (this.serviceScrollFrame) {
-      cancelAnimationFrame(this.serviceScrollFrame);
-    }
-
   },
   methods: {
     setupFadeObserver() {
@@ -156,7 +156,6 @@ export default {
         this.$refs.meetYou,
         this.$refs.webDeveloper,
         this.$refs.contentSection,
-        this.$refs.servicesTrack,
         this.$refs.lastServiceCard,
       ].forEach((element) => {
         if (element) {
@@ -204,96 +203,13 @@ export default {
       const releasePoint = Math.min(Math.max(stickyHeight * 0.62, 280), stickyHeight - 96);
       const stickyReleaseScroll = Math.max(0, lastCardTop - releasePoint);
       const trackHeight = Math.ceil(
-        Math.max(stickyHeight + 1, stickyReleaseScroll + stickyHeight, contentBottom)
+        Math.max(stickyHeight + 1, stickyReleaseScroll + stickyHeight)
       );
       const trailingGap = Math.min(Math.max(stickyHeight * 0.05, 28), 64);
       const sectionHeight = Math.ceil(Math.max(contentBottom + trailingGap, trackHeight));
 
       stickyTrack.style.setProperty("--presence-video-track-height", `${trackHeight}px`);
       section.style.setProperty("--presence-scroll-height", `${sectionHeight}px`);
-    },
-    setupServiceScroll() {
-      this.$nextTick(() => {
-        const track = this.$refs.servicesTrack;
-        const section = this.$refs.contentSection;
-
-        if (!track || !section) return;
-
-        this.serviceResizeObserver = new ResizeObserver(this.updateServiceMeasurements);
-        this.serviceResizeObserver.observe(track);
-        this.serviceResizeObserver.observe(section);
-
-        window.addEventListener("scroll", this.scheduleServiceScrollPosition, { passive: true });
-        window.addEventListener("resize", this.updateServiceMeasurements);
-        window.addEventListener("load", this.updateServiceMeasurements, { once: true });
-        document.fonts?.ready?.then(() => this.updateServiceMeasurements());
-
-        this.updateServiceMeasurements();
-      });
-    },
-    updateServiceMeasurements() {
-      const section = this.$refs.contentSection;
-      const track = this.$refs.servicesTrack;
-
-      if (!section || !track) return;
-
-      const viewportWidth = section.clientWidth || window.innerWidth;
-      const services = track.querySelectorAll(".service-slide");
-      const firstService = services[0];
-      const lastService = services[services.length - 1];
-
-      if (!firstService || !lastService) return;
-
-      const viewportCenter = viewportWidth / 2;
-      const firstServiceCenter = firstService.offsetLeft + firstService.offsetWidth / 2;
-      const lastServiceCenter = lastService.offsetLeft + lastService.offsetWidth / 2;
-
-      this.serviceStartTranslate = viewportCenter - firstServiceCenter;
-      this.serviceEndTranslate = viewportCenter - lastServiceCenter;
-      this.serviceTranslateDistance = Math.abs(this.serviceEndTranslate - this.serviceStartTranslate);
-
-      section.style.setProperty(
-        "--services-scroll-height",
-        `${Math.ceil(window.innerHeight + this.serviceTranslateDistance)}px`
-      );
-
-      this.scheduleServiceScrollPosition();
-      this.scheduleStickyHeightUpdate();
-    },
-    scheduleServiceScrollPosition() {
-      if (this.serviceScrollFrame) return;
-
-      this.serviceScrollFrame = requestAnimationFrame(() => {
-        this.serviceScrollFrame = 0;
-        this.applyServiceScrollPosition();
-      });
-    },
-    applyServiceScrollPosition() {
-      const section = this.$refs.contentSection;
-      const track = this.$refs.servicesTrack;
-
-      if (!section || !track) return;
-
-      const scrollableDistance = Math.max(section.offsetHeight - window.innerHeight, 1);
-      const rect = section.getBoundingClientRect();
-      const rawProgress = -rect.top / scrollableDistance;
-      const progress = Math.min(Math.max(rawProgress, 0), 1);
-      const currentTranslate = this.serviceStartTranslate
-        + (this.serviceEndTranslate - this.serviceStartTranslate) * progress;
-      const diagonalDistance = Math.min(Math.max(window.innerHeight * 0.26, 96), 240);
-      const currentDiagonal = (progress - 0.5) * diagonalDistance;
-      const serviceCount = track.querySelectorAll(".service-slide").length;
-
-      if (serviceCount > 0) {
-        this.activeServiceIndex = Math.min(
-          Math.max(Math.round(progress * (serviceCount - 1)), 0),
-          serviceCount - 1
-        );
-      }
-
-      this.serviceHeadingHidden = rect.top <= 0 && rect.bottom >= window.innerHeight;
-      track.style.setProperty("--services-scroll-x", `${currentTranslate}px`);
-      track.style.setProperty("--services-scroll-y", `${currentDiagonal}px`);
     },
     scrollToState(targetId) {
       const target = document.getElementById(targetId);
@@ -513,104 +429,24 @@ export default {
   position: relative;
   z-index: 1;
   color: white;
-  min-height: var(--services-scroll-height, 100dvh);
-  padding: 0;
+  padding-top: 2rem;
   top: 0;
-  background: transparent;
-}
-
-.services-sticky {
-  align-items: center;
   background: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0.74) 18%,
-    rgba(0, 0, 0, 0.78) 50%,
-    rgba(0, 0, 0, 0.74) 82%,
-    #000 100%
+    rgba(0, 0, 0, 0.68) 12%,
+    rgba(0, 0, 0, 0.72) 50%,
+    rgba(0, 0, 0, 0.68) 88%,
+    rgba(0, 0, 0, 0) 100%
   );
-  display: flex;
-  height: 100dvh;
-  overflow: hidden;
-  position: sticky;
-  top: 0;
-  width: 100vw;
 }
 
 .content-section p {
-  text-align: center;
+  text-align: start;
 }
 
 .text-container {
-  align-items: center;
-  display: flex;
-  height: 100%;
-  padding: clamp(5rem, 10dvh, 7rem) 0 clamp(3rem, 6dvh, 5rem);
-  position: relative;
-  width: 100%;
-}
-
-.services-heading {
-  left: 50%;
-  line-height: 1.2;
-  margin: 0;
-  max-width: min(84vw, 54rem);
-  position: absolute;
-  top: clamp(2rem, 6dvh, 4.5rem);
-  transform: translateX(-50%);
-  transition:
-    opacity 260ms ease,
-    transform 320ms ease;
-  width: max-content;
-}
-
-.services-track {
-  display: flex;
-  flex: 0 0 auto;
-  gap: 0;
-  padding: 0;
-  transform: translate3d(var(--services-scroll-x, 0px), var(--services-scroll-y, 0px), 0);
-  will-change: transform;
-}
-
-.service-slide {
-  align-items: center;
-  display: flex;
-  flex: 0 0 100vw;
-  flex-direction: column;
-  justify-content: center;
-  min-height: clamp(16rem, 42dvh, 24rem);
-  opacity: 0;
-  padding: clamp(1.4rem, 4vw, 3rem) max(1.25rem, 8vw);
-  pointer-events: none;
-  text-align: center;
-  transform: translateY(0.85rem) scale(0.98);
-  transition:
-    opacity 280ms ease,
-    transform 280ms ease;
-  visibility: hidden;
-}
-
-.service-slide--active {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(0) scale(1);
-  visibility: visible;
-}
-
-.service-slide h4 {
-  margin: 0 0 clamp(0.85rem, 2dvh, 1.2rem);
-}
-
-.service-slide i {
-  display: block;
-  margin-bottom: clamp(0.9rem, 2.4dvh, 1.4rem);
-}
-
-.service-slide p {
-  line-height: 1.55;
-  margin: 0 auto;
-  max-width: 30rem;
+  padding: 2rem;
 }
 
 .service-card {
@@ -664,59 +500,19 @@ export default {
   }
 
   .content-section {
-    padding: 0;
+    padding: 1rem;
     top: 0;
     margin-top: 0;
   }
 
   .text-container {
-    padding: clamp(5rem, 11dvh, 7rem) 0 clamp(3rem, 6dvh, 4rem);
-  }
-
-  .services-heading {
-    font-size: clamp(1.25rem, 3.4vw, 2rem);
-    max-width: min(84vw, 42rem);
-    top: clamp(2rem, 5dvh, 3.5rem);
-    width: auto;
-  }
-
-  .content-section--services-active .services-heading {
-    opacity: 0;
-    transform: translate(-50%, -7rem);
-  }
-
-  .services-track {
-    gap: 0;
-    padding: 0;
-  }
-
-  .service-slide {
-    flex-basis: 100vw;
-    min-height: clamp(18rem, 52dvh, 25rem);
-    padding: clamp(1.25rem, 4vw, 2rem);
+    padding: 2rem;
   }
 
   .service-card {
     width: 100%;
     margin: 0 auto;
     padding: 0px;
-  }
-}
-
-@media (max-width: 639px) {
-  .services-heading {
-    font-size: clamp(1rem, 5.4vw, 1.45rem);
-    max-width: 88vw;
-  }
-
-  .service-slide {
-    flex-basis: 100vw;
-    min-height: clamp(16rem, 50dvh, 22rem);
-    padding: 1.35rem;
-  }
-
-  .service-slide p {
-    font-size: clamp(0.95rem, 4.2vw, 1.1rem);
   }
 }
 

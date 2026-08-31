@@ -1,19 +1,6 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 
-
-
-
-// Controla la visibilidad del preloader
-const isPreloaderVisible = ref(true);
-
-// Oculta el preloader después de la carga
-onMounted(() => {
-  setTimeout(() => {
-    isPreloaderVisible.value = false;
-  }, 1500); // El preloader se oculta después de 1.5 segundos
-});
-
 // Estado para el ítem activo del menú
 const activeItem = ref(null);
 
@@ -47,18 +34,13 @@ onMounted(() => {
 <template>
   <div class="video-inicio-container">
   <div class="banner-container wraperr">
-    <!-- Preloader -->
-    <div
-      id="preloader"
-      :class="{ hidden: !isPreloaderVisible }"
-    ></div>
     <div class="espacio"></div>
     <!-- Holder Container -->
-    <div id="holder" v-if="!isPreloaderVisible">
+    <div id="holder">
       <!-- Main Section -->
       <main>
         <div tabindex="1" class="video-container">
-          <video autoplay muted loop playsinline>
+          <video autoplay muted loop playsinline preload="auto">
   <source src="../assets/Videos/leute-tanzen.webm" type="video/webm" />
   <source src="../assets/Videos/leute-tanzen.mp4" type="video/mp4" />
   Tu navegador no soporta videos HTML5.
@@ -118,24 +100,6 @@ onMounted(() => {
 
 }
 
-
-/* Preloader Estilo */
-#preloader {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: black;
-  z-index: 2000;
-  transition: opacity 0.5s ease, visibility 0.5s ease;
-}
-
-#preloader.hidden {
-  opacity: 0;
-  pointer-events: none;
-  visibility: hidden;
-}
 
 /* Holder Container */
 #holder {

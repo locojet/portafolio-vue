@@ -34,23 +34,29 @@ const titleMask = ref(null);
 const copyMask = ref(null);
 
 let frameId = 0;
-let hasScrolled = false;
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
-const setCloudMask = (maskElement, hostElement) => {
-  if (!maskElement || !hostElement) return;
+const applyCloudPerspective = (cloud, y, scale) => {
+  cloud.style.setProperty('--cloud-y', `${y}px`);
+  cloud.style.setProperty('--cloud-scale', scale.toFixed(3));
+};
 
-  const hostRect = hostElement.getBoundingClientRect();
+const getCloudRects = () => {
   const clouds = [cloudOne.value, cloudTwo.value, cloudThree.value];
   const names = ['one', 'two', 'three'];
 
-  clouds.forEach((cloud, index) => {
-    if (!cloud) return;
+  return clouds
+    .map((cloud, index) => (cloud ? { name: names[index], rect: cloud.getBoundingClientRect() } : null))
+    .filter(Boolean);
+};
 
-    const cloudRect = cloud.getBoundingClientRect();
-    const name = names[index];
+const setCloudMask = (maskElement, hostElement, cloudRects) => {
+  if (!maskElement || !hostElement) return;
 
+  const hostRect = hostElement.getBoundingClientRect();
+
+  cloudRects.forEach(({ name, rect: cloudRect }) => {
     maskElement.style.setProperty(`--mask-${name}-x`, `${cloudRect.left - hostRect.left}px`);
     maskElement.style.setProperty(`--mask-${name}-y`, `${cloudRect.top - hostRect.top}px`);
     maskElement.style.setProperty(`--mask-${name}-width`, `${cloudRect.width}px`);
@@ -63,43 +69,45 @@ const updateScene = () => {
 
   if (!wrapper.value || !cloudOne.value || !cloudTwo.value || !cloudThree.value || !title.value) return;
 
-  const scrollY = window.scrollY;
-  const wrapperTop = wrapper.value.getBoundingClientRect().top;
-  const sceneScroll = Math.max(window.innerHeight - wrapperTop, 0);
+  const wrapperRect = wrapper.value.getBoundingClientRect();
+  const viewportHeight = window.innerHeight;
+
+  if (wrapperRect.top > viewportHeight * 1.35 || wrapperRect.bottom < -viewportHeight * 0.35) return;
+
+  const wrapperTop = wrapperRect.top;
   const isResponsive = window.innerWidth <= 1024;
-  const titleProgress = clamp((window.innerHeight - wrapperTop) / window.innerHeight, 0, 1);
+  const isMobile = window.innerWidth <= 639;
+  const wrapperHeight = wrapper.value.offsetHeight || window.innerHeight;
+  const sceneProgress = clamp(
+    (window.innerHeight - wrapperTop) / (window.innerHeight + wrapperHeight),
+    0,
+    1
+  );
   const titleMaxOffset = isResponsive ? 44 : 36;
-  const titleOffset = titleProgress * titleMaxOffset;
+  const titleOffset = sceneProgress * titleMaxOffset;
 
   title.value.style.setProperty('--title-parallax', `${titleOffset}px`);
 
   if (isResponsive) {
-    const isMobile = window.innerWidth <= 639;
-    const parallaxScale = isMobile ? 0.48 : 0.72;
-    const maxOffset = window.innerHeight * (isMobile ? 0.34 : 0.46);
+    const cloudOneOffset = sceneProgress * (isMobile ? 124 : 176);
+    const cloudTwoOffset = sceneProgress * (isMobile ? 66 : 100);
+    const cloudThreeOffset = sceneProgress * (isMobile ? 172 : 238);
 
-    const cloudOneOffset = Math.min(sceneScroll * 0.25 * parallaxScale, maxOffset);
-    const cloudTwoOffset = Math.min(sceneScroll * 0.10 * parallaxScale, maxOffset * 0.5);
-    const cloudThreeOffset = Math.min(sceneScroll * 0.15 * parallaxScale, maxOffset * 0.75);
-
-    cloudOne.value.style.transform = `translate3d(0, ${cloudOneOffset}px, 0)`;
-    cloudTwo.value.style.transform = `translate3d(0, ${cloudTwoOffset}px, 0)`;
-    cloudThree.value.style.transform = `translate3d(0, ${cloudThreeOffset}px, 0)`;
+    applyCloudPerspective(cloudOne.value, cloudOneOffset, 1 + sceneProgress * (isMobile ? 0.035 : 0.045));
+    applyCloudPerspective(cloudTwo.value, cloudTwoOffset, 1 + sceneProgress * (isMobile ? 0.018 : 0.024));
+    applyCloudPerspective(cloudThree.value, cloudThreeOffset, 1 + sceneProgress * (isMobile ? 0.058 : 0.072));
   } else {
-    cloudOne.value.style.transform = hasScrolled ? `translateY(${scrollY * 0.25}px)` : '';
-    cloudTwo.value.style.transform = '';
-    cloudThree.value.style.transform = hasScrolled ? `translateY(${scrollY * 0.15}px)` : '';
+    applyCloudPerspective(cloudOne.value, sceneProgress * 250, 1 + sceneProgress * 0.045);
+    applyCloudPerspective(cloudTwo.value, sceneProgress * 136, 1 + sceneProgress * 0.022);
+    applyCloudPerspective(cloudThree.value, sceneProgress * 330, 1 + sceneProgress * 0.078);
   }
 
-  setCloudMask(titleMask.value, title.value);
-  setCloudMask(copyMask.value, copy.value);
+  const cloudRects = getCloudRects();
+  setCloudMask(titleMask.value, title.value, cloudRects);
+  setCloudMask(copyMask.value, copy.value, cloudRects);
 };
 
 const requestSceneUpdate = (event) => {
-  if (event?.type === 'scroll') {
-    hasScrolled = true;
-  }
-
   if (frameId) return;
   frameId = requestAnimationFrame(updateScene);
 };
@@ -126,10 +134,28 @@ onBeforeUnmount(() => {
 <style scoped>
 .wrapper {
   min-height: 100vh;
-  overflow-x: hidden;
+  overflow: clip;
   background: var(--quaternary-color);
-  scroll-behavior: smooth;
   padding-bottom: 4rem;
+  position: relative;
+}
+
+.wrapper::before {
+  background: linear-gradient(
+    to bottom,
+    var(--quaternary-color) 0%,
+    rgba(214, 147, 147, 0.96) 42%,
+    rgba(214, 147, 147, 0.48) 76%,
+    rgba(214, 147, 147, 0) 100%
+  );
+  content: "";
+  height: clamp(11rem, 26vh, 19rem);
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 1;
 }
 
 .cloud-text {
@@ -185,48 +211,42 @@ header {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  height: clamp(42rem, 78dvh, 58rem);
   gap: 1.5rem;
   text-align: center;
   position: relative;
 }
 .cloud-one{
   position: absolute;
-  top: -50rem;
+  top: clamp(11rem, 24dvh, 17rem);
   left: 50%;
-  transform: translateX(-50%);
-  width: 80rem;
-  max-width: 100vw;
+  width: clamp(36rem, 56vw, 68rem);
   z-index: 0;
 }
 
 .cloud-two{
   position: absolute;
-  top: -30rem;
-  left: 30%;
-  transform: translateX(-50%);
-  width: 80rem;
-  max-width: 100vw;
+  top: clamp(17rem, 34dvh, 25rem);
+  left: 57%;
+  width: clamp(30rem, 42vw, 52rem);
   z-index: 0;
   
 }
 
 .cloud-three{
   position: absolute;
-  top: -10rem;
-  left: 20%;
-  transform: translateX(-50%);
-  width: 80rem;
-  max-width: 100vw;
+  top: clamp(28rem, 50dvh, 38rem);
+  left: 44%;
+  width: clamp(38rem, 60vw, 72rem);
   z-index: 0;
 }
 
 
 
 .cloud {
-  width: 80rem;
- 
   position: absolute;
+  transform: translate3d(-50%, var(--cloud-y, 0px), 0) scale(var(--cloud-scale, 1));
+  will-change: transform;
 }
 
 .elefhant {
@@ -243,7 +263,7 @@ header {
   width: min(90vw, 900px);
   font-size: 5rem;
   color: white;
-  z-index: 1;
+  z-index: 2;
   margin: 0;
   text-shadow: none;
 }
@@ -286,27 +306,27 @@ header {
   }
 
   header {
-    height: clamp(32rem, 64dvh, 44rem);
+    height: clamp(34rem, 68dvh, 46rem);
   }
 
   .cloud {
     max-width: none;
-    width: clamp(36rem, 88vw, 52rem);
+    width: clamp(35rem, 80vw, 50rem);
   }
 
   .cloud-one{
-    top: clamp(-24rem, -32dvh, -10rem);
-    left: clamp(-16rem, -24vw, -5rem);
+    top: clamp(-15rem, -12dvh, -7rem);
+    left: clamp(14rem, 34vw, 23rem);
   }
 
   .cloud-two{
-    top: clamp(-16rem, -17dvh, -4rem);
-    left: clamp(11rem, 34vw, 25rem);
+    top: clamp(3rem, 13dvh, 8rem);
+    left: clamp(27rem, 72vw, 40rem);
   }
 
   .cloud-three{
-    top: clamp(4rem, 18dvh, 12rem);
-    left: clamp(-8rem, -7vw, 4rem);
+    top: clamp(20rem, 38dvh, 28rem);
+    left: clamp(14rem, 34vw, 24rem);
   }
 
   .titel {
@@ -317,14 +337,14 @@ header {
 
   .cloud-copy {
     font-size: clamp(1.35rem, 2.4vw, 1.8rem);
-    margin: clamp(-9rem, -10dvh, -4rem) auto 3rem;
+    margin: clamp(-8rem, -8dvh, -4rem) auto 3rem;
     max-width: min(82vw, 760px);
   }
 }
 
 @media (max-width: 639px) {
   .cloud {
-    width: clamp(27rem, 116vw, 38rem);
+    width: clamp(24rem, 104vw, 33rem);
   }
 
   .elefhant {
@@ -338,30 +358,30 @@ header {
   }
 
   header {
-    height: clamp(25rem, 52dvh, 31rem);
+    height: clamp(28rem, 58dvh, 34rem);
   }
 
   .cloud-copy {
     font-size: clamp(1.25rem, 5.4vw, 1.5rem);
-    margin: clamp(-8rem, -13dvh, -5rem) auto 2rem;
+    margin: clamp(-5.5rem, -8dvh, -3.5rem) auto 2rem;
     max-width: min(88vw, 28rem);
     padding: 1rem;
     text-align: justify;
   }
 
   .cloud-one{
-    top: clamp(-8rem, -16dvh, -4rem);
-    left: clamp(-3rem, -10vw, -1rem);
+    top: clamp(-6.5rem, -10dvh, -3.5rem);
+    left: clamp(13rem, 49vw, 16rem);
   }
 
   .cloud-two{
-    top: clamp(2rem, 8dvh, 5rem);
-    left: clamp(1rem, 9vw, 4rem);
+    top: clamp(7rem, 14dvh, 10rem);
+    left: clamp(18rem, 72vw, 24rem);
   }
 
   .cloud-three{
-    top: clamp(13rem, 30dvh, 19rem);
-    left: clamp(-2rem, -6vw, 0rem);
+    top: clamp(20rem, 34dvh, 25rem);
+    left: clamp(12rem, 46vw, 17rem);
   }
 }
 </style>

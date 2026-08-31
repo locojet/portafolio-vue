@@ -146,10 +146,10 @@ const updateMenuBlurHeight = () => {
 
       ? Math.min(
           Math.max(
-            window.innerHeight * 0.045,
-            44
+            window.innerHeight * 0.012,
+            10
           ),
-          62
+          18
         )
 
       : 16;
@@ -472,9 +472,9 @@ onUnmounted(() => {
    */
   --menu-blur-fade:
     clamp(
-      3rem,
-      6dvh,
-      4.5rem
+      5rem,
+      10dvh,
+      7rem
     );
 
 
@@ -511,6 +511,10 @@ onUnmounted(() => {
       var(
         --menu-blur-overscan
       )
+      +
+      var(
+        --menu-blur-fade
+      )
     );
 
 
@@ -538,10 +542,10 @@ onUnmounted(() => {
      ======================================================== */
 
   backdrop-filter:
-    blur(9px);
+    blur(8px);
 
   -webkit-backdrop-filter:
-    blur(9px);
+    blur(8px);
 
 
   /* ========================================================
@@ -563,40 +567,6 @@ onUnmounted(() => {
           var(--menu-blur-fade)
         ),
 
-      rgba(0, 0, 0, 0.96)
-        calc(
-          100%
-          -
-          var(--menu-blur-fade)
-          +
-          0.35rem
-        ),
-
-      rgba(0, 0, 0, 0.78)
-        calc(
-          100%
-          -
-          var(--menu-blur-fade)
-          +
-          1.1rem
-        ),
-
-      rgba(0, 0, 0, 0.48)
-        calc(
-          100%
-          -
-          var(--menu-blur-fade)
-          +
-          2rem
-        ),
-
-      rgba(0, 0, 0, 0.18)
-        calc(
-          100%
-          -
-          0.55rem
-        ),
-
       transparent 100%
     );
 
@@ -612,40 +582,6 @@ onUnmounted(() => {
           100%
           -
           var(--menu-blur-fade)
-        ),
-
-      rgba(0, 0, 0, 0.96)
-        calc(
-          100%
-          -
-          var(--menu-blur-fade)
-          +
-          0.35rem
-        ),
-
-      rgba(0, 0, 0, 0.78)
-        calc(
-          100%
-          -
-          var(--menu-blur-fade)
-          +
-          1.1rem
-        ),
-
-      rgba(0, 0, 0, 0.48)
-        calc(
-          100%
-          -
-          var(--menu-blur-fade)
-          +
-          2rem
-        ),
-
-      rgba(0, 0, 0, 0.18)
-        calc(
-          100%
-          -
-          0.55rem
         ),
 
       transparent 100%
@@ -695,15 +631,6 @@ onUnmounted(() => {
 
     clip-path
       0.65s
-      cubic-bezier(
-        0.22,
-        1,
-        0.36,
-        1
-      ),
-
-    height
-      0.45s
       cubic-bezier(
         0.22,
         1,
