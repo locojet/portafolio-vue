@@ -37,7 +37,7 @@ onMounted(() => {
   
     <!-- Saludo animado y flecha hacia abajo -->
     <div class="greeting-container wraperr" :style="{ opacity: greetingOpacity }">
-      <p class="greeting">Digitale Präsenz</p>
+      <p class="greeting">Moin!</p>
       <div
         class="arrow-container"
         role="button"
@@ -79,7 +79,7 @@ onMounted(() => {
 }
 
 .greeting {
-  font-family: 'Roboto', sans-serif;
+  font-family: myFont, Helvetica, Arial, sans-serif;
   font-size: 2rem;
   font-weight: bold;
   color: var(--primary-color);

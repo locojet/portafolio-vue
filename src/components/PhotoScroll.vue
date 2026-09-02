@@ -73,13 +73,7 @@ const offers = [
 }
 
 .package-scroll {
-  background:
-    linear-gradient(
-      to bottom,
-      #000 0%,
-      #000 74%,
-      var(--quaternary-color) 100%
-    );
+  background: #000;
   color: #fff;
   isolation: isolate;
   margin-top: -1px;
@@ -239,31 +233,13 @@ const offers = [
 
 @media (max-width: 1024px) {
   .package-scroll {
-    background:
-      linear-gradient(
-        to bottom,
-        #000 0%,
-        #000 76%,
-        var(--quaternary-color) 100%
-      );
+    background: #000;
     min-height: auto;
     padding: clamp(4rem, 8svh, 6rem) clamp(1rem, 5vw, 2rem);
   }
 
   .package-scroll::after {
-    background: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0) 0%,
-      var(--quaternary-color) 100%
-    );
-    bottom: 0;
-    content: "";
-    height: 34svh;
-    left: 0;
-    pointer-events: none;
-    position: absolute;
-    right: 0;
-    z-index: 2;
+    display: none;
   }
 
   .package-scroll__sticky {

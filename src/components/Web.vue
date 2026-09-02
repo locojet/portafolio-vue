@@ -1,142 +1,202 @@
 <template>
   <div id="contact" class="hero">
-    <img 
-      class="background" 
-      src="../assets/img/holo4.jpg " 
-      alt="Fondo hero"
-    >
+    <picture class="background-picture">
+      <source type="image/avif" :srcset="backgroundImage.avif" sizes="100vw" />
+      <source type="image/webp" :srcset="backgroundImage.webp" sizes="100vw" />
+      <img
+        class="background"
+        :src="backgroundImage.fallback"
+        alt="Fondo hero"
+        width="1536"
+        height="1024"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+
     <div class="overlay">
       <div class="left">
         <h1>Ihr Unternehmen hat mehr zu zeigen.</h1>
-        <p>Wir machen diese Qualität digital sichtbar: mit Website, Fotografie, Film und Content, die zusammen funktionieren.</p>
+
+        <p>
+          Wir machen diese Qualität digital sichtbar: mit Website,
+          Fotografie, Film und Content, die zusammen funktionieren.
+        </p>
       </div>
+
       <div class="right">
-        <p>Erzählen Sie uns von Ihrem Betrieb, Ihren Kunden und Ihren Zielen. Aus dem ersten Gespräch entsteht ein klares Konzept für einen modernen digitalen Auftritt.</p>
-        <button>Projekt besprechen</button>
+        <p>
+          Erzählen Sie uns von Ihrem Betrieb, Ihren Kunden und Ihren Zielen.
+          Aus dem ersten Gespräch entsteht ein klares Konzept für einen
+          modernen digitalen Auftritt.
+        </p>
+
       </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {
-  mounted() {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          // Staggered animation for inner elements
-          const h1 = entry.target.querySelector('h1');
-          const pElements = entry.target.querySelectorAll('p');
-          const button = entry.target.querySelector('button');
-          
-          // Reset all animations first
-          [h1, ...pElements, button].forEach(el => {
-            if (el) {
-              el.style.opacity = '0';
-              el.style.transform = 'translateY(20px)';
-            }
-          });
-          
-          // Animate h1
-          setTimeout(() => {
-            if (h1) {
-              h1.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
-              h1.style.opacity = '1';
-              h1.style.transform = 'translateY(0)';
-            }
-          }, 100);
-          
-          // Animate first paragraph
-          setTimeout(() => {
-            if (pElements[0]) {
-              pElements[0].style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
-              pElements[0].style.opacity = '1';
-              pElements[0].style.transform = 'translateY(0)';
-            }
-          }, 300);
-          
-          // Animate second paragraph (right side)
-          setTimeout(() => {
-            if (pElements[1]) {
-              pElements[1].style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
-              pElements[1].style.opacity = '1';
-              pElements[1].style.transform = 'translateY(0)';
-            }
-          }, 500);
-          
-          // Animate button
-          setTimeout(() => {
-            if (button) {
-              button.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
-              button.style.opacity = '1';
-              button.style.transform = 'translateY(0)';
-            }
-          }, 700);
-          
-          entry.target.classList.add("show");
-        } else {
-          // Reset when leaving viewport
-          entry.target.classList.remove("show");
-          const h1 = entry.target.querySelector('h1');
-          const pElements = entry.target.querySelectorAll('p');
-          const button = entry.target.querySelector('button');
-          
-          [h1, ...pElements, button].forEach(el => {
-            if (el) {
-              el.style.opacity = '0';
-              el.style.transform = 'translateY(20px)';
-              el.style.transition = 'none';
-            }
-          });
-        }
-      });
-    }, { 
-      threshold: 0.1,
-      rootMargin: "0px 0px -50px 0px"
-    });
+import { imageAssets } from '../assets/optimized/media';
 
-    document.querySelectorAll(".left, .right").forEach(el => observer.observe(el));
-  }
-}
+export default {
+  data() {
+    return {
+      backgroundImage: imageAssets.compuviejo,
+    };
+  },
+  mounted() {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const h1 = entry.target.querySelector("h1");
+            const pElements = entry.target.querySelectorAll("p");
+            const contactAction = entry.target.querySelector(".contact-action-shell");
+
+            // Reset de las animaciones
+            [h1, ...pElements, contactAction].forEach((el) => {
+              if (el) {
+                el.style.opacity = "0";
+                el.style.transform = "translateY(20px)";
+              }
+            });
+
+            // Animación del título
+            setTimeout(() => {
+              if (h1) {
+                h1.style.transition =
+                  "opacity 0.8s ease-out, transform 0.8s ease-out";
+
+                h1.style.opacity = "1";
+                h1.style.transform = "translateY(0)";
+              }
+            }, 100);
+
+            // Primer párrafo
+            setTimeout(() => {
+              if (pElements[0]) {
+                pElements[0].style.transition =
+                  "opacity 0.8s ease-out, transform 0.8s ease-out";
+
+                pElements[0].style.opacity = "1";
+                pElements[0].style.transform = "translateY(0)";
+              }
+            }, 300);
+
+            // Segundo párrafo
+            setTimeout(() => {
+              if (pElements[1]) {
+                pElements[1].style.transition =
+                  "opacity 0.8s ease-out, transform 0.8s ease-out";
+
+                pElements[1].style.opacity = "1";
+                pElements[1].style.transform = "translateY(0)";
+              }
+            }, 500);
+
+            // Botón de contacto
+            setTimeout(() => {
+              if (contactAction) {
+                contactAction.style.transition =
+                  "opacity 0.8s ease-out, transform 0.8s ease-out";
+
+                contactAction.style.opacity = "1";
+                contactAction.style.transform = "translateY(0)";
+              }
+            }, 700);
+
+            entry.target.classList.add("show");
+          } else {
+            entry.target.classList.remove("show");
+
+            const h1 = entry.target.querySelector("h1");
+            const pElements = entry.target.querySelectorAll("p");
+            const contactAction = entry.target.querySelector(".contact-action-shell");
+
+            [h1, ...pElements, contactAction].forEach((el) => {
+              if (el) {
+                el.style.opacity = "0";
+                el.style.transform = "translateY(20px)";
+                el.style.transition = "none";
+              }
+            });
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px",
+      }
+    );
+
+    document
+      .querySelectorAll(".left, .right")
+      .forEach((el) => observer.observe(el));
+  },
+};
 </script>
 
 <style scoped>
 .hero {
   position: relative;
+
   width: 100vw;
   height: 100vh;
+
   overflow: hidden;
 }
 
 .background {
   position: absolute;
+  inset: 0;
+
   width: 100%;
   height: 100%;
+
   object-fit: cover;
+
   filter: brightness(0.6);
+}
+
+.background-picture {
+  display: block;
+  inset: 0;
+  position: absolute;
 }
 
 .overlay {
   position: relative;
+
   z-index: 1;
+
   display: flex;
+
   justify-content: space-between;
   align-items: center;
+
+  width: 100%;
   height: 100%;
+
   padding: 2rem 4rem;
+
   color: white;
 }
 
-.left, .right {
+.left,
+.right {
   width: 40%;
   max-width: 500px;
 }
 
-/* Initial state for all text elements */
+/* ==========================================
+   ESTADO INICIAL DE LAS ANIMACIONES
+========================================== */
+
 .left h1,
 .left p,
 .right p,
-.right button {
+.right :deep(.contact-action-shell) {
   opacity: 0;
   transform: translateY(20px);
 }
@@ -153,12 +213,18 @@ p {
 
 button {
   margin-top: 1rem;
+
   padding: 0.8rem 1.5rem;
-  background: #4CAF50;
+
+  background: #4caf50;
+
   color: white;
+
   border: none;
   border-radius: 4px;
+
   cursor: pointer;
+
   transition: background 0.3s;
 }
 
@@ -166,31 +232,101 @@ button:hover {
   background: #45a049;
 }
 
-/* 🔽 Responsive para móviles */
+/* ==========================================
+   TABLET Y MÓVIL
+========================================== */
+
 @media (max-width: 768px) {
-  .overlay {
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-    gap: 2rem;
-    padding: 1rem;
-    top: 20rem;
+  .hero {
+    height: 150vh;
   }
 
-  .left, .right {
+  .overlay {
+    flex-direction: column;
+
+    justify-content: flex-start;
+    align-items: center;
+
+    text-align: center;
+
+    gap: 2rem;
+
+    width: 100%;
+    height: 100%;
+
+    padding: 5rem 1.5rem 2rem;
+  }
+
+  .left,
+  .right {
+    width: 100%;
+    max-width: 500px;
+  }
+
+  .right {
+    transition-delay: 0s !important;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  p {
+    font-size: 1rem;
+  }
+}
+
+/* ==========================================
+   MÓVILES PEQUEÑOS
+========================================== */
+
+@media (max-width: 480px) {
+  .hero {
+    height: 150vh;
+  }
+
+  .overlay {
+    flex-direction: column;
+
+    justify-content: flex-start;
+    align-items: center;
+
+    text-align: center;
+
+    gap: 1.5rem;
+
+    /*
+      El primer valor controla qué tan abajo
+      comienza todo el contenido.
+    */
+    padding: 6rem 1.2rem 2rem;
+  }
+
+  .left,
+  .right {
     width: 100%;
     max-width: none;
   }
 
-  .right {
-    transition-delay: 0s !important; /* Elimina el retraso en móvil */
+  h1 {
+    font-size: 1.6rem;
+    line-height: 1.2;
   }
-  .hero{
-    height: 150vh;
+
+  p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  button {
+    padding: 0.75rem 1.3rem;
   }
 }
 
-/* Efecto escalonado en desktop */
+/* ==========================================
+   DESKTOP
+========================================== */
+
 @media (min-width: 769px) {
   .right {
     transition-delay: 0.3s;

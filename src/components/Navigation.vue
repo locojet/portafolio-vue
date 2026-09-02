@@ -34,32 +34,32 @@
         <div tabindex="8" class="bar eins">
           <a
             class="bartext"
-            href="#presence"
-            @click="preventNavClose"
+            href="#presence-services"
+            @click="navigateToSection($event, 'presence-services')"
           >
             Präsenz
           </a>
         </div>
 
-        <!-- Medien -->
+        <!-- Konzept -->
         <div tabindex="9" class="bar zwei">
           <a
             class="bartext"
             href="#media"
-            @click="preventNavClose"
+            @click="navigateToSection($event, 'media')"
           >
-            Medien
+            Konzept
           </a>
         </div>
 
-        <!-- Kontakt -->
+        <!-- About -->
         <div tabindex="10" class="bar drei">
           <a
             class="bartext"
-            href="#contact"
-            @click="preventNavClose"
+            href="#about"
+            @click="navigateToSection($event, 'about')"
           >
-            Kontakt
+            About
           </a>
         </div>
 
@@ -259,9 +259,100 @@ const toggleNav = () => {
    ENLACES
    ========================================================== */
 
-const preventNavClose = (event) => {
+const clampValue = (
+  value,
+  min,
+  max
+) => Math.min(
+  Math.max(
+    value,
+    min
+  ),
+  max
+);
+
+
+const getSectionOffset = (targetId) => {
+
+  const isSmallViewport =
+    window.matchMedia('(max-width: 1024px)').matches;
+
+
+  if (targetId === 'presence-services') {
+
+    const presenceOffset =
+      isSmallViewport
+        ? window.innerHeight * 0.3
+        : window.innerHeight * 0.14;
+
+
+    return clampValue(
+      presenceOffset + (isNavActive.value ? 18 : 0),
+      isSmallViewport ? 220 : 110,
+      isSmallViewport ? 290 : 180
+    );
+
+  }
+
+
+  const baseOffset =
+    isSmallViewport
+      ? window.innerHeight * 0.2
+      : window.innerHeight * 0.14;
+
+
+  const activeMenuExtra =
+    isNavActive.value
+      ? 28
+      : 0;
+
+
+  return clampValue(
+      baseOffset + activeMenuExtra,
+      isSmallViewport ? 150 : 100,
+      isSmallViewport ? 240 : 180
+  );
+
+};
+
+
+const navigateToSection = (event, targetId) => {
 
   event.stopPropagation();
+  event.preventDefault();
+
+
+  const target =
+    document.getElementById(targetId);
+
+
+  if (!target) {
+    return;
+  }
+
+
+  const targetTop =
+    target.getBoundingClientRect().top +
+    window.scrollY -
+    getSectionOffset(targetId);
+
+
+  window.history.pushState(
+    null,
+    '',
+    `${window.location.pathname}${window.location.search}#${targetId}`
+  );
+
+
+  window.scrollTo({
+    top: Math.max(targetTop, 0),
+    behavior: 'smooth'
+  });
+
+
+  nextTick(
+    scheduleMenuBlurTransitionUpdates
+  );
 
 };
 
@@ -472,9 +563,9 @@ onUnmounted(() => {
    */
   --menu-blur-fade:
     clamp(
-      5rem,
-      10dvh,
-      7rem
+      6.5rem,
+      12svh,
+      9rem
     );
 
 
@@ -533,7 +624,7 @@ onUnmounted(() => {
       0,
       0,
       0,
-      0.02
+      0.1
     );
 
 
@@ -567,6 +658,22 @@ onUnmounted(() => {
           var(--menu-blur-fade)
         ),
 
+      rgba(0, 0, 0, 0.68)
+        calc(
+          100%
+          -
+          var(--menu-blur-fade)
+          +
+          2rem
+        ),
+
+      rgba(0, 0, 0, 0.2)
+        calc(
+          100%
+          -
+          2rem
+        ),
+
       transparent 100%
     );
 
@@ -582,6 +689,22 @@ onUnmounted(() => {
           100%
           -
           var(--menu-blur-fade)
+        ),
+
+      rgba(0, 0, 0, 0.68)
+        calc(
+          100%
+          -
+          var(--menu-blur-fade)
+          +
+          2rem
+        ),
+
+      rgba(0, 0, 0, 0.2)
+        calc(
+          100%
+          -
+          2rem
         ),
 
       transparent 100%
@@ -669,7 +792,7 @@ onUnmounted(() => {
 
   height:
     calc(
-      8rem
+      10rem
       +
       var(--menu-blur-overscan)
     );
@@ -955,50 +1078,26 @@ div.boton.active {
    ========================================================== */
 
 .bartext {
-
   display: inline-block;
 
-  font-family:
-    myFont,
-    'Bebas Neue',
-    sans-serif;
-
+  font-family: Helvetica, Arial, sans-serif;
   font-weight: 400;
+  font-style: italic;
 
   opacity: 0;
-
-  color:
-    var(--primary-color);
-
+  color: var(--primary-color);
   text-align: center;
 
   position: absolute;
-
   top: 0px;
 
-  transform:
-    translate(
-      -50%,
-      0
-    );
+  transform: translate(-50%, 0);
 
   z-index: 1000;
 
   transition:
-
-    opacity
-      0.3s
-      ease-in-out,
-
-    transform
-      0.3s
-      ease-in-out;
-
-  font-family:
-    'Roboto';
-
-  font-style: italic;
-
+    opacity 0.3s ease-in-out,
+    transform 0.3s ease-in-out;
 }
 
 
@@ -1045,36 +1144,5 @@ div.boton.active {
 }
 
 
-
-/* ==========================================================
-   DESKTOP
-   ========================================================== */
-
-@media (min-width: 1024px) {
-
-  .navkorb {
-
-    display: none;
-
-  }
-
-
-  .fondo {
-
-    top: -30rem;
-
-    transition:
-
-      opacity
-        0s
-        ease-in-out,
-
-      transform
-        0s
-        ease-in-out;
-
-  }
-
-}
 
 </style>

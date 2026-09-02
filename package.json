@@ -6,23 +6,22 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "optimize:media": "node scripts/optimize-media.mjs",
     "preview": "vite preview",
     "deploy": "gh-pages -d dist",
     "update": "git add . && git commit -m 'Automatisiertes Update' && git push origin main && npm run build && npm run deploy"
   },
   "dependencies": {
-    "@types/three": "^0.175.0",
-    "gsap": "^3.14.1",
-    "three": "^0.172.0",
-    "three-stdlib": "^2.35.15",
-    "vue": "^3.5.13",
-    "vue-parallax-js": "^0.2.3"
+    "vue": "^3.5.13"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "5.2.1",
     "autoprefixer": "^10.4.20",
+    "ffmpeg-static": "^5.3.0",
     "gh-pages": "^6.3.0",
+    "lighthouse": "^13.4.1",
     "postcss": "^8.5.1",
+    "sharp": "^0.35.4",
     "tailwindcss": "^3.4.17",
     "vite": "^6.3.6"
   }

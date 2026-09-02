@@ -1,5 +1,5 @@
 <template>
-  <footer class="site-footer wraperr">
+  <footer id="footer-contact" class="site-footer wraperr">
     <div class="footer-inner">
       <p class="footer-brand">Digitale Präsenz</p>
       <p class="footer-line">Web. Foto. Film. Content. Alles aus einer Hand.</p>
@@ -24,6 +24,7 @@
   background: #000;
   color: #fff;
   padding: 4rem 2rem;
+  scroll-margin-top: clamp(6rem, 12svh, 9rem);
   width: 100vw;
 }
 

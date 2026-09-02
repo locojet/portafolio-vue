@@ -1,34 +1,6 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
-
-// Estado para el ítem activo del menú
-const activeItem = ref(null);
-
-// Función para establecer el ítem activo
-const setActive = (index) => {
-  activeItem.value = index;
-};
-
-// Detectar el desplazamiento y desvanecer los elementos
-const greetingOpacity = ref(1);  // Inicia con opacidad 1
-const arrowOpacity = ref(1);  // Inicia con opacidad 1
-
-const handleScroll = () => {
-  const scrollPosition = window.scrollY;
-
-  // Cambiar la opacidad según el desplazamiento
-  greetingOpacity.value = Math.max(1 - scrollPosition / 500, 0);  // La opacidad se reduce a medida que se hace scroll
-  arrowOpacity.value = Math.max(1 - scrollPosition / 500, 0);  // Lo mismo para la flecha
-};
-
-onMounted(() => {
-  window.addEventListener('scroll', handleScroll); // Añadir el evento de scroll
-
-  // Limpiar el evento cuando el componente se desmonte
-  onUnmounted(() => {
-    window.removeEventListener('scroll', handleScroll);
-  });
-});
+import heroPoster from '../assets/optimized/img/leute-tanzen-poster-640.webp';
+import heroVideo from '../assets/optimized/videos/leute-tanzen-540.mp4';
 </script>
 
 <template>
@@ -40,9 +12,17 @@ onMounted(() => {
       <!-- Main Section -->
       <main>
         <div tabindex="1" class="video-container">
-          <video autoplay muted loop playsinline preload="auto">
-  <source src="../assets/Videos/leute-tanzen.webm" type="video/webm" />
-  <source src="../assets/Videos/leute-tanzen.mp4" type="video/mp4" />
+          <video
+            autoplay
+            muted
+            loop
+            playsinline
+            webkit-playsinline
+            preload="auto"
+            data-critical-media="true"
+            :poster="heroPoster"
+          >
+  <source :src="heroVideo" type="video/mp4" />
   Tu navegador no soporta videos HTML5.
 </video>
           
@@ -149,6 +129,8 @@ main {
 main video {
   width: 100%;
   height: 100%;
+  background: #000;
+  display: block;
   object-fit: cover;
   border-radius: 1.5rem;
   filter: none;

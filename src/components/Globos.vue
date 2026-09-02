@@ -1,113 +1,93 @@
 <template>
-  <div ref="container">
-    <div class="wrapper" ref="wrapper">
-      <header ref="header">
-        <img ref="cloudOne" src="../assets/img/Clouds/cloud1.png" class="cloud cloud-one" />
-        <img ref="cloudTwo" src="../assets/img/Clouds/cloud7.png" class="cloud cloud-two" />
-        <img ref="cloudThree" src="../assets/img/Clouds/cloud8.png" class="cloud cloud-three" />
-        
-        <h1 ref="title" class="titel cloud-text">
-          <span class="text-normal">{{ titleText }}</span>
-          <span ref="titleMask" class="text-cloud-mask" aria-hidden="true">{{ titleText }}</span>
-        </h1>
-      </header>
+  <section ref="scene" class="cloud-scene wraperr" aria-labelledby="cloud-title">
+    <div class="cloud-scene__stage" aria-hidden="true">
+      <picture ref="cloudOne" class="cloud cloud-one">
+        <source type="image/avif" :srcset="cloudOneImage.avif" sizes="(max-width: 639px) 116vw, (max-width: 1024px) 86vw, 50vw" />
+        <source type="image/webp" :srcset="cloudOneImage.webp" sizes="(max-width: 639px) 116vw, (max-width: 1024px) 86vw, 50vw" />
+        <img :src="cloudOneImage.fallback" alt="" width="5522" height="3682" loading="lazy" decoding="async" />
+      </picture>
+      <picture ref="cloudTwo" class="cloud cloud-two">
+        <source type="image/avif" :srcset="cloudTwoImage.avif" sizes="(max-width: 639px) 96vw, (max-width: 1024px) 72vw, 38vw" />
+        <source type="image/webp" :srcset="cloudTwoImage.webp" sizes="(max-width: 639px) 96vw, (max-width: 1024px) 72vw, 38vw" />
+        <img :src="cloudTwoImage.fallback" alt="" width="4000" height="4000" loading="lazy" decoding="async" />
+      </picture>
+      <picture ref="cloudThree" class="cloud cloud-three">
+        <source type="image/avif" :srcset="cloudThreeImage.avif" sizes="(max-width: 639px) 132vw, (max-width: 1024px) 96vw, 64vw" />
+        <source type="image/webp" :srcset="cloudThreeImage.webp" sizes="(max-width: 639px) 132vw, (max-width: 1024px) 96vw, 64vw" />
+        <img :src="cloudThreeImage.fallback" alt="" width="5517" height="3682" loading="lazy" decoding="async" />
+      </picture>
+    </div>
+
+    <div class="cloud-scene__content">
+      <h1 id="cloud-title" ref="title" class="titel cloud-text">{{ titleText }}</h1>
+
       <section ref="copy" class="cloud-copy cloud-text">
-        <p class="copy-text text-normal">{{ copyText }}</p>
-        <p ref="copyMask" class="copy-text text-cloud-mask" aria-hidden="true">{{ copyText }}</p>
+        <p>{{ copyText }}</p>
       </section>
     </div>
-  </div>
+  </section>
 </template>
+
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { imageAssets } from '../assets/optimized/media';
 
 const titleText = 'Echt sichtbar.';
 const copyText = 'Wir arbeiten nicht wie eine anonyme Agentur im Hintergrund. Wir kommen zu Ihnen, lernen Ihr Unternehmen kennen und entwickeln daraus eine digitale Präsenz, die zeigt, wer Sie sind, was Sie leisten und warum man Ihnen vertrauen kann.';
+const cloudOneImage = imageAssets.cloud1;
+const cloudTwoImage = imageAssets.cloud7;
+const cloudThreeImage = imageAssets.cloud8;
 
-const wrapper = ref(null);
+const scene = ref(null);
 const cloudOne = ref(null);
 const cloudTwo = ref(null);
 const cloudThree = ref(null);
 const title = ref(null);
 const copy = ref(null);
-const titleMask = ref(null);
-const copyMask = ref(null);
 
 let frameId = 0;
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
-const applyCloudPerspective = (cloud, y, scale) => {
-  cloud.style.setProperty('--cloud-y', `${y}px`);
-  cloud.style.setProperty('--cloud-scale', scale.toFixed(3));
-};
+const setLayer = (element, x, y, scale) => {
+  if (!element) return;
 
-const getCloudRects = () => {
-  const clouds = [cloudOne.value, cloudTwo.value, cloudThree.value];
-  const names = ['one', 'two', 'three'];
-
-  return clouds
-    .map((cloud, index) => (cloud ? { name: names[index], rect: cloud.getBoundingClientRect() } : null))
-    .filter(Boolean);
-};
-
-const setCloudMask = (maskElement, hostElement, cloudRects) => {
-  if (!maskElement || !hostElement) return;
-
-  const hostRect = hostElement.getBoundingClientRect();
-
-  cloudRects.forEach(({ name, rect: cloudRect }) => {
-    maskElement.style.setProperty(`--mask-${name}-x`, `${cloudRect.left - hostRect.left}px`);
-    maskElement.style.setProperty(`--mask-${name}-y`, `${cloudRect.top - hostRect.top}px`);
-    maskElement.style.setProperty(`--mask-${name}-width`, `${cloudRect.width}px`);
-    maskElement.style.setProperty(`--mask-${name}-height`, `${cloudRect.height}px`);
-  });
+  element.style.setProperty('--cloud-x', `${x.toFixed(2)}px`);
+  element.style.setProperty('--cloud-y', `${y.toFixed(2)}px`);
+  element.style.setProperty('--cloud-scale', scale.toFixed(3));
 };
 
 const updateScene = () => {
   frameId = 0;
 
-  if (!wrapper.value || !cloudOne.value || !cloudTwo.value || !cloudThree.value || !title.value) return;
+  if (!scene.value) return;
 
-  const wrapperRect = wrapper.value.getBoundingClientRect();
-  const viewportHeight = window.innerHeight;
+  const rect = scene.value.getBoundingClientRect();
+  const viewportHeight = window.innerHeight || 1;
 
-  if (wrapperRect.top > viewportHeight * 1.35 || wrapperRect.bottom < -viewportHeight * 0.35) return;
+  if (rect.top > viewportHeight * 1.25 || rect.bottom < -viewportHeight * 0.25) {
+    return;
+  }
 
-  const wrapperTop = wrapperRect.top;
-  const isResponsive = window.innerWidth <= 1024;
-  const isMobile = window.innerWidth <= 639;
-  const wrapperHeight = wrapper.value.offsetHeight || window.innerHeight;
-  const sceneProgress = clamp(
-    (window.innerHeight - wrapperTop) / (window.innerHeight + wrapperHeight),
+  const progress = clamp(
+    (viewportHeight - rect.top) / (viewportHeight + rect.height),
     0,
     1
   );
-  const titleMaxOffset = isResponsive ? 44 : 36;
-  const titleOffset = sceneProgress * titleMaxOffset;
+  const centeredProgress = progress - 0.5;
+  const isTablet = window.innerWidth <= 1024;
+  const isMobile = window.innerWidth <= 639;
+  const motion = isMobile ? 0.74 : isTablet ? 0.86 : 1;
 
-  title.value.style.setProperty('--title-parallax', `${titleOffset}px`);
+  setLayer(cloudOne.value, centeredProgress * -70 * motion, centeredProgress * -260 * motion, 1 + progress * 0.075);
+  setLayer(cloudTwo.value, centeredProgress * 92 * motion, centeredProgress * -150 * motion, 1 + progress * 0.045);
+  setLayer(cloudThree.value, centeredProgress * -42 * motion, centeredProgress * -350 * motion, 1 + progress * 0.11);
 
-  if (isResponsive) {
-    const cloudOneOffset = sceneProgress * (isMobile ? 124 : 176);
-    const cloudTwoOffset = sceneProgress * (isMobile ? 66 : 100);
-    const cloudThreeOffset = sceneProgress * (isMobile ? 172 : 238);
-
-    applyCloudPerspective(cloudOne.value, cloudOneOffset, 1 + sceneProgress * (isMobile ? 0.035 : 0.045));
-    applyCloudPerspective(cloudTwo.value, cloudTwoOffset, 1 + sceneProgress * (isMobile ? 0.018 : 0.024));
-    applyCloudPerspective(cloudThree.value, cloudThreeOffset, 1 + sceneProgress * (isMobile ? 0.058 : 0.072));
-  } else {
-    applyCloudPerspective(cloudOne.value, sceneProgress * 250, 1 + sceneProgress * 0.045);
-    applyCloudPerspective(cloudTwo.value, sceneProgress * 136, 1 + sceneProgress * 0.022);
-    applyCloudPerspective(cloudThree.value, sceneProgress * 330, 1 + sceneProgress * 0.078);
-  }
-
-  const cloudRects = getCloudRects();
-  setCloudMask(titleMask.value, title.value, cloudRects);
-  setCloudMask(copyMask.value, copy.value, cloudRects);
+  title.value?.style.setProperty('--text-y', `${(centeredProgress * -54 * motion).toFixed(2)}px`);
+  copy.value?.style.setProperty('--text-y', `${(centeredProgress * -34 * motion).toFixed(2)}px`);
 };
 
-const requestSceneUpdate = (event) => {
+const requestSceneUpdate = () => {
   if (frameId) return;
   frameId = requestAnimationFrame(updateScene);
 };
@@ -117,7 +97,11 @@ onMounted(() => {
   window.addEventListener('scroll', requestSceneUpdate, { passive: true });
   window.addEventListener('resize', requestSceneUpdate);
 
-  [cloudOne.value, cloudTwo.value, cloudThree.value].forEach((cloud) => {
+  [
+    cloudOne.value?.querySelector('img'),
+    cloudTwo.value?.querySelector('img'),
+    cloudThree.value?.querySelector('img'),
+  ].forEach((cloud) => {
     cloud?.addEventListener('load', requestSceneUpdate, { once: true });
   });
 });
@@ -131,257 +115,230 @@ onBeforeUnmount(() => {
   }
 });
 </script>
+
 <style scoped>
-.wrapper {
-  min-height: 100vh;
-  overflow: clip;
-  background: var(--quaternary-color);
-  padding-bottom: 4rem;
-  position: relative;
+.wraperr {
+  overflow-x: clip;
 }
 
-.wrapper::before {
+.cloud-scene {
   background: linear-gradient(
     to bottom,
-    var(--quaternary-color) 0%,
-    rgba(214, 147, 147, 0.96) 42%,
-    rgba(214, 147, 147, 0.48) 76%,
-    rgba(214, 147, 147, 0) 100%
+    #000 0%,
+    #000 12%,
+    rgba(111, 74, 74, 0.96) 32%,
+    rgba(214, 147, 147, 0.92) 58%,
+    var(--quaternary-color) 100%
   );
+  color: #fff;
+  isolation: isolate;
+  min-height: clamp(48rem, 112svh, 72rem);
+  overflow: hidden;
+  padding: clamp(5.5rem, 12svh, 8rem) clamp(1.2rem, 5vw, 4rem) clamp(5rem, 11svh, 8rem);
+  position: relative;
+  width: 100vw;
+}
+
+.cloud-scene::before {
   content: "";
-  height: clamp(11rem, 26vh, 19rem);
   left: 0;
   pointer-events: none;
   position: absolute;
   right: 0;
+  z-index: 4;
+}
+
+.cloud-scene::before {
+  background: linear-gradient(
+    to bottom,
+    #000 0%,
+    rgba(0, 0, 0, 0.86) 34%,
+    rgba(0, 0, 0, 0.24) 78%,
+    rgba(214, 147, 147, 0) 100%
+  );
+  height: clamp(8rem, 18svh, 14rem);
   top: 0;
-  z-index: 1;
 }
 
-.cloud-text {
-  position: relative;
-}
-
-.text-normal {
-  display: block;
-  position: relative;
-  z-index: 1;
-}
-
-.text-cloud-mask {
-  color: var(--quaternary-color);
-  display: block;
+.cloud-scene__stage {
   inset: 0;
-  mask-image:
-    url("../assets/img/Clouds/cloud1.png"),
-    url("../assets/img/Clouds/cloud7.png"),
-    url("../assets/img/Clouds/cloud8.png");
-  mask-position:
-    var(--mask-one-x, -9999px) var(--mask-one-y, -9999px),
-    var(--mask-two-x, -9999px) var(--mask-two-y, -9999px),
-    var(--mask-three-x, -9999px) var(--mask-three-y, -9999px);
-  mask-repeat: no-repeat;
-  mask-size:
-    var(--mask-one-width, 0px) var(--mask-one-height, 0px),
-    var(--mask-two-width, 0px) var(--mask-two-height, 0px),
-    var(--mask-three-width, 0px) var(--mask-three-height, 0px);
+  overflow: hidden;
+  perspective: 900px;
   pointer-events: none;
   position: absolute;
-  text-shadow:
-    0 1px 2px rgba(70, 32, 38, 0.3),
-    0 3px 12px rgba(70, 32, 38, 0.24);
-  -webkit-mask-image:
-    url("../assets/img/Clouds/cloud1.png"),
-    url("../assets/img/Clouds/cloud7.png"),
-    url("../assets/img/Clouds/cloud8.png");
-  -webkit-mask-position:
-    var(--mask-one-x, -9999px) var(--mask-one-y, -9999px),
-    var(--mask-two-x, -9999px) var(--mask-two-y, -9999px),
-    var(--mask-three-x, -9999px) var(--mask-three-y, -9999px);
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-size:
-    var(--mask-one-width, 0px) var(--mask-one-height, 0px),
-    var(--mask-two-width, 0px) var(--mask-two-height, 0px),
-    var(--mask-three-width, 0px) var(--mask-three-height, 0px);
-  z-index: 2;
-}
-
-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: clamp(42rem, 78dvh, 58rem);
-  gap: 1.5rem;
-  text-align: center;
-  position: relative;
-}
-.cloud-one{
-  position: absolute;
-  top: clamp(11rem, 24dvh, 17rem);
-  left: 50%;
-  width: clamp(36rem, 56vw, 68rem);
+  transform-style: preserve-3d;
   z-index: 0;
 }
-
-.cloud-two{
-  position: absolute;
-  top: clamp(17rem, 34dvh, 25rem);
-  left: 57%;
-  width: clamp(30rem, 42vw, 52rem);
-  z-index: 0;
-  
-}
-
-.cloud-three{
-  position: absolute;
-  top: clamp(28rem, 50dvh, 38rem);
-  left: 44%;
-  width: clamp(38rem, 60vw, 72rem);
-  z-index: 0;
-}
-
-
 
 .cloud {
+  backface-visibility: hidden;
+  display: block;
+  height: auto;
+  max-width: none;
+  opacity: 0.88;
   position: absolute;
-  transform: translate3d(-50%, var(--cloud-y, 0px), 0) scale(var(--cloud-scale, 1));
+  transform:
+    translate3d(
+      calc(-50% + var(--cloud-x, 0px)),
+      var(--cloud-y, 0px),
+      0
+    )
+    scale(var(--cloud-scale, 1));
+  transform-origin: center;
+  user-select: none;
   will-change: transform;
 }
 
-.elefhant {
-  position: absolute;
-  width: 20rem;
-  max-width: 80vw;
-}
-
-.titel {
-  position: absolute;
-  top: clamp(6rem, 18vh, 12rem);
-  left: 50%;
-  transform: translateX(-50%) translateY(var(--title-parallax, 0px));
-  width: min(90vw, 900px);
-  font-size: 5rem;
-  color: white;
-  z-index: 2;
-  margin: 0;
-  text-shadow: none;
-}
-
-.titel .text-cloud-mask {
-  color: var(--primary-color);
-  -webkit-text-stroke: 0.9px rgba(18, 8, 10, 0.82);
-  paint-order: stroke fill;
-}
-
-.cloud-copy {
-  font-size: 2rem;
-  padding: 2rem;
-  color: rgb(255, 255, 255);
-  margin: 3rem auto;
-  max-width: 800px;
-  line-height: 1.6;
-  
-  z-index: 1;
-}
-
-.copy-text {
-  margin: 0;
-}
-
-.cloud-copy .text-cloud-mask {
-  box-sizing: border-box;
-  color: var(--primary-color);
-  height: 100%;
-  padding: inherit;
-  -webkit-text-stroke: 0.9px rgba(18, 8, 10, 0.82);
-  paint-order: stroke fill;
-  text-align: inherit;
+.cloud img {
+  display: block;
+  height: auto;
   width: 100%;
 }
 
+.cloud-one {
+  left: 46%;
+  top: clamp(8rem, 18svh, 13rem);
+  width: clamp(36rem, 50vw, 68rem);
+  z-index: 1;
+}
+
+.cloud-two {
+  left: 63%;
+  top: clamp(16rem, 32svh, 25rem);
+  width: clamp(30rem, 38vw, 54rem);
+  z-index: 2;
+}
+
+.cloud-three {
+  bottom: clamp(-12rem, -16svh, -6rem);
+  left: 48%;
+  width: clamp(48rem, 64vw, 82rem);
+  z-index: 3;
+}
+
+.cloud-scene__content {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  max-width: 56rem;
+  min-height: calc(clamp(48rem, 112svh, 72rem) - clamp(10rem, 23svh, 16rem));
+  position: relative;
+  text-align: center;
+  z-index: 5;
+}
+
+.cloud-text {
+  -webkit-text-stroke: 0.7px rgba(18, 8, 10, 0.82);
+  color: #fff;
+  paint-order: stroke fill;
+  text-shadow:
+    0 2px 5px rgba(18, 8, 10, 0.46),
+    0 0.85rem 2.2rem rgba(18, 8, 10, 0.28);
+  transform: translate3d(0, var(--text-y, 0px), 0);
+  will-change: transform;
+}
+
+.titel {
+  font-size: clamp(2.55rem, 4.8vw, 4.35rem);
+  line-height: 1.05;
+  margin: clamp(0.4rem, 1.8svh, 1.6rem) 0 clamp(11.5rem, 26svh, 18rem);
+}
+
+.cloud-copy {
+  font-size: clamp(1.35rem, 2.1vw, 2rem);
+  line-height: 1.55;
+  max-width: min(82vw, 48rem);
+  text-align: left;
+}
+
+.cloud-copy p {
+  margin: 0;
+}
+
 @media (max-width: 1024px) {
-  .wrapper {
-    min-height: 100dvh;
+  .cloud-scene {
+    min-height: clamp(44rem, 104svh, 58rem);
+    padding: clamp(4.5rem, 10svh, 7rem) clamp(1.1rem, 5vw, 2.5rem) clamp(4rem, 9svh, 6rem);
   }
 
-  header {
-    height: clamp(34rem, 68dvh, 46rem);
+  .cloud-scene__content {
+    max-width: min(82vw, 44rem);
+    min-height: calc(clamp(44rem, 104svh, 58rem) - clamp(8rem, 19svh, 13rem));
   }
 
-  .cloud {
-    max-width: none;
-    width: clamp(35rem, 80vw, 50rem);
+  .cloud-one {
+    left: 42%;
+    top: clamp(4rem, 12svh, 8rem);
+    width: clamp(38rem, 86vw, 54rem);
   }
 
-  .cloud-one{
-    top: clamp(-15rem, -12dvh, -7rem);
-    left: clamp(14rem, 34vw, 23rem);
+  .cloud-two {
+    left: 66%;
+    top: clamp(14rem, 30svh, 21rem);
+    width: clamp(32rem, 72vw, 48rem);
   }
 
-  .cloud-two{
-    top: clamp(3rem, 13dvh, 8rem);
-    left: clamp(27rem, 72vw, 40rem);
-  }
-
-  .cloud-three{
-    top: clamp(20rem, 38dvh, 28rem);
-    left: clamp(14rem, 34vw, 24rem);
+  .cloud-three {
+    bottom: clamp(-8rem, -12svh, -4rem);
+    left: 48%;
+    width: clamp(44rem, 96vw, 62rem);
   }
 
   .titel {
-    font-size: clamp(3rem, 7vw, 4.4rem);
-    line-height: 1.15;
-    top: clamp(5rem, 13dvh, 8rem);
+    font-size: clamp(2.35rem, 5.6vw, 3.45rem);
+    margin: clamp(0.6rem, 2.2svh, 1.8rem) 0 clamp(9.8rem, 21svh, 13.5rem);
   }
 
   .cloud-copy {
-    font-size: clamp(1.35rem, 2.4vw, 1.8rem);
-    margin: clamp(-8rem, -8dvh, -4rem) auto 3rem;
-    max-width: min(82vw, 760px);
+    font-size: clamp(1.35rem, 2.5vw, 1.8rem);
+    max-width: min(84vw, 40rem);
   }
 }
 
 @media (max-width: 639px) {
-  .cloud {
-    width: clamp(24rem, 104vw, 33rem);
+  .cloud-scene {
+    min-height: clamp(42rem, 102svh, 50rem);
+    padding: clamp(4rem, 9svh, 5rem) 1rem clamp(3.5rem, 8svh, 5rem);
   }
 
-  .elefhant {
-    width: 12rem;
+  .cloud-scene::before {
+    height: clamp(7rem, 16svh, 10rem);
+  }
+
+  .cloud-scene__content {
+    max-width: min(88vw, 28rem);
+    min-height: calc(clamp(42rem, 102svh, 50rem) - clamp(7.5rem, 17svh, 10rem));
+  }
+
+  .cloud-one {
+    left: 39%;
+    top: clamp(3.5rem, 10svh, 6rem);
+    width: clamp(28rem, 116vw, 36rem);
+  }
+
+  .cloud-two {
+    left: 72%;
+    top: clamp(13rem, 27svh, 17rem);
+    width: clamp(24rem, 96vw, 32rem);
+  }
+
+  .cloud-three {
+    bottom: clamp(-6rem, -10svh, -3rem);
+    left: 48%;
+    width: clamp(34rem, 132vw, 44rem);
   }
 
   .titel {
-    font-size: clamp(2.15rem, 9vw, 2.8rem);
-    top: clamp(5rem, 12dvh, 7rem);
-    line-height: 1.15;
-  }
-
-  header {
-    height: clamp(28rem, 58dvh, 34rem);
+    font-size: clamp(1.95rem, 8.2vw, 2.55rem);
+    margin: clamp(0.5rem, 2.4svh, 1.6rem) 0 clamp(9.4rem, 20svh, 11.8rem);
   }
 
   .cloud-copy {
-    font-size: clamp(1.25rem, 5.4vw, 1.5rem);
-    margin: clamp(-5.5rem, -8dvh, -3.5rem) auto 2rem;
-    max-width: min(88vw, 28rem);
-    padding: 1rem;
-    text-align: justify;
-  }
-
-  .cloud-one{
-    top: clamp(-6.5rem, -10dvh, -3.5rem);
-    left: clamp(13rem, 49vw, 16rem);
-  }
-
-  .cloud-two{
-    top: clamp(7rem, 14dvh, 10rem);
-    left: clamp(18rem, 72vw, 24rem);
-  }
-
-  .cloud-three{
-    top: clamp(20rem, 34dvh, 25rem);
-    left: clamp(12rem, 46vw, 17rem);
+    font-size: clamp(1.15rem, 5.1vw, 1.45rem);
+    line-height: 1.5;
+    max-width: min(88vw, 25rem);
+    text-align: left;
   }
 }
 </style>

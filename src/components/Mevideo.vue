@@ -3,8 +3,33 @@
     <!-- Sticky Video Element -->
     <div ref="stickyTrack" class="sticky-track">
       <div ref="stickyVideo" class="sticky-child">
-        <video ref="video" autoplay muted playsinline loop preload="auto">
-          <source src="../assets/Videos/timeline5.mp4" type="video/mp4" />
+        <video
+          ref="video"
+          autoplay
+          muted
+          playsinline
+          webkit-playsinline
+          loop
+          preload="none"
+          :poster="isPresenceVideoLoaded ? timelinePoster : undefined"
+        >
+          <source
+            v-if="isPresenceVideoLoaded"
+            :src="timelineMobile"
+            type="video/mp4"
+            media="(max-width: 639px)"
+          />
+          <source
+            v-if="isPresenceVideoLoaded"
+            :src="timelineTablet"
+            type="video/mp4"
+            media="(max-width: 1024px)"
+          />
+          <source
+            v-if="isPresenceVideoLoaded"
+            :src="timelineDesktop"
+            type="video/mp4"
+          />
           Your browser does not support videos.
         </video>
       </div>
@@ -42,31 +67,31 @@
           <h3 class="services-heading text-3xl text-white text-center">Digitale Auftritte für Unternehmen, die gesehen werden wollen</h3>
           <div ref="servicesTrack" class="services-track">
             <article class="service-slide" :class="{ 'service-slide--active': activeServiceIndex === 0 }">
-            <i class="fas fa-laptop-code text-4xl text-white mb-4 animate-bounce"></i>
+            <span class="service-icon service-icon--web service-icon--bounce" aria-hidden="true"></span>
             <h4 class="text-xl font-semibold text-white">Webdesign & Entwicklung</h4>
             <p>Individuelle Websites mit klarer Benutzerführung, schnellem Aufbau, responsivem Design und einem Kontaktbereich, der Vertrauen schafft.</p>
             </article>
 
             <article class="service-slide" :class="{ 'service-slide--active': activeServiceIndex === 1 }">
-            <i class="fas fa-camera text-4xl text-white mb-4 animate-bounce"></i>
+            <span class="service-icon service-icon--camera service-icon--bounce" aria-hidden="true"></span>
             <h4 class="text-xl font-semibold text-white">Foto & Bildsprache</h4>
             <p>Echte Mitarbeiter, Räume, Produkte, Maschinen und Prozesse statt austauschbarer Stockfotos, abgestimmt auf Ihre Positionierung.</p>
             </article>
 
             <article class="service-slide" :class="{ 'service-slide--active': activeServiceIndex === 2 }">
-            <i class="fas fa-video text-4xl text-white mb-4 animate-pulse"></i>
+            <span class="service-icon service-icon--video service-icon--pulse" aria-hidden="true"></span>
             <h4 class="text-xl font-semibold text-white">Video & Reels</h4>
             <p>Imagefilme, Recruiting-Videos, Produktclips, Reels und kurze Formate, die mit Bewegung, Stimme und Atmosphäre sichtbar machen.</p>
             </article>
 
             <article class="service-slide" :class="{ 'service-slide--active': activeServiceIndex === 3 }">
-            <i class="fas fa-magic text-4xl text-white mb-4 animate-pulse"></i>
+            <span class="service-icon service-icon--spark service-icon--pulse" aria-hidden="true"></span>
             <h4 class="text-xl font-semibold text-white">Content Creation</h4>
             <p>Aus einem Produktionstag entstehen Inhalte für Website, Social Media, Google Profile, Recruiting, Präsentationen und laufende Kommunikation.</p>
             </article>
 
             <article ref="lastServiceCard" class="service-slide" :class="{ 'service-slide--active': activeServiceIndex === 4 }">
-            <i class="fas fa-route text-4xl text-white mb-4 animate-pulse"></i>
+            <span class="service-icon service-icon--route service-icon--pulse" aria-hidden="true"></span>
             <h4 class="text-xl font-semibold text-white">Strategie & Komplettauftritt</h4>
             <p>Kennenlernen, Konzept, Produktion, Entwicklung, Launch und ein fertiger digitaler Auftritt aus einer Hand.</p>
             </article>
@@ -80,6 +105,11 @@
 </template>
 
 <script>
+import timelinePoster from '../assets/optimized/img/timeline5-poster-640.webp';
+import timelineDesktop from '../assets/optimized/videos/timeline5-1080.mp4';
+import timelineMobile from '../assets/optimized/videos/timeline5-540.mp4';
+import timelineTablet from '../assets/optimized/videos/timeline5-720.mp4';
+
 export default {
   name: "StickyVideoWithContent",
   data() {
@@ -87,6 +117,7 @@ export default {
       fadeObserver: null,
       resizeObserver: null,
       serviceResizeObserver: null,
+      videoLoadObserver: null,
       stickyHeightFrame: 0,
       serviceScrollFrame: 0,
       serviceStartTranslate: 0,
@@ -94,17 +125,24 @@ export default {
       serviceTranslateDistance: 0,
       activeServiceIndex: 0,
       serviceHeadingHidden: false,
+      isPresenceVideoLoaded: false,
+      timelineDesktop,
+      timelineMobile,
+      timelinePoster,
+      timelineTablet,
     };
   },
   mounted() {
     this.setupFadeObserver();
     this.setupStickyHeight();
     this.setupServiceScroll();
+    this.setupPresenceVideoLoading();
   },
   beforeUnmount() {
     this.fadeObserver?.disconnect();
     this.resizeObserver?.disconnect();
     this.serviceResizeObserver?.disconnect();
+    this.videoLoadObserver?.disconnect();
     window.removeEventListener("resize", this.scheduleStickyHeightUpdate);
     window.removeEventListener("load", this.scheduleStickyHeightUpdate);
     window.removeEventListener("scroll", this.scheduleServiceScrollPosition);
@@ -121,6 +159,47 @@ export default {
 
   },
   methods: {
+    setupPresenceVideoLoading() {
+      const section = this.$refs.stickySection;
+
+      const loadVideo = () => {
+        if (this.isPresenceVideoLoaded) return;
+
+        this.isPresenceVideoLoaded = true;
+
+        this.$nextTick(() => {
+          const video = this.$refs.video;
+
+          if (!video) return;
+
+          video.muted = true;
+          video.defaultMuted = true;
+          video.playsInline = true;
+          video.setAttribute("muted", "");
+          video.setAttribute("playsinline", "");
+          video.setAttribute("webkit-playsinline", "");
+          video.load();
+          video.play?.().catch(() => undefined);
+        });
+      };
+
+      if ("IntersectionObserver" in window && section) {
+        this.videoLoadObserver = new IntersectionObserver(([entry]) => {
+          if (!entry.isIntersecting) return;
+
+          loadVideo();
+          this.videoLoadObserver?.disconnect();
+        }, {
+          rootMargin: "280px 0px",
+          threshold: 0.01,
+        });
+
+        this.videoLoadObserver.observe(section);
+        return;
+      }
+
+      loadVideo();
+    },
     setupFadeObserver() {
       const options = {
         root: null,
@@ -294,6 +373,38 @@ export default {
       this.serviceHeadingHidden = rect.top <= 0 && rect.bottom >= window.innerHeight;
       track.style.setProperty("--services-scroll-x", `${currentTranslate}px`);
       track.style.setProperty("--services-scroll-y", `${currentDiagonal}px`);
+      this.updateServiceMenuVisibility(track, currentTranslate);
+    },
+    updateServiceMenuVisibility(track, currentTranslate) {
+      const slides = [...track.querySelectorAll(".service-slide")];
+      const desktopNav = document.querySelector(".desktop-nav.desktop-nav--visible");
+      const isDesktopViewport = window.matchMedia("(min-width: 1025px)").matches;
+
+      if (!desktopNav || !isDesktopViewport) {
+        slides.forEach((slide) => {
+          slide.style.removeProperty("--service-menu-opacity");
+        });
+        return;
+      }
+
+      const navRight = desktopNav.getBoundingClientRect().right;
+      const fadeDistance = Math.min(Math.max(window.innerWidth * 0.05, 54), 86);
+
+      slides.forEach((slide) => {
+        const visualContentWidth = [...slide.children].reduce((width, child) => {
+          return Math.max(width, child.getBoundingClientRect().width);
+        }, 220);
+        const contentHalfWidth = visualContentWidth / 2;
+        const fullyHiddenAt = navRight + contentHalfWidth + 18;
+        const fadeStartsAt = fullyHiddenAt + fadeDistance;
+        const slideCenter = currentTranslate + slide.offsetLeft + slide.offsetWidth / 2;
+        const opacity = Math.min(
+          Math.max((slideCenter - fullyHiddenAt) / (fadeStartsAt - fullyHiddenAt), 0),
+          1
+        );
+
+        slide.style.setProperty("--service-menu-opacity", opacity.toFixed(3));
+      });
     },
     scrollToState(targetId) {
       const target = document.getElementById(targetId);
@@ -423,6 +534,7 @@ export default {
 }
 
 .parent-element {
+  background: #000;
   min-height: var(--presence-scroll-height, auto);
   isolation: isolate;
   position: relative;
@@ -515,6 +627,7 @@ export default {
   color: white;
   min-height: var(--services-scroll-height, 100dvh);
   padding: 0;
+  scroll-margin-top: clamp(6rem, 12svh, 9rem);
   top: 0;
   background: transparent;
 }
@@ -576,23 +689,23 @@ export default {
 .service-slide {
   align-items: center;
   display: flex;
-  flex: 0 0 100vw;
+  flex: 0 0 var(--service-slide-width, 100vw);
   flex-direction: column;
   justify-content: center;
   min-height: clamp(16rem, 42dvh, 24rem);
-  opacity: 0;
+  opacity: var(--service-menu-opacity, 1);
   padding: clamp(1.4rem, 4vw, 3rem) max(1.25rem, 8vw);
   pointer-events: none;
   text-align: center;
-  transform: translateY(0.85rem) scale(0.98);
+  transform: translateY(0) scale(1);
   transition:
-    opacity 280ms ease,
+    opacity 170ms linear,
     transform 280ms ease;
-  visibility: hidden;
+  visibility: visible;
 }
 
 .service-slide--active {
-  opacity: 1;
+  opacity: var(--service-menu-opacity, 1);
   pointer-events: auto;
   transform: translateY(0) scale(1);
   visibility: visible;
@@ -602,15 +715,156 @@ export default {
   margin: 0 0 clamp(0.85rem, 2dvh, 1.2rem);
 }
 
-.service-slide i {
+.service-icon {
+  color: #fff;
   display: block;
+  height: clamp(2.2rem, 5dvh, 3rem);
   margin-bottom: clamp(0.9rem, 2.4dvh, 1.4rem);
+  position: relative;
+  width: clamp(2.2rem, 5dvh, 3rem);
+}
+
+.service-icon::before,
+.service-icon::after {
+  content: "";
+  position: absolute;
+}
+
+.service-icon--web::before {
+  border: 0.24rem solid currentColor;
+  border-radius: 0.2rem;
+  height: 58%;
+  left: 10%;
+  top: 8%;
+  width: 80%;
+}
+
+.service-icon--web::after {
+  background: currentColor;
+  border-radius: 999px;
+  bottom: 12%;
+  height: 0.28rem;
+  left: 4%;
+  width: 92%;
+}
+
+.service-icon--camera::before {
+  border: 0.24rem solid currentColor;
+  border-radius: 0.36rem;
+  height: 62%;
+  left: 5%;
+  top: 22%;
+  width: 90%;
+}
+
+.service-icon--camera::after {
+  border: 0.26rem solid currentColor;
+  border-radius: 999px;
+  height: 38%;
+  left: 31%;
+  top: 34%;
+  width: 38%;
+}
+
+.service-icon--video::before {
+  border: 0.24rem solid currentColor;
+  border-radius: 0.28rem;
+  height: 58%;
+  left: 8%;
+  top: 20%;
+  width: 62%;
+}
+
+.service-icon--video::after {
+  border-bottom: 0.62rem solid transparent;
+  border-left: 0.9rem solid currentColor;
+  border-top: 0.62rem solid transparent;
+  right: 4%;
+  top: 32%;
+}
+
+.service-icon--spark::before {
+  background: currentColor;
+  border-radius: 999px;
+  height: 86%;
+  left: 47%;
+  top: 7%;
+  transform: rotate(36deg);
+  width: 0.24rem;
+}
+
+.service-icon--spark::after {
+  background: currentColor;
+  border-radius: 999px;
+  height: 0.24rem;
+  left: 7%;
+  top: 47%;
+  transform: rotate(36deg);
+  width: 86%;
+}
+
+.service-icon--route::before {
+  border: 0.22rem solid currentColor;
+  border-bottom: 0;
+  border-left: 0;
+  border-radius: 0 1.4rem 0 0;
+  height: 62%;
+  left: 16%;
+  top: 15%;
+  transform: rotate(18deg);
+  width: 62%;
+}
+
+.service-icon--route::after {
+  background:
+    radial-gradient(circle, currentColor 0 45%, transparent 48%) 0 0 / 50% 50%;
+  height: 74%;
+  left: 10%;
+  top: 12%;
+  width: 74%;
+}
+
+.service-icon--bounce {
+  animation: serviceIconFloat 1.5s ease-in-out infinite alternate;
+}
+
+.service-icon--pulse {
+  animation: serviceIconPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes serviceIconFloat {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-0.55rem);
+  }
+}
+
+@keyframes serviceIconPulse {
+  0%,
+  100% {
+    opacity: 0.7;
+    transform: scale(0.96);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
 }
 
 .service-slide p {
   line-height: 1.55;
   margin: 0 auto;
   max-width: 30rem;
+}
+
+@media screen and (min-width: 1025px) {
+  .service-slide {
+    --service-slide-width: 84vw;
+  }
 }
 
 .service-card {
@@ -667,6 +921,7 @@ export default {
     padding: 0;
     top: 0;
     margin-top: 0;
+    scroll-margin-top: clamp(9rem, 24svh, 14rem);
   }
 
   .text-container {
