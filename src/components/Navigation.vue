@@ -27,7 +27,10 @@
         <!-- Botón decorativo redondo -->
         <div
           class="boton"
-          :class="{ active: isNavActive }"
+          :class="{
+            active: isNavActive,
+            closing: isNavClosing
+          }"
         ></div>
 
         <!-- Leistungen -->
@@ -95,6 +98,8 @@ import {
 
 const isNavActive = ref(false);
 
+const isNavClosing = ref(false);
+
 const isFixed = ref(false);
 
 const isScrolledEnough = ref(false);
@@ -108,6 +113,8 @@ const menuBlurHeight = ref('12rem');
 let menuBlurFrame = 0;
 
 let menuBlurTimers = [];
+
+let menuCloseTimer = 0;
 
 let activeSectionFrame = 0;
 
@@ -268,8 +275,39 @@ const scheduleMenuBlurTransitionUpdates = () => {
 
 const toggleNav = () => {
 
-  isNavActive.value =
-    !isNavActive.value;
+  if (menuCloseTimer) {
+
+    clearTimeout(menuCloseTimer);
+
+    menuCloseTimer = 0;
+
+  }
+
+
+  if (isNavActive.value) {
+
+    isNavClosing.value = true;
+
+    isNavActive.value = false;
+
+    menuCloseTimer = window.setTimeout(
+      () => {
+
+        isNavClosing.value = false;
+
+        menuCloseTimer = 0;
+
+      },
+      550
+    );
+
+  } else {
+
+    isNavClosing.value = false;
+
+    isNavActive.value = true;
+
+  }
 
 
   nextTick(
@@ -746,6 +784,13 @@ onUnmounted(() => {
 
   }
 
+
+  if (menuCloseTimer) {
+
+    clearTimeout(menuCloseTimer);
+
+  }
+
 });
 
 </script>
@@ -1086,7 +1131,7 @@ onUnmounted(() => {
 
   transition:
     border-radius
-      0.45s
+      0.43s
       ease-in-out;
 
 }
@@ -1202,11 +1247,11 @@ div.boton {
   transition:
 
     transform
-      0.4s
+      0.55s
       ease-in-out,
 
     margin-bottom
-      0.4s
+      0.55s
       ease-in-out;
 
 }
@@ -1242,6 +1287,14 @@ div.boton::after {
     translate(-50%, -50%)
     scale(0);
 
+  transition:
+    opacity
+      0.55s
+      ease-in-out,
+    transform
+      0.55s
+      ease-in-out;
+
 }
 
 
@@ -1250,6 +1303,47 @@ div.boton.active::after {
 
   opacity: 1;
 
+
+}
+
+
+div.boton.closing {
+
+  animation:
+    menu-button-close
+    0.37s
+    ease-in-out
+    both;
+
+}
+
+
+div.boton.closing::before,
+div.boton.closing::after {
+
+  opacity: 1;
+
+}
+
+
+div.boton.closing::before {
+
+  animation:
+    menu-x-out-before
+    0.55s
+    ease-in-out
+    both;
+
+}
+
+
+div.boton.closing::after {
+
+  animation:
+    menu-x-out-after
+    0.55s
+    ease-in-out
+    both;
 
 }
 
@@ -1338,6 +1432,60 @@ div.boton.active::after {
 }
 
 
+@keyframes menu-x-out-before {
+
+  from {
+
+    opacity: 1;
+
+    transform:
+      translate(-50%, -50%)
+      scale(1)
+      rotate(45deg);
+
+  }
+
+  to {
+
+    opacity: 0;
+
+    transform:
+      translate(-50%, -50%)
+      scale(0)
+      rotate(0deg);
+
+  }
+
+}
+
+
+@keyframes menu-x-out-after {
+
+  from {
+
+    opacity: 1;
+
+    transform:
+      translate(-50%, -50%)
+      scale(1)
+      rotate(-45deg);
+
+  }
+
+  to {
+
+    opacity: 0;
+
+    transform:
+      translate(-50%, -50%)
+      scale(0)
+      rotate(0deg);
+
+  }
+
+}
+
+
 /* ==========================================================
    BOTÓN ACTIVO
    ========================================================== */
@@ -1346,10 +1494,85 @@ div.boton.active {
 
   margin-bottom: -3rem;
 
+  animation:
+    menu-button-bounce
+    0.55s
+    ease-in-out
+    both;
+
   transform:
     translateX(-15px)
     translateY(65px)
     scale(0.9);
+
+}
+
+
+@keyframes menu-button-bounce {
+
+  0% {
+
+    transform:
+      scale(0.9);
+
+  }
+
+  55% {
+
+    transform:
+      translateX(-15px)
+      translateY(80px)
+      scale(0.9);
+
+  }
+
+  74% {
+
+    transform:
+      translateX(-15px)
+      translateY(57px)
+      scale(0.9);
+
+  }
+
+  88% {
+
+    transform:
+      translateX(-15px)
+      translateY(69px)
+      scale(0.9);
+
+  }
+
+  100% {
+
+    transform:
+      translateX(-15px)
+      translateY(65px)
+      scale(0.9);
+
+  }
+
+}
+
+
+@keyframes menu-button-close {
+
+  0% {
+
+    transform:
+      translateX(-15px)
+      translateY(65px)
+      scale(0.9);
+
+  }
+
+  100% {
+
+    transform:
+      scale(0.9);
+
+  }
 
 }
 
