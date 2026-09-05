@@ -1253,7 +1253,7 @@ div.boton.active::before {
 
   animation:
     menu-x-in-before
-    0.6s
+    0.40s
     ease-out
     both;
 
@@ -1268,7 +1268,7 @@ div.boton.active::after {
 
   animation:
     menu-x-in-after
-    0.6s
+    0.40s
     ease-out
     both;
 
