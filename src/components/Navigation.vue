@@ -1513,24 +1513,26 @@ div.boton.active {
   0% {
 
     transform:
+      translateX(0)
+      translateY(0)
       scale(0.9);
 
   }
 
-  60% {
+  68% {
 
     transform:
       translateX(-15px)
-      translateY(70px)
+      translateY(66px)
       scale(0.9);
 
   }
 
-  82% {
+  84% {
 
     transform:
       translateX(-15px)
-      translateY(63px)
+      translateY(64px)
       scale(0.9);
 
   }
@@ -1539,7 +1541,7 @@ div.boton.active {
 
     transform:
       translateX(-15px)
-      translateY(66px)
+      translateY(65px)
       scale(0.9);
 
   }
