@@ -1084,6 +1084,11 @@ onUnmounted(() => {
   transform:
     rotate(-6deg);
 
+  transition:
+    border-radius
+      0.45s
+      ease-in-out;
+
 }
 
 
@@ -1343,7 +1348,7 @@ div.boton.active {
 
   transform:
     translateX(-15px)
-    translateY(50px)
+    translateY(65px)
     scale(0.9);
 
 }
