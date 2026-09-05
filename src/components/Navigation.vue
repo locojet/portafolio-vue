@@ -1235,7 +1235,7 @@ div.boton::after {
 
   transform:
     translate(-50%, -50%)
-    scale(0.65);
+    scale(0);
 
 }
 
@@ -1253,7 +1253,7 @@ div.boton.active::before {
 
   animation:
     menu-x-in-before
-    0.28s
+    0.6s
     ease-out
     both;
 
@@ -1268,7 +1268,7 @@ div.boton.active::after {
 
   animation:
     menu-x-in-after
-    0.28s
+    0.6s
     ease-out
     both;
 
@@ -1287,7 +1287,7 @@ div.boton.active::after {
 
     transform:
       translate(-50%, -50%)
-      scale(0.65)
+      scale(0)
       rotate(0deg);
 
   }
@@ -1314,7 +1314,7 @@ div.boton.active::after {
 
     transform:
       translate(-50%, -50%)
-      scale(0.65)
+      scale(0)
       rotate(0deg);
 
   }
