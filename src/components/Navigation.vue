@@ -30,14 +30,16 @@
           :class="{ active: isNavActive }"
         ></div>
 
-        <!-- Präsenz -->
+        <!-- Leistungen -->
         <div tabindex="8" class="bar eins">
           <a
             class="bartext"
+            :class="{ 'bartext--active': activeSection === 'presence-services' }"
             href="#presence-services"
+            :aria-current="activeSection === 'presence-services' ? 'true' : undefined"
             @click="navigateToSection($event, 'presence-services')"
           >
-            Präsenz
+            Leistungen
           </a>
         </div>
 
@@ -45,7 +47,9 @@
         <div tabindex="9" class="bar zwei">
           <a
             class="bartext"
+            :class="{ 'bartext--active': activeSection === 'media' }"
             href="#media"
+            :aria-current="activeSection === 'media' ? 'true' : undefined"
             @click="navigateToSection($event, 'media')"
           >
             Konzept
@@ -56,7 +60,9 @@
         <div tabindex="10" class="bar drei">
           <a
             class="bartext"
+            :class="{ 'bartext--active': activeSection === 'about' }"
             href="#about"
+            :aria-current="activeSection === 'about' ? 'true' : undefined"
             @click="navigateToSection($event, 'about')"
           >
             About
@@ -93,6 +99,8 @@ const isFixed = ref(false);
 
 const isScrolledEnough = ref(false);
 
+const activeSection = ref('presence-services');
+
 const navButton = ref(null);
 
 const menuBlurHeight = ref('12rem');
@@ -100,6 +108,22 @@ const menuBlurHeight = ref('12rem');
 let menuBlurFrame = 0;
 
 let menuBlurTimers = [];
+
+let activeSectionFrame = 0;
+
+let sectionObserver = null;
+
+const navigationTargets = [
+  {
+    id: 'presence-services'
+  },
+  {
+    id: 'media'
+  },
+  {
+    id: 'about'
+  }
+];
 
 
 /* ==========================================================
@@ -316,6 +340,187 @@ const getSectionOffset = (targetId) => {
 };
 
 
+/* ==========================================================
+   SECCIÓN ACTIVA
+   ========================================================== */
+
+const updateActiveSectionFromViewport = () => {
+
+  const bandTop =
+    window.innerHeight * 0.2;
+
+
+  const bandBottom =
+    window.innerHeight * 0.68;
+
+
+  let bestMatch = null;
+
+
+  navigationTargets.forEach((target) => {
+
+    const section =
+      document.getElementById(target.id);
+
+
+    if (!section) {
+      return;
+    }
+
+
+    const rect =
+      section.getBoundingClientRect();
+
+
+    const overlap =
+      Math.max(
+        0,
+        Math.min(rect.bottom, bandBottom) -
+        Math.max(rect.top, bandTop)
+      );
+
+
+    if (
+      overlap > 0 &&
+      (!bestMatch || overlap > bestMatch.overlap)
+    ) {
+
+      bestMatch = {
+        id: target.id,
+        overlap
+      };
+
+    }
+
+  });
+
+
+  if (bestMatch) {
+
+    activeSection.value =
+      bestMatch.id;
+
+    return;
+
+  }
+
+
+  const viewportAnchor =
+    window.scrollY +
+    window.innerHeight * 0.42;
+
+
+  let nextActive =
+    activeSection.value;
+
+
+  navigationTargets.forEach((target) => {
+
+    const section =
+      document.getElementById(target.id);
+
+
+    if (!section) {
+      return;
+    }
+
+
+    const sectionTop =
+      section.getBoundingClientRect().top +
+      window.scrollY -
+      getSectionOffset(target.id) * 0.55;
+
+
+    if (viewportAnchor >= sectionTop) {
+      nextActive = target.id;
+    }
+
+  });
+
+
+  activeSection.value =
+    nextActive;
+
+};
+
+
+const scheduleActiveSectionUpdate = () => {
+
+  if (activeSectionFrame) {
+    return;
+  }
+
+
+  activeSectionFrame =
+    requestAnimationFrame(() => {
+
+      activeSectionFrame = 0;
+
+      updateActiveSectionFromViewport();
+
+    });
+
+};
+
+
+const syncActiveSectionFromHash = () => {
+
+  const hashTarget =
+    window.location.hash.replace('#', '');
+
+
+  if (
+    navigationTargets.some(
+      (target) => target.id === hashTarget
+    )
+  ) {
+
+    activeSection.value =
+      hashTarget;
+
+  }
+
+
+  scheduleActiveSectionUpdate();
+
+};
+
+
+const setupActiveSectionObserver = () => {
+
+  if (!('IntersectionObserver' in window)) {
+    return;
+  }
+
+
+  sectionObserver =
+    new IntersectionObserver(
+      () => {
+        scheduleActiveSectionUpdate();
+      },
+      {
+        root: null,
+        rootMargin: '-28% 0px -54% 0px',
+        threshold: [0, 0.08, 0.25, 0.5]
+      }
+    );
+
+
+  navigationTargets.forEach((target) => {
+
+    const section =
+      document.getElementById(target.id);
+
+
+    if (section) {
+      sectionObserver.observe(section);
+    }
+
+  });
+
+};
+
+
 const navigateToSection = (event, targetId) => {
 
   event.stopPropagation();
@@ -329,6 +534,9 @@ const navigateToSection = (event, targetId) => {
   if (!target) {
     return;
   }
+
+  activeSection.value =
+    targetId;
 
 
   const targetTop =
@@ -395,6 +603,9 @@ const handleScroll = () => {
     scheduleMenuBlurUpdate
   );
 
+
+  scheduleActiveSectionUpdate();
+
 };
 
 
@@ -456,6 +667,10 @@ onMounted(() => {
    */
   handleScroll();
 
+  setupActiveSectionObserver();
+
+  syncActiveSectionFromHash();
+
 
   window.addEventListener(
     'scroll',
@@ -466,6 +681,12 @@ onMounted(() => {
   window.addEventListener(
     'resize',
     scheduleMenuBlurTransitionUpdates
+  );
+
+
+  window.addEventListener(
+    'hashchange',
+    syncActiveSectionFromHash
   );
 
 
@@ -494,6 +715,15 @@ onUnmounted(() => {
   );
 
 
+  window.removeEventListener(
+    'hashchange',
+    syncActiveSectionFromHash
+  );
+
+
+  sectionObserver?.disconnect();
+
+
   menuBlurTimers.forEach(
     (timer) => clearTimeout(timer)
   );
@@ -503,6 +733,15 @@ onUnmounted(() => {
 
     cancelAnimationFrame(
       menuBlurFrame
+    );
+
+  }
+
+
+  if (activeSectionFrame) {
+
+    cancelAnimationFrame(
+      activeSectionFrame
     );
 
   }
@@ -953,6 +1192,8 @@ div.boton {
     2px
     var(--quaternary-color);
 
+  position: relative;
+
   transition:
 
     transform
@@ -962,6 +1203,132 @@ div.boton {
     margin-bottom
       0.4s
       ease-in-out;
+
+}
+
+
+div.boton::before,
+div.boton::after {
+
+  background:
+    var(--quaternary-color);
+
+  border-radius: 999px;
+
+  content: "";
+
+  height: 2px;
+
+  left: 50%;
+
+  position: absolute;
+
+  top: 50%;
+
+  transform-origin: center;
+
+  width: 30px;
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  transform:
+    translate(-50%, -50%)
+    scale(0.65);
+
+}
+
+
+div.boton.active::before,
+div.boton.active::after {
+
+  opacity: 1;
+
+
+}
+
+
+div.boton.active::before {
+
+  animation:
+    menu-x-in-before
+    0.28s
+    ease-out
+    both;
+
+  transform:
+    translate(-50%, -50%)
+    rotate(45deg);
+
+}
+
+
+div.boton.active::after {
+
+  animation:
+    menu-x-in-after
+    0.28s
+    ease-out
+    both;
+
+  transform:
+    translate(-50%, -50%)
+    rotate(-45deg);
+
+}
+
+
+@keyframes menu-x-in-before {
+
+  from {
+
+    opacity: 0;
+
+    transform:
+      translate(-50%, -50%)
+      scale(0.65)
+      rotate(0deg);
+
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform:
+      translate(-50%, -50%)
+      scale(1)
+      rotate(45deg);
+
+  }
+
+}
+
+
+@keyframes menu-x-in-after {
+
+  from {
+
+    opacity: 0;
+
+    transform:
+      translate(-50%, -50%)
+      scale(0.65)
+      rotate(0deg);
+
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform:
+      translate(-50%, -50%)
+      scale(1)
+      rotate(-45deg);
+
+  }
 
 }
 
@@ -1125,6 +1492,21 @@ div.boton.active {
 }
 
 
+.navkorb.active .bartext.bartext--active,
+.navkorb.active .bartext.bartext--active:visited,
+.navkorb.active .bartext.bartext--active:hover,
+.navkorb.active .bartext.bartext--active:focus-visible,
+.navkorb.active .bartext.bartext--active:active {
+
+  color:
+    var(--quaternary-color);
+
+  text-shadow:
+    0 0 1rem rgba(214, 147, 147, 0.82);
+
+}
+
+
 /* ==========================================================
    HOVER
    ========================================================== */
@@ -1139,7 +1521,21 @@ div.boton.active {
     scale(1.1);
 
   color:
-    var(--tertiary-color);
+    var(--quaternary-color);
+
+}
+
+
+.navkorb.active .bartext:focus-visible {
+
+  color:
+    var(--quaternary-color);
+
+  outline:
+    1px solid rgba(214, 147, 147, 0.62);
+
+  outline-offset:
+    0.35rem;
 
 }
 

@@ -39,7 +39,7 @@ const activeItem = ref(null);
 
 const navItems = [
   {
-    label: 'Präsenz',
+    label: 'Leistungen',
     target: 'presence-services'
   },
   {
@@ -58,6 +58,8 @@ const navItems = [
 
 let activeFrame = 0;
 
+let sectionObserver = null;
+
 const clampValue = (
   value,
   min,
@@ -71,6 +73,10 @@ const getDocumentTop = (element) => (
   element.getBoundingClientRect().top
   +
   window.scrollY
+);
+
+const getNavItemIndex = (targetId) => (
+  navItems.findIndex((item) => item.target === targetId)
 );
 
 const getSectionOffset = (targetId) => {
@@ -135,10 +141,50 @@ const navigateToSection = (
   });
 };
 
-const updateActiveItem = () => {
+const getActiveItemFromViewport = () => {
+  const bandTop =
+    window.innerHeight * 0.2;
+
+  const bandBottom =
+    window.innerHeight * 0.68;
+
+  let bestMatch = null;
+
+  navItems.forEach((item, index) => {
+    const section =
+      document.getElementById(item.target);
+
+    if (!section) {
+      return;
+    }
+
+    const rect =
+      section.getBoundingClientRect();
+
+    const overlap =
+      Math.max(
+        0,
+        Math.min(rect.bottom, bandBottom) -
+        Math.max(rect.top, bandTop)
+      );
+
+    if (
+      overlap > 0 &&
+      (!bestMatch || overlap > bestMatch.overlap)
+    ) {
+      bestMatch = {
+        index,
+        overlap
+      };
+    }
+  });
+
+  if (bestMatch) {
+    return bestMatch.index;
+  }
+
   const viewportAnchor =
-    window.scrollY
-    +
+    window.scrollY +
     window.innerHeight * 0.42;
 
   let nextActive = null;
@@ -159,7 +205,11 @@ const updateActiveItem = () => {
     }
   });
 
-  activeItem.value = nextActive;
+  return nextActive;
+};
+
+const updateActiveItem = () => {
+  activeItem.value = getActiveItemFromViewport();
 };
 
 const scheduleActiveItemUpdate = () => {
@@ -175,8 +225,51 @@ const scheduleActiveItemUpdate = () => {
     });
 };
 
+const syncActiveItemFromHash = () => {
+  const hashTarget =
+    window.location.hash.replace('#', '');
+
+  const hashIndex =
+    getNavItemIndex(hashTarget);
+
+  if (hashIndex >= 0) {
+    activeItem.value = hashIndex;
+  }
+
+  scheduleActiveItemUpdate();
+};
+
+const setupActiveItemObserver = () => {
+  if (!('IntersectionObserver' in window)) {
+    return;
+  }
+
+  sectionObserver =
+    new IntersectionObserver(
+      scheduleActiveItemUpdate,
+      {
+        root: null,
+        rootMargin: '-24% 0px -48% 0px',
+        threshold: [0, 0.08, 0.24, 0.5]
+      }
+    );
+
+  navItems.forEach((item) => {
+    const section =
+      document.getElementById(item.target);
+
+    if (section) {
+      sectionObserver.observe(section);
+    }
+  });
+};
+
 onMounted(() => {
   updateActiveItem();
+
+  setupActiveItemObserver();
+
+  syncActiveItemFromHash();
 
   window.addEventListener(
     'scroll',
@@ -190,6 +283,11 @@ onMounted(() => {
     'resize',
     scheduleActiveItemUpdate
   );
+
+  window.addEventListener(
+    'hashchange',
+    syncActiveItemFromHash
+  );
 });
 
 onUnmounted(() => {
@@ -202,6 +300,13 @@ onUnmounted(() => {
     'resize',
     scheduleActiveItemUpdate
   );
+
+  window.removeEventListener(
+    'hashchange',
+    syncActiveItemFromHash
+  );
+
+  sectionObserver?.disconnect();
 
   if (activeFrame) {
     cancelAnimationFrame(activeFrame);
@@ -515,6 +620,14 @@ onUnmounted(() => {
 
   transform:
     translateX(0.28rem);
+}
+
+.desktop-nav.desktop-nav--visible a:active,
+.desktop-nav.desktop-nav--visible a.active:active,
+.desktop-nav.desktop-nav--visible a.active:hover,
+.desktop-nav.desktop-nav--visible a.active:focus-visible {
+  color:
+    var(--desktop-nav-pink);
 }
 
 

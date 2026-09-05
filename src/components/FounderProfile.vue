@@ -99,7 +99,7 @@ const visionList = computed(() => (
     linear-gradient(180deg, #000 0%, #110c0c 48%, #000 100%);
   color: #fff;
   margin-top: -1px;
-  padding: clamp(4.5rem, 8vw, 8rem) clamp(1.2rem, 5vw, 4rem);
+  padding: clamp(3.25rem, 5.5vw, 5.5rem) clamp(1.2rem, 5vw, 4rem);
   scroll-margin-top: clamp(6rem, 12svh, 9rem);
   width: 100vw;
 }
@@ -149,6 +149,10 @@ const visionList = computed(() => (
 }
 
 @media (min-width: 640px) and (max-width: 1024px) {
+  .founder-profile {
+    padding: clamp(4.5rem, 8vw, 8rem) clamp(1.2rem, 5vw, 4rem);
+  }
+
   .founder-profile__vision {
     grid-template-columns: 1fr;
     max-width: min(34rem, calc(100vw - 2rem));

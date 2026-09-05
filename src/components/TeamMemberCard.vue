@@ -73,17 +73,12 @@ defineProps({
 <style scoped>
 .team-member-card {
   align-items: center;
-  background:
-    radial-gradient(circle at 78% 18%, rgba(214, 147, 147, 0.16), rgba(214, 147, 147, 0) 32%),
-    rgba(255, 255, 255, 0.035);
-  border: 1px solid rgba(255, 218, 218, 0.13);
-  border-radius: 8px;
   display: grid;
-  gap: clamp(2rem, 5vw, 4.5rem);
-  grid-template-columns: minmax(14rem, 0.72fr) minmax(0, 1fr);
+  gap: clamp(1.4rem, 3.2vw, 3rem);
+  grid-template-columns: minmax(10rem, 0.52fr) minmax(0, 1fr);
   margin: 0 auto;
-  max-width: min(72rem, 90vw);
-  padding: clamp(1.4rem, 4vw, 3rem);
+  max-width: min(54rem, 78vw);
+  padding: clamp(0.8rem, 2vw, 1.6rem) 0;
 }
 
 .team-member-card__portrait {
@@ -101,7 +96,7 @@ defineProps({
   border-radius: 50%;
   box-shadow: 0 1.8rem 4rem rgba(0, 0, 0, 0.46);
   display: block;
-  flex: 0 0 clamp(13rem, 20vw, 19rem);
+  flex: 0 0 clamp(9.5rem, 14vw, 13.5rem);
   overflow: hidden;
   position: relative;
 }
@@ -132,8 +127,8 @@ defineProps({
 
 .team-member-card__signature-wrap {
   flex: 0 0 auto;
-  margin-bottom: clamp(1rem, 2.6vw, 1.8rem);
-  width: clamp(5.5rem, 9vw, 8.5rem);
+  margin-bottom: clamp(0.7rem, 1.8vw, 1.25rem);
+  width: clamp(4.8rem, 7vw, 6.5rem);
   z-index: 2;
 }
 
@@ -158,7 +153,7 @@ defineProps({
 }
 
 .team-member-card__copy h2 {
-  font-size: clamp(2rem, 3.2vw, 3.25rem);
+  font-size: clamp(1.65rem, 2.35vw, 2.45rem);
   font-weight: 900;
   line-height: 1;
   margin: 0;

@@ -78,8 +78,8 @@
 
             <article class="service-slide" :class="{ 'service-slide--active': activeServiceIndex === 1 }">
             <span class="service-icon service-icon--camera service-icon--bounce" aria-hidden="true"></span>
-            <h4 class="text-xl font-semibold text-white">Foto & Bildsprache</h4>
-            <p>Echte Mitarbeiter, Räume, Produkte, Maschinen und Prozesse statt austauschbarer Stockfotos, abgestimmt auf Ihre Positionierung.</p>
+            <h4 class="text-xl font-semibold text-white">Foto, Drohne & Bildsprache</h4>
+            <p>Echte Mitarbeiter, Räume, Produkte, Maschinen, Prozesse und Drohnenflüge für starke Luftperspektiven statt austauschbarer Stockfotos.</p>
             </article>
 
             <article class="service-slide" :class="{ 'service-slide--active': activeServiceIndex === 2 }">

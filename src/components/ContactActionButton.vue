@@ -527,13 +527,7 @@ onUnmounted(() => {
 }
 
 .contact-action-option {
-  background:
-    rgba(
-      214,
-      147,
-      147,
-      .68
-    );
+  background: transparent;
 
   backdrop-filter:
     blur(12px);
@@ -998,13 +992,7 @@ onUnmounted(() => {
 
   .contact-action-option {
     align-items: center;
-    background:
-      rgba(
-        214,
-        147,
-        147,
-        .68
-      );
+    background: transparent;
 
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
@@ -1134,13 +1122,7 @@ onUnmounted(() => {
 
   .contact-action-option--close {
     appearance: none;
-    background:
-      rgba(
-        214,
-        147,
-        147,
-        .68
-      );
+    background: transparent;
 
     border:
       none !important;
@@ -1207,25 +1189,13 @@ onUnmounted(() => {
 
   .contact-action-option:hover,
   .contact-action-option:focus-visible {
-    background:
-      rgba(
-        214,
-        147,
-        147,
-        .76
-      );
+    background: transparent;
 
     outline: none;
   }
 
   .contact-action-option:active {
-    background:
-      rgba(
-        214,
-        147,
-        147,
-        .84
-      );
+    background: transparent;
   }
 }
 

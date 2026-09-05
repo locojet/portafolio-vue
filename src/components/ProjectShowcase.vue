@@ -5,41 +5,39 @@
       <h2 id="projects-title">{{ title }}</h2>
     </div>
 
-    <div class="project-showcase__carousel">
-      <div
-        ref="rail"
-        class="project-showcase__rail"
-        @focusin="pauseAutoplay"
-        @focusout="resumeAutoplaySoon"
-        @pointerdown="handlePointerDown"
-        @pointermove="handlePointerMove"
-        @pointerup="handlePointerUp"
-        @pointerleave="handlePointerUp"
-        @pointercancel="handlePointerCancel"
-        @click.capture="handleClickCapture"
-        @dragstart.prevent
-        @touchstart.passive="pauseAutoplay"
-        @touchend.passive="resumeAutoplaySoon"
-        @wheel.passive="pauseAutoplayTemporarily"
-        @scroll.passive="handleRailScroll"
-      >
+    <div
+      ref="carousel"
+      class="project-showcase__carousel"
+      :class="{ 'project-showcase__carousel--dragging': isDragging }"
+      :style="carouselStyle"
+      @focusin="pauseAutoplay"
+      @focusout="resumeAutoplaySoon"
+      @pointerdown="handlePointerDown"
+      @pointermove="handlePointerMove"
+      @pointerup="handlePointerUp"
+      @pointerleave="handlePointerLeave"
+      @pointercancel="handlePointerCancel"
+      @click.capture="handleClickCapture"
+      @wheel="handleWheel"
+      @dragstart.prevent
+    >
+      <div class="project-showcase__stage" aria-live="polite">
         <a
           v-for="(project, index) in projectItems"
           :key="project.title"
           class="project-card"
-          :class="[
-            { 'project-card--active': activeIndex === index },
-            index % 2 === 0 ? 'project-card--from-left' : 'project-card--from-right'
-          ]"
+          :class="projectCardClass(index)"
           :href="project.href"
           :aria-current="activeIndex === index ? 'true' : undefined"
+          :aria-hidden="isVisibleProject(index) ? undefined : 'true'"
           :aria-label="project.title"
+          :tabindex="isVisibleProject(index) ? 0 : -1"
           :target="project.href?.startsWith('http') ? '_blank' : undefined"
           :rel="project.href?.startsWith('http') ? 'noreferrer' : undefined"
         >
           <picture>
-            <source type="image/avif" :srcset="project.image.avif" sizes="(max-width: 639px) 56vw, (max-width: 1024px) 46vw, 400px" />
-            <source type="image/webp" :srcset="project.image.webp" sizes="(max-width: 639px) 56vw, (max-width: 1024px) 46vw, 400px" />
+            <source type="image/avif" :srcset="project.image.avif" sizes="(max-width: 639px) 72vw, (max-width: 1024px) 54vw, 400px" />
+            <source type="image/webp" :srcset="project.image.webp" sizes="(max-width: 639px) 72vw, (max-width: 1024px) 54vw, 400px" />
             <img
               :src="project.image.fallback"
               :alt="project.title"
@@ -122,164 +120,79 @@ const projectItems = computed(() => (
     : defaultProjects
 ));
 
-const rail = ref(null);
+const carousel = ref(null);
 const showcase = ref(null);
 const activeIndex = ref(0);
+const dragOffset = ref(0);
+const isDragging = ref(false);
+const isCarouselVisible = ref(false);
 
 let autoplayTimer = 0;
 let resumeId = 0;
-let scrollFrame = 0;
-let snapTimer = 0;
 let visibilityObserver = null;
-let revealObserver = null;
-let railResizeObserver = null;
 let isInteracting = false;
 let isInViewport = true;
-let isPointerDragging = false;
-let dragStartX = 0;
-let dragStartScrollLeft = 0;
-let hasDragged = false;
+let pointerIsDown = false;
+let pointerId = null;
+let pointerStartX = 0;
+let pointerStartY = 0;
+let pointerAxis = '';
 let shouldCancelClick = false;
-let isSnapping = false;
-let snapReleaseTimer = 0;
-let lastRailWidth = 0;
+let wheelLocked = false;
+let wheelUnlockTimer = 0;
 
-const getCards = () => Array.from(rail.value?.querySelectorAll('.project-card') ?? []);
+const carouselStyle = computed(() => ({
+  '--project-drag-x': `${dragOffset.value}px`,
+}));
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
-const getClosestProjectIndex = () => {
-  const element = rail.value;
-  const cards = getCards();
+const normalizeIndex = (index) => {
+  const count = projectItems.value.length;
+  if (count === 0) return 0;
 
-  if (!element || cards.length === 0) return activeIndex.value;
-
-  const center = element.scrollLeft + element.clientWidth / 2;
-  let closestIndex = 0;
-  let closestDistance = Infinity;
-
-  cards.forEach((card, index) => {
-    const cardCenter = card.offsetLeft + card.offsetWidth / 2;
-    const distance = Math.abs(center - cardCenter);
-
-    if (distance < closestDistance) {
-      closestDistance = distance;
-      closestIndex = index;
-    }
-  });
-
-  return closestIndex;
+  return ((index % count) + count) % count;
 };
 
-const updateProjectStyles = (closestIndex = getClosestProjectIndex()) => {
-  const element = rail.value;
-  const cards = getCards();
+const getWrappedOffset = (index) => {
+  const count = projectItems.value.length;
+  if (count <= 1) return 0;
 
-  if (!element || cards.length === 0) return;
+  let offset = index - activeIndex.value;
 
-  const railCenter = element.scrollLeft + element.clientWidth / 2;
-  const cardStep = cards.length > 1
-    ? Math.max(Math.abs(cards[1].offsetLeft - cards[0].offsetLeft), 1)
-    : Math.max(cards[0].offsetWidth, 1);
+  if (offset > count / 2) offset -= count;
+  if (offset < -count / 2) offset += count;
 
-  cards.forEach((card, index) => {
-    const cardCenter = card.offsetLeft + card.offsetWidth / 2;
-    const relativePosition = (cardCenter - railCenter) / cardStep;
-    const clampedPosition = clamp(relativePosition, -1.35, 1.35);
-    const distance = Math.min(Math.abs(relativePosition), 2);
-    const isCenter = index === closestIndex;
-    const rotateY = isCenter ? 0 : clamp(-clampedPosition * 11, -12, 12);
-    const scale = isCenter ? 1.02 : clamp(1 - distance * 0.07, 0.88, 0.96);
-    const translateZ = isCenter ? 34 : clamp(12 - distance * 30, -42, 10);
-    const opacity = isCenter ? 1 : clamp(0.9 - distance * 0.18, 0.34, 0.78);
-
-    card.style.setProperty('--project-rotate-y', `${rotateY.toFixed(2)}deg`);
-    card.style.setProperty('--project-scale', scale.toFixed(3));
-    card.style.setProperty('--project-z', `${translateZ.toFixed(1)}px`);
-    card.style.setProperty('--project-visual-opacity', opacity.toFixed(3));
-    card.classList.toggle('project-card--is-center', isCenter);
-    card.classList.toggle('project-card--is-left', relativePosition < -0.12);
-    card.classList.toggle('project-card--is-right', relativePosition > 0.12);
-  });
+  return offset;
 };
 
-const scrollToProject = (index, behavior = 'smooth') => {
-  const element = rail.value;
-  const cards = getCards();
-  const card = cards[index];
+const isVisibleProject = (index) => Math.abs(getWrappedOffset(index)) <= 1;
 
-  if (!element || !card) return;
+const projectCardClass = (index) => {
+  const offset = getWrappedOffset(index);
 
-  const left = card.offsetLeft - (element.clientWidth - card.offsetWidth) / 2;
-  isSnapping = behavior !== 'auto';
-  clearTimeout(snapReleaseTimer);
-  clearTimeout(snapTimer);
-  element.scrollTo({ left, behavior });
-  activeIndex.value = index;
-  updateProjectStyles(index);
-
-  if (behavior === 'auto') {
-    isSnapping = false;
-    return;
-  }
-
-  snapReleaseTimer = window.setTimeout(() => {
-    isSnapping = false;
-  }, 520);
+  return {
+    'project-card--visible': isCarouselVisible.value,
+    'project-card--active': offset === 0,
+    'project-card--left': offset === -1,
+    'project-card--right': offset === 1,
+    'project-card--hidden': Math.abs(offset) > 1,
+  };
 };
 
-const updateActiveProject = () => {
-  if (scrollFrame) return;
-
-  scrollFrame = requestAnimationFrame(() => {
-    scrollFrame = 0;
-
-    const element = rail.value;
-    const cards = getCards();
-    if (!element || cards.length === 0) return;
-
-    const closestIndex = getClosestProjectIndex();
-
-    activeIndex.value = closestIndex;
-    updateProjectStyles(closestIndex);
-  });
+const moveToProject = (nextIndex) => {
+  activeIndex.value = normalizeIndex(nextIndex);
+  dragOffset.value = 0;
 };
 
-const snapToClosestProject = (behavior = 'smooth') => {
-  const cards = getCards();
-
-  if (cards.length === 0) return;
-
-  scrollToProject(getClosestProjectIndex(), behavior);
-};
-
-const scheduleSnapAfterScroll = () => {
-  if (isSnapping || isPointerDragging) return;
-
-  clearTimeout(snapTimer);
-  snapTimer = window.setTimeout(() => {
-    snapToClosestProject('smooth');
-  }, 150);
-};
-
-const handleRailScroll = () => {
-  updateActiveProject();
-  scheduleSnapAfterScroll();
-};
-
-const handleRailScrollEnd = () => {
-  if (isPointerDragging) return;
-
-  snapToClosestProject('smooth');
+const moveByDirection = (direction) => {
+  if (projectItems.value.length <= 1) return;
+  moveToProject(activeIndex.value + direction);
 };
 
 const playNextProject = () => {
   if (isInteracting || document.hidden || !isInViewport) return;
-
-  const cards = getCards();
-  if (cards.length === 0) return;
-
-  scrollToProject((activeIndex.value + 1) % cards.length);
+  moveByDirection(1);
 };
 
 const scheduleAutoplay = (delay = props.autoplayDelay) => {
@@ -304,69 +217,111 @@ const resumeAutoplaySoon = () => {
 
   resumeId = window.setTimeout(() => {
     isInteracting = false;
-    scheduleAutoplay(650);
-  }, 1800);
+    scheduleAutoplay(700);
+  }, 900);
 };
 
-const pauseAutoplayTemporarily = () => {
-  pauseAutoplay();
-  resumeAutoplaySoon();
+const getDragLimit = () => Math.min(Math.max(window.innerWidth * 0.28, 72), 180);
+
+const resetPointerState = () => {
+  pointerIsDown = false;
+  pointerId = null;
+  pointerAxis = '';
+  isDragging.value = false;
+  dragOffset.value = 0;
+};
+
+const capturePointer = (event) => {
+  const element = carousel.value;
+
+  if (!element?.setPointerCapture || element.hasPointerCapture?.(event.pointerId)) {
+    return;
+  }
+
+  element.setPointerCapture(event.pointerId);
+};
+
+const releasePointer = (event) => {
+  const element = carousel.value;
+
+  if (element?.hasPointerCapture?.(event.pointerId)) {
+    element.releasePointerCapture(event.pointerId);
+  }
 };
 
 const handlePointerDown = (event) => {
+  if (!event.isPrimary || event.button > 0) return;
+
   pauseAutoplay();
-
-  if (event.pointerType !== 'mouse') return;
-
-  const element = rail.value;
-  if (!element) return;
-
-  isPointerDragging = true;
-  hasDragged = false;
+  pointerIsDown = true;
+  pointerId = event.pointerId;
+  pointerStartX = event.clientX;
+  pointerStartY = event.clientY;
+  pointerAxis = '';
   shouldCancelClick = false;
-  dragStartX = event.clientX;
-  dragStartScrollLeft = element.scrollLeft;
-  element.classList.add('project-showcase__rail--dragging');
-  element.setPointerCapture?.(event.pointerId);
+  dragOffset.value = 0;
 };
 
 const handlePointerMove = (event) => {
-  const element = rail.value;
+  if (!pointerIsDown || event.pointerId !== pointerId) return;
 
-  if (!isPointerDragging || !element) return;
+  const deltaX = event.clientX - pointerStartX;
+  const deltaY = event.clientY - pointerStartY;
 
-  const deltaX = event.clientX - dragStartX;
+  if (!pointerAxis && Math.max(Math.abs(deltaX), Math.abs(deltaY)) > 8) {
+    pointerAxis = Math.abs(deltaX) > Math.abs(deltaY) * 1.18 ? 'horizontal' : 'vertical';
 
-  if (Math.abs(deltaX) > 4) {
-    hasDragged = true;
-    shouldCancelClick = true;
+    if (pointerAxis === 'horizontal') {
+      capturePointer(event);
+    }
   }
 
-  if (!hasDragged) return;
+  if (pointerAxis === 'vertical') {
+    return;
+  }
+
+  if (pointerAxis !== 'horizontal') {
+    return;
+  }
 
   event.preventDefault();
-  element.scrollLeft = dragStartScrollLeft - deltaX;
+  isDragging.value = true;
+  shouldCancelClick = Math.abs(deltaX) > 6;
+  dragOffset.value = clamp(deltaX, -getDragLimit(), getDragLimit());
 };
 
-const finishPointerDrag = (event) => {
-  const element = rail.value;
+const finishPointerGesture = (event) => {
+  if (!pointerIsDown || event.pointerId !== pointerId) return;
 
-  if (isPointerDragging && element) {
-    element.classList.remove('project-showcase__rail--dragging');
-    element.releasePointerCapture?.(event.pointerId);
-    isPointerDragging = false;
-    snapToClosestProject('smooth');
+  const distance = dragOffset.value;
+  const threshold = Math.min(Math.max(window.innerWidth * 0.08, 34), 84);
+
+  releasePointer(event);
+
+  if (pointerAxis === 'horizontal' && Math.abs(distance) >= threshold) {
+    moveByDirection(distance < 0 ? 1 : -1);
   }
 
+  resetPointerState();
   resumeAutoplaySoon();
 };
 
 const handlePointerUp = (event) => {
-  finishPointerDrag(event);
+  finishPointerGesture(event);
+};
+
+const handlePointerLeave = (event) => {
+  if (event.pointerType === 'mouse') {
+    finishPointerGesture(event);
+  }
 };
 
 const handlePointerCancel = (event) => {
-  finishPointerDrag(event);
+  if (event.pointerId !== pointerId) return;
+
+  releasePointer(event);
+  resetPointerState();
+  resumeAutoplaySoon();
 };
 
 const handleClickCapture = (event) => {
@@ -377,19 +332,23 @@ const handleClickCapture = (event) => {
   shouldCancelClick = false;
 };
 
-const syncRailAfterResize = () => {
-  const element = rail.value;
-  if (!element) return;
+const handleWheel = (event) => {
+  const horizontalDelta = Math.abs(event.deltaX) > Math.abs(event.deltaY);
+  if (!horizontalDelta) return;
 
-  const width = Math.round(element.clientWidth);
+  event.preventDefault();
+  pauseAutoplay();
 
-  if (!width || width === lastRailWidth) {
-    updateProjectStyles(activeIndex.value);
-    return;
+  if (!wheelLocked) {
+    moveByDirection(event.deltaX > 0 ? 1 : -1);
+    wheelLocked = true;
+    clearTimeout(wheelUnlockTimer);
+    wheelUnlockTimer = window.setTimeout(() => {
+      wheelLocked = false;
+    }, 420);
   }
 
-  lastRailWidth = width;
-  scrollToProject(activeIndex.value, 'auto');
+  resumeAutoplaySoon();
 };
 
 const handleVisibilityChange = () => {
@@ -402,28 +361,9 @@ const handleVisibilityChange = () => {
 };
 
 onMounted(() => {
-  scrollToProject(0, 'auto');
-  syncRailAfterResize();
-
-  const cards = getCards();
-
-  if ('IntersectionObserver' in window) {
-    revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-
-        entry.target.classList.add('project-card--visible');
-        revealObserver?.unobserve(entry.target);
-      });
-    }, {
-      rootMargin: '0px 0px -10% 0px',
-      threshold: 0.18,
-    });
-
-    cards.forEach((card) => revealObserver.observe(card));
-  } else {
-    cards.forEach((card) => card.classList.add('project-card--visible'));
-  }
+  window.requestAnimationFrame(() => {
+    isCarouselVisible.value = true;
+  });
 
   if ('IntersectionObserver' in window && showcase.value) {
     visibilityObserver = new IntersectionObserver(([entry]) => {
@@ -434,36 +374,22 @@ onMounted(() => {
       } else {
         clearTimeout(autoplayTimer);
       }
-    }, { threshold: 0.2 });
+    }, { threshold: 0.18 });
 
     visibilityObserver.observe(showcase.value);
   } else {
     scheduleAutoplay(900);
   }
 
-  if ('ResizeObserver' in window && rail.value) {
-    railResizeObserver = new ResizeObserver(syncRailAfterResize);
-    railResizeObserver.observe(rail.value);
-  }
-
-  rail.value?.addEventListener('scrollend', handleRailScrollEnd, { passive: true });
   document.addEventListener('visibilitychange', handleVisibilityChange);
 });
 
 onBeforeUnmount(() => {
   visibilityObserver?.disconnect();
-  revealObserver?.disconnect();
-  railResizeObserver?.disconnect();
-  rail.value?.removeEventListener('scrollend', handleRailScrollEnd);
   document.removeEventListener('visibilitychange', handleVisibilityChange);
   clearTimeout(autoplayTimer);
   clearTimeout(resumeId);
-  clearTimeout(snapTimer);
-  clearTimeout(snapReleaseTimer);
-
-  if (scrollFrame) {
-    cancelAnimationFrame(scrollFrame);
-  }
+  clearTimeout(wheelUnlockTimer);
 });
 </script>
 
@@ -473,8 +399,9 @@ onBeforeUnmount(() => {
 }
 
 .project-showcase {
-  --project-card-gap: clamp(1.4rem, 3vw, 2rem);
-  --project-card-width: clamp(18rem, 42vw, 25rem);
+  --project-card-height: clamp(19rem, 44svh, 26rem);
+  --project-card-width: clamp(14rem, 30vw, 18.5rem);
+  --project-side-offset: clamp(13rem, 34vw, 19.5rem);
   background:
     radial-gradient(circle at 16% 18%, rgba(214, 147, 147, 0.2), rgba(214, 147, 147, 0) 30%),
     linear-gradient(180deg, #000 0%, #080606 54%, #000 100%);
@@ -509,73 +436,59 @@ onBeforeUnmount(() => {
 }
 
 .project-showcase__carousel {
+  cursor: grab;
+  height: calc(var(--project-card-height) + 2.5rem);
   margin: 0 auto;
   max-width: min(58rem, 100vw);
   overflow: clip;
-  perspective: 1050px;
+  perspective: 1080px;
   perspective-origin: center center;
   position: relative;
+  touch-action: pan-y;
   width: 100%;
 }
 
-.project-showcase__rail {
-  cursor: grab;
-  display: flex;
-  gap: var(--project-card-gap);
-  overflow-x: auto;
-  overflow-y: hidden;
-  overscroll-behavior-inline: contain;
-  padding: clamp(0.8rem, 2vw, 1.4rem) max(1.25rem, calc((100% - var(--project-card-width)) / 2));
-  scroll-behavior: smooth;
-  scroll-padding-inline: max(1.25rem, calc((100% - var(--project-card-width)) / 2));
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-  touch-action: pan-x pan-y;
-  transform-style: preserve-3d;
-  -webkit-overflow-scrolling: touch;
-}
-
-.project-showcase__rail--dragging {
+.project-showcase__carousel--dragging {
   cursor: grabbing;
-  scroll-behavior: auto;
-  scroll-snap-type: none;
   user-select: none;
 }
 
-.project-showcase__rail::-webkit-scrollbar {
-  display: none;
+.project-showcase__carousel--dragging .project-card {
+  transition: none;
+}
+
+.project-showcase__stage {
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  width: 100%;
 }
 
 .project-card {
-  --project-entry-x: 0rem;
-  --project-entry-y: 1rem;
   --project-mask-image: linear-gradient(#000, #000);
-  --project-rotate-y: 0deg;
-  --project-scale: 0.94;
-  --project-visual-opacity: 0.78;
-  --project-z: -24px;
-  aspect-ratio: 4 / 5;
   border: 1px solid rgba(255, 218, 218, 0.14);
   border-radius: 8px;
   box-shadow: 0 1.6rem 4rem rgba(0, 0, 0, 0.42);
   display: block;
-  flex: 0 0 var(--project-card-width);
-  max-height: clamp(24rem, 62svh, 35rem);
-  min-height: clamp(18rem, 40vw, 23rem);
-  overflow: hidden;
-  position: relative;
-  scroll-snap-align: center;
-  scroll-snap-stop: always;
+  height: var(--project-card-height);
+  left: 50%;
+  margin: 0;
   opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+  scale: 1;
+  top: 50%;
   transform:
-    translate3d(var(--project-entry-x), var(--project-entry-y), var(--project-z))
-    rotateY(var(--project-rotate-y))
-    scale(var(--project-scale));
+    translate3d(calc(-50% + var(--project-drag-x, 0px)), -50%, -110px)
+    rotateY(0deg)
+    scale(0.82);
   transform-origin: center center;
   transition:
     border-color 260ms ease,
-    opacity 680ms ease,
-    transform 780ms cubic-bezier(0.22, 1, 0.36, 1);
+    opacity 520ms ease,
+    transform 640ms cubic-bezier(0.22, 1, 0.36, 1);
+  width: var(--project-card-width);
   will-change: opacity, transform;
   -webkit-mask-image: var(--project-mask-image);
   mask-image: var(--project-mask-image);
@@ -585,36 +498,50 @@ onBeforeUnmount(() => {
   mask-size: 100% 100%;
 }
 
-.project-card--from-left {
-  --project-entry-x: -4rem;
-}
-
-.project-card--from-right {
-  --project-entry-x: 4rem;
-}
-
-.project-card--visible {
-  --project-entry-x: 0rem;
-  --project-entry-y: 0rem;
-  opacity: var(--project-visual-opacity, 0.78);
-}
-
-.project-card--active,
-.project-card:focus-visible {
+.project-card--visible.project-card--active {
+  --project-mask-image: linear-gradient(#000, #000);
   border-color: rgba(255, 218, 218, 0.44);
   opacity: 1;
+  pointer-events: auto;
+  transform:
+    translate3d(calc(-50% + var(--project-drag-x, 0px)), -50%, 54px)
+    rotateY(0deg)
+    scale(1);
+  z-index: 4;
 }
 
-.project-card--is-left {
-  --project-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.28) 17%, #000 45%, #000 100%);
+.project-card--visible.project-card--left {
+  --project-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.22) 15%, #000 44%, #000 100%);
+  opacity: 0.82;
+  pointer-events: auto;
+  transform:
+    translate3d(calc(-50% - var(--project-side-offset) + var(--project-drag-x, 0px)), -50%, -58px)
+    rotateY(14deg)
+    scale(0.91);
+  z-index: 2;
 }
 
-.project-card--is-right {
-  --project-mask-image: linear-gradient(90deg, #000 0%, #000 55%, rgba(0, 0, 0, 0.28) 83%, transparent 100%);
+.project-card--visible.project-card--right {
+  --project-mask-image: linear-gradient(90deg, #000 0%, #000 56%, rgba(0, 0, 0, 0.22) 85%, transparent 100%);
+  opacity: 0.82;
+  pointer-events: auto;
+  transform:
+    translate3d(calc(-50% + var(--project-side-offset) + var(--project-drag-x, 0px)), -50%, -58px)
+    rotateY(-14deg)
+    scale(0.91);
+  z-index: 2;
 }
 
-.project-card--is-center {
-  --project-mask-image: linear-gradient(#000, #000);
+.project-card--hidden {
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.project-card:focus-visible {
+  border-color: rgba(255, 218, 218, 0.72);
+  outline: 2px solid rgba(214, 147, 147, 0.62);
+  outline-offset: 0.35rem;
 }
 
 .project-card picture,
@@ -678,20 +605,23 @@ onBeforeUnmount(() => {
 
 @media (min-width: 640px) and (max-width: 1024px) {
   .project-showcase {
-    --project-card-gap: clamp(1.35rem, 3vw, 1.8rem);
-    --project-card-width: clamp(21rem, 46vw, 28rem);
+    --project-card-height: clamp(20rem, 46svh, 28rem);
+    --project-card-width: clamp(16rem, 40vw, 20rem);
+    --project-side-offset: clamp(13.5rem, 38vw, 20rem);
     padding: clamp(4rem, 9svh, 6rem) 0;
   }
 
   .project-showcase__carousel {
     max-width: 100vw;
+    perspective: 980px;
   }
 }
 
 @media (max-width: 639px) {
   .project-showcase {
-    --project-card-gap: 0.85rem;
-    --project-card-width: clamp(12.75rem, 54vw, 14.75rem);
+    --project-card-height: clamp(18rem, 50svh, 25rem);
+    --project-card-width: clamp(12.5rem, 56vw, 15.5rem);
+    --project-side-offset: clamp(10rem, 46vw, 14rem);
     padding: clamp(4rem, 9svh, 6rem) 0;
   }
 
@@ -700,32 +630,30 @@ onBeforeUnmount(() => {
   }
 
   .project-showcase__carousel {
+    height: calc(var(--project-card-height) + 1.75rem);
     max-width: 100vw;
-    perspective: 780px;
+    perspective: 760px;
   }
 
-  .project-showcase__rail {
-    padding-inline: max(1rem, calc((100% - var(--project-card-width)) / 2));
-    scroll-padding-inline: max(1rem, calc((100% - var(--project-card-width)) / 2));
-    scroll-snap-type: x mandatory;
+  .project-card--visible.project-card--left {
+    transform:
+      translate3d(calc(-50% - var(--project-side-offset) + var(--project-drag-x, 0px)), -50%, -44px)
+      rotateY(12deg)
+      scale(0.9);
   }
 
-  .project-card {
-    min-height: 18.5rem;
+  .project-card--visible.project-card--right {
+    transform:
+      translate3d(calc(-50% + var(--project-side-offset) + var(--project-drag-x, 0px)), -50%, -44px)
+      rotateY(-12deg)
+      scale(0.9);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .project-card,
-  .project-card--from-left,
-  .project-card--from-right,
-  .project-card--visible,
-  .project-card--active {
-    opacity: 1;
-    transform: none;
-    transition:
-      border-color 260ms ease,
-      transform 260ms ease;
+  .project-card img {
+    transition: none;
   }
 }
 </style>
