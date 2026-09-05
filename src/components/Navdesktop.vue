@@ -363,9 +363,9 @@ onUnmounted(() => {
     0.48rem;
 
   font-family:
-    'Roboto',
     myFont,
-    'Bebas Neue',
+    Helvetica,
+    Arial,
     sans-serif;
 
   font-size:

@@ -36,12 +36,12 @@ const defaultTeamMembers = [
     signature: imageAssets.firma,
   },
   {
-    id: 'ann-kathrin',
-    headingId: 'ann-kathrin-title',
+    id: 'ann-katrin',
+    headingId: 'ann-katrin-title',
     eyebrow: 'Client & Operations',
-    name: 'Ann-Kathrin Jahn',
+    name: 'Ann-Katrin Jahn',
     role: 'Client & Operations Manager',
-    copy: 'Ann-Kathrin begleitet Kunden, organisiert Abläufe und hält Projekte klar, verbindlich und nah an dem, was Unternehmen wirklich brauchen.',
+    copy: 'Ann-Katrin begleitet Kunden, organisiert Abläufe und hält Projekte klar, verbindlich und nah an dem, was Unternehmen wirklich brauchen.',
     photo: imageAssets.fotoJuan,
   },
 ];
@@ -148,7 +148,7 @@ const visionList = computed(() => (
   line-height: 1.55;
 }
 
-@media (max-width: 900px) {
+@media (min-width: 640px) and (max-width: 1024px) {
   .founder-profile__vision {
     grid-template-columns: 1fr;
     max-width: min(34rem, calc(100vw - 2rem));
@@ -158,6 +158,11 @@ const visionList = computed(() => (
 @media (max-width: 639px) {
   .founder-profile {
     padding: clamp(4rem, 8svh, 5rem) 1rem;
+  }
+
+  .founder-profile__vision {
+    grid-template-columns: 1fr;
+    max-width: min(34rem, calc(100vw - 2rem));
   }
 }
 </style>

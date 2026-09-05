@@ -231,7 +231,7 @@ const offers = [
   text-transform: uppercase;
 }
 
-@media (max-width: 1024px) {
+@media (min-width: 640px) and (max-width: 1024px) {
   .package-scroll {
     background: #000;
     min-height: auto;
@@ -268,13 +268,38 @@ const offers = [
 }
 
 @media (max-width: 639px) {
+  .package-scroll {
+    background: #000;
+    min-height: auto;
+    padding: clamp(4rem, 8svh, 6rem) clamp(1rem, 5vw, 2rem);
+  }
+
+  .package-scroll::after {
+    display: none;
+  }
+
+  .package-scroll__sticky {
+    max-width: min(46rem, calc(100vw - 2rem));
+    overflow: visible;
+    position: relative;
+  }
+
   .package-scroll__track {
+    display: grid;
     gap: clamp(0.85rem, 4vw, 1.15rem);
     grid-template-columns: 1fr;
+    padding: 0;
+    transform: none;
+    will-change: auto;
   }
 
   .package-card {
+    flex: none;
+    height: auto;
+    max-width: none;
     min-height: clamp(20rem, 58svh, 26rem);
+    padding: clamp(0.95rem, 2.4vw, 1.25rem);
+    width: 100%;
   }
 
   .package-card__price {

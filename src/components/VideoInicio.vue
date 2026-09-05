@@ -1,6 +1,7 @@
 <script setup>
 import heroPoster from '../assets/optimized/img/leute-tanzen-poster-640.webp';
-import heroVideo from '../assets/optimized/videos/leute-tanzen-540.mp4';
+import heroVideoDesktop from '../assets/optimized/videos/leute-tanzen-hq.mp4';
+import heroVideoMobile from '../assets/optimized/videos/leute-tanzen-540.mp4';
 </script>
 
 <template>
@@ -19,10 +20,18 @@ import heroVideo from '../assets/optimized/videos/leute-tanzen-540.mp4';
             playsinline
             webkit-playsinline
             preload="auto"
-            data-critical-media="true"
             :poster="heroPoster"
           >
-  <source :src="heroVideo" type="video/mp4" />
+  <source
+    :src="heroVideoMobile"
+    type="video/mp4"
+    media="(max-width: 639px)"
+  />
+  <source
+    :src="heroVideoDesktop"
+    type="video/mp4"
+    media="(min-width: 640px)"
+  />
   Tu navegador no soporta videos HTML5.
 </video>
           
@@ -102,10 +111,9 @@ import heroVideo from '../assets/optimized/videos/leute-tanzen-540.mp4';
   bottom: 0;
   background: linear-gradient(
     to bottom,
-    rgba(0, 0, 0, 0) 36%,
-    rgba(0, 0, 0, 0.28) 64%,
-    rgba(0, 0, 0, 0.75) 86%,
-    #000000 100%
+    rgba(0, 0, 0, 0) 48%,
+    rgba(0, 0, 0, 0.32) 74%,
+    rgba(0, 0, 0, 0.82) 100%
   );
   pointer-events: none;
 }
@@ -178,7 +186,7 @@ main video {
   filter: blur(0);
 }
 
-@media screen and (max-width: 1024px) {
+@media (min-width: 640px) and (max-width: 1024px) {
   
   .video-inicio-container{
     --intro-logo-band: clamp(8.5rem, 16dvh, 12rem);
@@ -215,26 +223,58 @@ main video {
     opacity: 1;
   }
 
-  
-}
-
-@media screen and (max-width: 639px) {
-  .video-inicio-container {
-    --intro-logo-band: clamp(9rem, 22dvh, 12rem);
-  }
-}
-
-
-@media (min-width: 1024px) {
   .gradient-overlay {
     background: linear-gradient(
       to bottom,
-      rgba(0, 0, 0, 0) 48%,
-      rgba(0, 0, 0, 0.32) 74%,
-      rgba(0, 0, 0, 0.82) 100%
+      rgba(0, 0, 0, 0) 36%,
+      rgba(0, 0, 0, 0.28) 64%,
+      rgba(0, 0, 0, 0.75) 86%,
+      #000000 100%
     );
   }
   
+}
+
+@media (max-width: 639px) {
+  .video-inicio-container {
+    --intro-logo-band: clamp(9rem, 22svh, 12rem);
+    min-height: calc(100svh + 6rem);
+    top: -3rem;
+  }
+
+  .banner-container {
+    background: linear-gradient(
+      to bottom,
+      var(--quaternary-color) 0 var(--intro-logo-band),
+      #000 var(--intro-logo-band) 100%
+    );
+    height: calc(100svh + 6rem);
+    min-height: calc(100svh + 6rem);
+  }
+
+  main {
+    width: 150%;
+    height: 50svh;
+    margin-top: calc(clamp(7rem, 10svh, 9rem) + 11px);
+    margin-left: -5rem;
+    rotate: -6deg;
+    scale: 1.1;
+  }
+
+  main video {
+    filter: none;
+    opacity: 1;
+  }
+
+  .gradient-overlay {
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 36%,
+      rgba(0, 0, 0, 0.28) 64%,
+      rgba(0, 0, 0, 0.75) 86%,
+      #000000 100%
+    );
+  }
 }
 
 
@@ -262,7 +302,16 @@ video {
 
 
 
-@media screen and (max-width: 1024px) {
+@media (min-width: 640px) and (max-width: 1024px) {
+  /* Remueve filtros en video */
+  .video-container {
+    filter: none !important;
+    animation: none !important;
+  }
+
+}
+
+@media (max-width: 639px) {
   /* Remueve filtros en video */
   .video-container {
     filter: none !important;

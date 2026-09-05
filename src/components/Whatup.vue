@@ -122,7 +122,7 @@ onMounted(() => {
   }
 }
 
-@media (max-width: 1024px) {
+@media (min-width: 640px) and (max-width: 1024px) {
   .greeting-container {
     top: -19rem;
   }

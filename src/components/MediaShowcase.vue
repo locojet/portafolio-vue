@@ -312,7 +312,27 @@ article p {
   padding: 0.5rem 1rem 1.2rem;
 }
 
-@media (max-width: 1024px) {
+@media (min-width: 640px) and (max-width: 1024px) {
+  .media-showcase {
+    padding: 6rem 1.2rem;
+  }
+
+  h2 {
+    font-size: 1.75rem;
+  }
+
+  .photo-grid,
+  .video-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .photo-section,
+  .video-section {
+    margin-top: 4rem;
+  }
+}
+
+@media (max-width: 639px) {
   .media-showcase {
     padding: 6rem 1.2rem;
   }

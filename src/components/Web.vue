@@ -189,6 +189,10 @@ export default {
   max-width: 500px;
 }
 
+.right {
+  transition-delay: 0.3s;
+}
+
 /* ==========================================
    ESTADO INICIAL DE LAS ANIMACIONES
 ========================================== */
@@ -236,7 +240,7 @@ button:hover {
    TABLET Y MÓVIL
 ========================================== */
 
-@media (max-width: 768px) {
+@media (min-width: 640px) and (max-width: 1024px) {
   .hero {
     height: 150vh;
   }
@@ -277,12 +281,12 @@ button:hover {
 }
 
 /* ==========================================
-   MÓVILES PEQUEÑOS
+   MÓVILES
 ========================================== */
 
-@media (max-width: 480px) {
+@media (max-width: 639px) {
   .hero {
-    height: 150vh;
+    height: 150svh;
   }
 
   .overlay {
@@ -293,13 +297,13 @@ button:hover {
 
     text-align: center;
 
-    gap: 1.5rem;
+    gap: clamp(1.5rem, 4vw, 2rem);
 
     /*
       El primer valor controla qué tan abajo
       comienza todo el contenido.
     */
-    padding: 6rem 1.2rem 2rem;
+    padding: clamp(5rem, 20vw, 6rem) 1.2rem 2rem;
   }
 
   .left,
@@ -309,12 +313,12 @@ button:hover {
   }
 
   h1 {
-    font-size: 1.6rem;
+    font-size: clamp(1.6rem, 5vw, 1.8rem);
     line-height: 1.2;
   }
 
   p {
-    font-size: 0.95rem;
+    font-size: clamp(0.95rem, 2.8vw, 1rem);
     line-height: 1.5;
   }
 
@@ -323,13 +327,4 @@ button:hover {
   }
 }
 
-/* ==========================================
-   DESKTOP
-========================================== */
-
-@media (min-width: 769px) {
-  .right {
-    transition-delay: 0.3s;
-  }
-}
 </style>

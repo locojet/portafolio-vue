@@ -6,12 +6,12 @@
           <source
             type="image/avif"
             :srcset="member.photo.avif"
-            sizes="(max-width: 639px) 54vw, (max-width: 900px) 48vw, 18vw"
+            sizes="(max-width: 639px) 54vw, (max-width: 1024px) 48vw, 18vw"
           />
           <source
             type="image/webp"
             :srcset="member.photo.webp"
-            sizes="(max-width: 639px) 54vw, (max-width: 900px) 48vw, 18vw"
+            sizes="(max-width: 639px) 54vw, (max-width: 1024px) 48vw, 18vw"
           />
           <img
             class="team-member-card__photo"
@@ -29,12 +29,12 @@
         <source
           type="image/avif"
           :srcset="member.signature.avif"
-          sizes="(max-width: 639px) 26vw, (max-width: 900px) 22vw, 10vw"
+          sizes="(max-width: 639px) 26vw, (max-width: 1024px) 22vw, 10vw"
         />
         <source
           type="image/webp"
           :srcset="member.signature.webp"
-          sizes="(max-width: 639px) 26vw, (max-width: 900px) 22vw, 10vw"
+          sizes="(max-width: 639px) 26vw, (max-width: 1024px) 22vw, 10vw"
         />
         <img
           class="team-member-card__signature"
@@ -180,7 +180,7 @@ defineProps({
   margin: 0;
 }
 
-@media (max-width: 900px) {
+@media (min-width: 640px) and (max-width: 1024px) {
   .team-member-card {
     grid-template-columns: 1fr;
     max-width: min(34rem, calc(100vw - 2rem));
@@ -204,11 +204,24 @@ defineProps({
 
 @media (max-width: 639px) {
   .team-member-card {
+    grid-template-columns: 1fr;
+    max-width: min(34rem, calc(100vw - 2rem));
     padding: clamp(1.2rem, 5vw, 1.6rem);
+  }
+
+  .team-member-card__portrait {
+    justify-content: flex-start;
+    max-width: 100%;
+    width: 100%;
   }
 
   .team-member-card__photo-frame {
     flex-basis: clamp(11rem, 54vw, 15rem);
+  }
+
+  .team-member-card__signature-wrap {
+    margin-bottom: clamp(0.8rem, 4vw, 1.5rem);
+    width: clamp(5.2rem, 22vw, 8rem);
   }
 
   .team-member-card__copy h2 {

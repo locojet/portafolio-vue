@@ -30,28 +30,7 @@ const runWithTimeout = (task, delay = 5500) => Promise.race([
 ]);
 
 const updateDesktopNavigationMode = () => {
-  const isWideDesktop = window.matchMedia('(min-width: 1025px)').matches;
-  const hasTouchScreen = navigator.maxTouchPoints > 0;
-
-  isDesktopNavigationEnabled.value = isWideDesktop && !hasTouchScreen;
-};
-
-const waitForWindowLoad = () => {
-  if (document.readyState === 'complete') {
-    return Promise.resolve();
-  }
-
-  return new Promise((resolve) => {
-    window.addEventListener('load', resolve, { once: true });
-  });
-};
-
-const waitForFonts = () => {
-  if (!document.fonts?.ready) {
-    return Promise.resolve();
-  }
-
-  return document.fonts.ready.catch(() => undefined);
+  isDesktopNavigationEnabled.value = window.innerWidth >= 640;
 };
 
 const prepareInlineAutoplayVideo = (video) => {
@@ -87,45 +66,12 @@ const waitForImage = (image) => {
   });
 };
 
-const waitForVideo = (video) => {
-  prepareInlineAutoplayVideo(video);
-
-  if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
-    return Promise.resolve();
-  }
-
-  return new Promise((resolve) => {
-    const finish = () => {
-      clearTimeout(timeout);
-      video.removeEventListener('loadeddata', finish);
-      video.removeEventListener('canplay', finish);
-      video.removeEventListener('error', finish);
-      video.removeEventListener('abort', finish);
-      resolve();
-    };
-    const timeout = setTimeout(finish, 9000);
-
-    mediaTimeouts.push(timeout);
-    video.addEventListener('loadeddata', finish, { once: true });
-    video.addEventListener('canplay', finish, { once: true });
-    video.addEventListener('error', finish, { once: true });
-    video.addEventListener('abort', finish, { once: true });
-    video.load();
-  });
-};
-
 const waitForMedia = () => {
   const images = [
     ...document.querySelectorAll('img[data-critical-media="true"]'),
   ];
-  const videos = [
-    ...document.querySelectorAll('video[data-critical-media="true"]'),
-  ];
 
-  return Promise.all([
-    ...images.map(waitForImage),
-    ...videos.map(waitForVideo),
-  ]);
+  return Promise.all(images.map(waitForImage));
 };
 
 const startAutoplayVideos = () => {
@@ -157,11 +103,7 @@ onMounted(async () => {
     window.addEventListener('pageshow', retryAutoplayWhenVisible);
 
     await nextTick();
-    await runWithTimeout(Promise.all([
-      waitForWindowLoad(),
-      waitForFonts(),
-      waitForMedia(),
-    ]));
+    await runWithTimeout(waitForMedia(), 1800);
   } catch {
     // If Safari delays media metadata or blocks a resource, keep the page visible.
   } finally {

@@ -275,7 +275,7 @@ const clampValue = (
 const getSectionOffset = (targetId) => {
 
   const isSmallViewport =
-    window.matchMedia('(max-width: 1024px)').matches;
+    window.innerWidth <= 1024;
 
 
   if (targetId === 'presence-services') {
@@ -553,7 +553,7 @@ onUnmounted(() => {
   --menu-blur-overscan:
     clamp(
       5rem,
-      11dvh,
+      11svh,
       8rem
     );
 

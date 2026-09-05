@@ -2,7 +2,11 @@
   <section ref="stickySection" id="presence" class="parent-element wraperr container-1">
     <!-- Sticky Video Element -->
     <div ref="stickyTrack" class="sticky-track">
-      <div ref="stickyVideo" class="sticky-child">
+      <div
+        ref="stickyVideo"
+        class="sticky-child"
+        :class="{ 'sticky-child--video-visible': isPresenceVideoVisible }"
+      >
         <video
           ref="video"
           autoplay
@@ -23,7 +27,7 @@
             v-if="isPresenceVideoLoaded"
             :src="timelineTablet"
             type="video/mp4"
-            media="(max-width: 1024px)"
+            media="(min-width: 640px) and (max-width: 1024px)"
           />
           <source
             v-if="isPresenceVideoLoaded"
@@ -108,7 +112,6 @@
 import timelinePoster from '../assets/optimized/img/timeline5-poster-640.webp';
 import timelineDesktop from '../assets/optimized/videos/timeline5-1080.mp4';
 import timelineMobile from '../assets/optimized/videos/timeline5-540.mp4';
-import timelineTablet from '../assets/optimized/videos/timeline5-720.mp4';
 
 export default {
   name: "StickyVideoWithContent",
@@ -123,31 +126,37 @@ export default {
       serviceStartTranslate: 0,
       serviceEndTranslate: 0,
       serviceTranslateDistance: 0,
+      stableViewportHeight: 0,
+      stableViewportWidth: 0,
       activeServiceIndex: 0,
       serviceHeadingHidden: false,
       isPresenceVideoLoaded: false,
+      isPresenceVideoVisible: false,
       timelineDesktop,
       timelineMobile,
       timelinePoster,
-      timelineTablet,
+      timelineTablet: timelineDesktop,
     };
   },
   mounted() {
+    this.refreshStableViewportMetrics(true);
     this.setupFadeObserver();
     this.setupStickyHeight();
     this.setupServiceScroll();
     this.setupPresenceVideoLoading();
+    window.addEventListener("resize", this.handleViewportResize);
+    window.addEventListener("orientationchange", this.handleViewportResize);
   },
   beforeUnmount() {
     this.fadeObserver?.disconnect();
     this.resizeObserver?.disconnect();
     this.serviceResizeObserver?.disconnect();
     this.videoLoadObserver?.disconnect();
-    window.removeEventListener("resize", this.scheduleStickyHeightUpdate);
     window.removeEventListener("load", this.scheduleStickyHeightUpdate);
     window.removeEventListener("scroll", this.scheduleServiceScrollPosition);
-    window.removeEventListener("resize", this.updateServiceMeasurements);
     window.removeEventListener("load", this.updateServiceMeasurements);
+    window.removeEventListener("resize", this.handleViewportResize);
+    window.removeEventListener("orientationchange", this.handleViewportResize);
 
     if (this.stickyHeightFrame) {
       cancelAnimationFrame(this.stickyHeightFrame);
@@ -159,10 +168,69 @@ export default {
 
   },
   methods: {
+    isMobileViewport() {
+      return window.innerWidth <= 639;
+    },
+    refreshStableViewportMetrics(force = false) {
+      const nextWidth =
+        window.innerWidth ||
+        document.documentElement.clientWidth ||
+        0;
+      const nextHeight =
+        window.innerHeight ||
+        document.documentElement.clientHeight ||
+        1;
+      const widthChanged =
+        Math.abs(nextWidth - this.stableViewportWidth) > 24;
+
+      if (
+        force ||
+        !this.stableViewportHeight ||
+        !this.isMobileViewport() ||
+        widthChanged
+      ) {
+        this.stableViewportWidth = nextWidth;
+        this.stableViewportHeight = nextHeight;
+      }
+    },
+    getViewportHeight() {
+      if (this.isMobileViewport()) {
+        return (
+          this.stableViewportHeight ||
+          document.documentElement.clientHeight ||
+          window.innerHeight ||
+          1
+        );
+      }
+
+      return (
+        window.innerHeight ||
+        document.documentElement.clientHeight ||
+        1
+      );
+    },
+    handleViewportResize() {
+      const nextWidth =
+        window.innerWidth ||
+        document.documentElement.clientWidth ||
+        0;
+      const widthChanged =
+        Math.abs(nextWidth - this.stableViewportWidth) > 24;
+
+      if (this.isMobileViewport() && !widthChanged) {
+        return;
+      }
+
+      this.refreshStableViewportMetrics(true);
+      this.scheduleStickyHeightUpdate();
+      this.updateServiceMeasurements();
+    },
     setupPresenceVideoLoading() {
-      const section = this.$refs.stickySection;
+      const trigger = this.$refs.webDeveloper;
 
       const loadVideo = () => {
+        this.isPresenceVideoVisible = true;
+
         if (this.isPresenceVideoLoaded) return;
 
         this.isPresenceVideoLoaded = true;
@@ -183,18 +251,18 @@ export default {
         });
       };
 
-      if ("IntersectionObserver" in window && section) {
+      if ("IntersectionObserver" in window && trigger) {
         this.videoLoadObserver = new IntersectionObserver(([entry]) => {
           if (!entry.isIntersecting) return;
 
           loadVideo();
           this.videoLoadObserver?.disconnect();
         }, {
-          rootMargin: "280px 0px",
-          threshold: 0.01,
+          rootMargin: "0px 0px -18% 0px",
+          threshold: 0.08,
         });
 
-        this.videoLoadObserver.observe(section);
+        this.videoLoadObserver.observe(trigger);
         return;
       }
 
@@ -243,7 +311,6 @@ export default {
         }
       });
 
-      window.addEventListener("resize", this.scheduleStickyHeightUpdate);
       window.addEventListener("load", this.scheduleStickyHeightUpdate, { once: true });
       document.fonts?.ready?.then(() => this.scheduleStickyHeightUpdate());
       this.scheduleStickyHeightUpdate();
@@ -276,7 +343,8 @@ export default {
         const rect = element.getBoundingClientRect();
         return Math.max(lowestPoint, rect.bottom + window.scrollY - sectionTop);
       }, 0);
-      const stickyHeight = stickyVideo.getBoundingClientRect().height || window.innerHeight;
+      const viewportHeight = this.getViewportHeight();
+      const stickyHeight = stickyVideo.getBoundingClientRect().height || viewportHeight;
       const lastCardTop = lastServiceCard
         ? lastServiceCard.getBoundingClientRect().top + window.scrollY - sectionTop
         : stickyHeight;
@@ -303,7 +371,6 @@ export default {
         this.serviceResizeObserver.observe(section);
 
         window.addEventListener("scroll", this.scheduleServiceScrollPosition, { passive: true });
-        window.addEventListener("resize", this.updateServiceMeasurements);
         window.addEventListener("load", this.updateServiceMeasurements, { once: true });
         document.fonts?.ready?.then(() => this.updateServiceMeasurements());
 
@@ -317,6 +384,7 @@ export default {
       if (!section || !track) return;
 
       const viewportWidth = section.clientWidth || window.innerWidth;
+      const viewportHeight = this.getViewportHeight();
       const services = track.querySelectorAll(".service-slide");
       const firstService = services[0];
       const lastService = services[services.length - 1];
@@ -333,7 +401,7 @@ export default {
 
       section.style.setProperty(
         "--services-scroll-height",
-        `${Math.ceil(window.innerHeight + this.serviceTranslateDistance)}px`
+        `${Math.ceil(viewportHeight + this.serviceTranslateDistance)}px`
       );
 
       this.scheduleServiceScrollPosition();
@@ -353,13 +421,14 @@ export default {
 
       if (!section || !track) return;
 
-      const scrollableDistance = Math.max(section.offsetHeight - window.innerHeight, 1);
+      const viewportHeight = this.getViewportHeight();
+      const scrollableDistance = Math.max(section.offsetHeight - viewportHeight, 1);
       const rect = section.getBoundingClientRect();
       const rawProgress = -rect.top / scrollableDistance;
       const progress = Math.min(Math.max(rawProgress, 0), 1);
       const currentTranslate = this.serviceStartTranslate
         + (this.serviceEndTranslate - this.serviceStartTranslate) * progress;
-      const diagonalDistance = Math.min(Math.max(window.innerHeight * 0.26, 96), 240);
+      const diagonalDistance = Math.min(Math.max(viewportHeight * 0.26, 96), 240);
       const currentDiagonal = (progress - 0.5) * diagonalDistance;
       const serviceCount = track.querySelectorAll(".service-slide").length;
 
@@ -370,7 +439,7 @@ export default {
         );
       }
 
-      this.serviceHeadingHidden = rect.top <= 0 && rect.bottom >= window.innerHeight;
+      this.serviceHeadingHidden = rect.top <= 0 && rect.bottom >= viewportHeight;
       track.style.setProperty("--services-scroll-x", `${currentTranslate}px`);
       track.style.setProperty("--services-scroll-y", `${currentDiagonal}px`);
       this.updateServiceMenuVisibility(track, currentTranslate);
@@ -378,9 +447,9 @@ export default {
     updateServiceMenuVisibility(track, currentTranslate) {
       const slides = [...track.querySelectorAll(".service-slide")];
       const desktopNav = document.querySelector(".desktop-nav.desktop-nav--visible");
-      const isDesktopViewport = window.matchMedia("(min-width: 1025px)").matches;
+      const usesPersistentNavigation = window.innerWidth >= 640;
 
-      if (!desktopNav || !isDesktopViewport) {
+      if (!desktopNav || !usesPersistentNavigation) {
         slides.forEach((slide) => {
           slide.style.removeProperty("--service-menu-opacity");
         });
@@ -573,6 +642,7 @@ export default {
 }
 
 .sticky-child {
+  opacity: 0;
   position: sticky;
   top: 0;
   height: 100vh;
@@ -581,6 +651,11 @@ export default {
   z-index: 0;
   aspect-ratio: 16 / 9;
   overflow: hidden;
+  transition: opacity 1.8s ease;
+}
+
+.sticky-child--video-visible {
+  opacity: 1;
 }
 
 .sticky-child video {
@@ -689,7 +764,8 @@ export default {
 .service-slide {
   align-items: center;
   display: flex;
-  flex: 0 0 var(--service-slide-width, 100vw);
+  --service-slide-width: 84vw;
+  flex: 0 0 var(--service-slide-width);
   flex-direction: column;
   justify-content: center;
   min-height: clamp(16rem, 42dvh, 24rem);
@@ -861,12 +937,6 @@ export default {
   max-width: 30rem;
 }
 
-@media screen and (min-width: 1025px) {
-  .service-slide {
-    --service-slide-width: 84vw;
-  }
-}
-
 .service-card {
   background-color: rgba(0, 0, 0, 0.7);
   padding: 20px;
@@ -892,7 +962,7 @@ export default {
 }
 
 /* Ajustes para pantallas pequeñas */
-@media (max-width: 1024px) {
+@media (min-width: 640px) and (max-width: 1024px) {
   .hello-container {
     --presence-intro-offset: clamp(38rem, 72dvh, 52rem);
   }
@@ -959,40 +1029,103 @@ export default {
 }
 
 @media (max-width: 639px) {
+  .hello-container {
+    --presence-intro-offset: clamp(38rem, 72svh, 52rem);
+    min-height: calc(var(--presence-intro-offset) + 200svh);
+  }
+
+  .state-panel {
+    min-height: 100svh;
+  }
+
+  .state-content {
+    gap: clamp(2rem, 5svh, 4rem);
+  }
+
+  .nicetomeetyou,
+  .nicetomeetyou1 {
+    font-size: clamp(0.76rem, 2vw, 0.92rem);
+  }
+
+  .sticky-child::before {
+    background: radial-gradient(circle, transparent, rgba(0, 0, 0, 1) 100%);
+    height: 110svh;
+  }
+
+  .sticky-track {
+    height: var(--presence-video-track-height, 100svh);
+  }
+
+  .sticky-track::before {
+    height: clamp(24rem, 58svh, 38rem);
+    top: clamp(-20rem, -30svh, -9rem);
+  }
+
+  .parent-element {
+    min-height: var(--presence-scroll-height, auto);
+    height: auto;
+    margin-top: -50rem;
+  }
+
+  .sticky-child {
+    height: 100svh;
+  }
+
+  .sticky-child video {
+    height: 100svh;
+  }
+
+  .sticky-child::after {
+    height: clamp(10rem, 28svh, 18rem);
+  }
+
+  .content-section {
+    min-height: var(--services-scroll-height, 100svh);
+    padding: 0;
+    top: 0;
+    margin-top: 0;
+    scroll-margin-top: clamp(9rem, 24svh, 14rem);
+  }
+
+  .services-sticky {
+    height: 100svh;
+  }
+
+  .text-container {
+    padding: clamp(5rem, 11svh, 7rem) 0 clamp(3rem, 6svh, 4rem);
+  }
+
   .services-heading {
     font-size: clamp(1rem, 5.4vw, 1.45rem);
     max-width: 88vw;
+    top: clamp(2rem, 5svh, 3.5rem);
+    width: auto;
+  }
+
+  .content-section--services-active .services-heading {
+    opacity: 0;
+    transform: translate(-50%, -7rem);
+  }
+
+  .services-track {
+    gap: 0;
+    padding: 0;
   }
 
   .service-slide {
     flex-basis: 100vw;
-    min-height: clamp(16rem, 50dvh, 22rem);
+    min-height: clamp(16rem, 50svh, 22rem);
     padding: 1.35rem;
   }
 
   .service-slide p {
     font-size: clamp(0.95rem, 4.2vw, 1.1rem);
   }
-}
 
-@media (min-width: 1024px) {
-  .content-section {
-    top: 0;
-  }
-
-  .inspiration-container {
-    position: relative;
-    display: flex;
-    justify-content: flex-end;
-  }
-
-  .inspiration {
-    margin-top: 0rem;
-    position: absolute;
-  }
-
-  .inspiration h2 {
-    right: 0;
+  .service-card {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0px;
   }
 }
 </style>

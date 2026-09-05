@@ -46,8 +46,30 @@ const title = ref(null);
 const copy = ref(null);
 
 let frameId = 0;
+let stableViewportHeight = 0;
+let stableViewportWidth = 0;
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+const isMobileViewport = () => window.innerWidth <= 639;
+
+const refreshStableViewportMetrics = () => {
+  stableViewportWidth =
+    window.innerWidth ||
+    document.documentElement.clientWidth ||
+    0;
+  stableViewportHeight =
+    window.innerHeight ||
+    document.documentElement.clientHeight ||
+    1;
+};
+
+const getViewportHeight = () => {
+  if (isMobileViewport()) {
+    return stableViewportHeight || window.innerHeight || 1;
+  }
+
+  return window.innerHeight || 1;
+};
 
 const setLayer = (element, x, y, scale) => {
   if (!element) return;
@@ -63,7 +85,7 @@ const updateScene = () => {
   if (!scene.value) return;
 
   const rect = scene.value.getBoundingClientRect();
-  const viewportHeight = window.innerHeight || 1;
+  const viewportHeight = getViewportHeight();
 
   if (rect.top > viewportHeight * 1.25 || rect.bottom < -viewportHeight * 0.25) {
     return;
@@ -92,10 +114,27 @@ const requestSceneUpdate = () => {
   frameId = requestAnimationFrame(updateScene);
 };
 
+const handleResize = () => {
+  const nextWidth =
+    window.innerWidth ||
+    document.documentElement.clientWidth ||
+    0;
+  const widthChanged =
+    Math.abs(nextWidth - stableViewportWidth) > 24;
+
+  if (isMobileViewport() && !widthChanged) {
+    return;
+  }
+
+  refreshStableViewportMetrics();
+  requestSceneUpdate();
+};
+
 onMounted(() => {
+  refreshStableViewportMetrics();
   requestSceneUpdate();
   window.addEventListener('scroll', requestSceneUpdate, { passive: true });
-  window.addEventListener('resize', requestSceneUpdate);
+  window.addEventListener('resize', handleResize);
 
   [
     cloudOne.value?.querySelector('img'),
@@ -108,7 +147,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   window.removeEventListener('scroll', requestSceneUpdate);
-  window.removeEventListener('resize', requestSceneUpdate);
+  window.removeEventListener('resize', handleResize);
 
   if (frameId) {
     cancelAnimationFrame(frameId);
@@ -256,7 +295,7 @@ onBeforeUnmount(() => {
   margin: 0;
 }
 
-@media (max-width: 1024px) {
+@media (min-width: 640px) and (max-width: 1024px) {
   .cloud-scene {
     min-height: clamp(44rem, 104svh, 58rem);
     padding: clamp(4.5rem, 10svh, 7rem) clamp(1.1rem, 5vw, 2.5rem) clamp(4rem, 9svh, 6rem);

@@ -529,10 +529,10 @@ onUnmounted(() => {
 .contact-action-option {
   background:
     rgba(
-      16,
-      10,
-      11,
-      .78
+      214,
+      147,
+      147,
+      .68
     );
 
   backdrop-filter:
@@ -602,7 +602,7 @@ onUnmounted(() => {
     rotate(-45deg);
 }
 
-@media (max-width: 768px) {
+@media (min-width: 640px) and (max-width: 1024px), (max-width: 639px) {
 
   .contact-action-shell {
     --mobile-menu-height: 4.15rem;
@@ -998,7 +998,13 @@ onUnmounted(() => {
 
   .contact-action-option {
     align-items: center;
-    background: transparent;
+    background:
+      rgba(
+        214,
+        147,
+        147,
+        .68
+      );
 
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
@@ -1128,7 +1134,13 @@ onUnmounted(() => {
 
   .contact-action-option--close {
     appearance: none;
-    background: transparent;
+    background:
+      rgba(
+        214,
+        147,
+        147,
+        .68
+      );
 
     border:
       none !important;
@@ -1197,10 +1209,10 @@ onUnmounted(() => {
   .contact-action-option:focus-visible {
     background:
       rgba(
-        255,
-        255,
-        255,
-        .07
+        214,
+        147,
+        147,
+        .76
       );
 
     outline: none;
@@ -1209,55 +1221,11 @@ onUnmounted(() => {
   .contact-action-option:active {
     background:
       rgba(
-        255,
-        255,
-        255,
-        .13
+        214,
+        147,
+        147,
+        .84
       );
-  }
-}
-
-@media (max-width: 390px) {
-
-  .contact-action-shell {
-    --mobile-menu-height: 3.9rem;
-
-    --mobile-menu-background-extra:
-      3.5rem;
-
-    --mobile-menu-background-fade:
-      2.7rem;
-  }
-
-  .contact-action-shell.floating-contact-action {
-    bottom: 4.5rem;
-    transform: none;
-  }
-
-  .contact-action-toggle {
-    min-width: 2.4rem;
-
-    padding:
-      .78rem
-      .38rem;
-  }
-
-  .contact-action-toggle__label {
-    font-size: 1.03rem;
-  }
-
-  .contact-action-icon {
-    height: 1.65rem;
-    width: 1.65rem;
-  }
-
-  .contact-action-option--impressum {
-    font-size: 1.16rem;
-  }
-
-  .contact-action-x {
-    height: 1rem;
-    width: 1rem;
   }
 }
 

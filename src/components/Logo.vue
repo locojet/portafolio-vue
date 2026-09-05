@@ -10,12 +10,12 @@
       <source
         type="image/avif"
         :srcset="logoAvifSrcset"
-        sizes="(max-width: 600px) 38vw, (max-width: 1024px) 16vw, 10vw"
+        sizes="(max-width: 639px) 38vw, (max-width: 1024px) 16vw, 10vw"
       />
       <source
         type="image/webp"
         :srcset="logoWebpSrcset"
-        sizes="(max-width: 600px) 38vw, (max-width: 1024px) 16vw, 10vw"
+        sizes="(max-width: 639px) 38vw, (max-width: 1024px) 16vw, 10vw"
       />
       <img
         :src="logoFallback"
@@ -40,12 +40,12 @@
       <source
         type="image/avif"
         :srcset="logoAvifSrcset"
-        sizes="(min-width: 1025px) 9vw, 1px"
+        sizes="9vw"
       />
       <source
         type="image/webp"
         :srcset="logoWebpSrcset"
-        sizes="(min-width: 1025px) 9vw, 1px"
+        sizes="9vw"
       />
       <img
         :src="logoFallback"
@@ -75,7 +75,7 @@ const isStickyLogoVisible = ref(false);
 let logoFrame = 0;
 
 const isDesktopViewport = () => (
-  window.matchMedia('(min-width: 1025px)').matches &&
+  window.innerWidth > 1024 &&
   window.matchMedia(
     '(hover: hover) and (pointer: fine)'
   ).matches
@@ -295,8 +295,7 @@ onUnmounted(() => {
    IPAD + MOBILE
 ========================= */
 
-@media screen and
-(max-width: 1024px) {
+@media (min-width: 640px) and (max-width: 1024px) {
 
   .brand-logo--main {
     position: fixed;
@@ -376,8 +375,18 @@ onUnmounted(() => {
    MÓVILES
 ========================= */
 
-@media screen and
-(max-width: 600px) {
+@media (max-width: 639px) {
+
+  .brand-logo--main {
+    position: fixed;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    z-index: 9999;
+  }
 
   .brand-logo--main {
     left:
@@ -394,37 +403,47 @@ onUnmounted(() => {
   }
 
   .brand-logo--main img {
+    --logo-scale: 0.9;
+
+    position: relative;
+
+    display: block;
+
+    left: 0;
     top: 0;
 
-    width:
-      clamp(
-        8.5rem,
-        36vw,
-        10.25rem
-      );
-
-    min-width: 0;
-    max-width: none;
-  }
-}
-
-
-/* =========================
-   MÓVILES PEQUEÑOS
-========================= */
-
-@media screen and
-(max-width: 400px) {
-
-  .brand-logo--main img {
-    top: 0;
+    right: auto;
 
     width:
       clamp(
         7.8rem,
         38vw,
-        9.6rem
+        10.25rem
       );
+
+    min-width: 0;
+    max-width: none;
+
+    opacity: 1;
+    visibility: visible;
+
+    pointer-events: auto;
+
+    transform:
+      scale(
+        var(--logo-scale)
+      );
+
+    transition:
+      transform
+      0.3s
+      ease-in-out;
+
+    z-index: 9999;
+  }
+
+  .brand-logo--sticky {
+    display: none;
   }
 }
 

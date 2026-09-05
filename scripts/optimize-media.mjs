@@ -34,7 +34,8 @@ const animatedImages = [
     src: 'src/assets/img/preload.gif',
     name: 'preload',
     width: 160,
-    quality: 68,
+    fps: 12,
+    quality: 48,
   },
 ];
 
@@ -43,7 +44,8 @@ const videoJobs = [
     src: 'src/assets/Videos/leute-tanzen.mp4',
     name: 'leute-tanzen',
     variants: [
-      { label: '540', height: 540, crf: 34, maxrate: '620k', bufsize: '1240k' },
+      { label: '540', height: 540, crf: 37, maxrate: '420k', bufsize: '840k' },
+      { label: 'hq', height: 540, crf: 24, maxrate: '2400k', bufsize: '4800k' },
     ],
     posterAt: '00:00:00.350',
   },
@@ -52,7 +54,6 @@ const videoJobs = [
     name: 'timeline5',
     variants: [
       { label: '540', height: 540, crf: 32, maxrate: '820k', bufsize: '1640k' },
-      { label: '720', height: 720, crf: 31, maxrate: '1300k', bufsize: '2600k' },
       { label: '1080', height: 1080, crf: 30, maxrate: '2100k', bufsize: '4200k' },
     ],
     posterAt: '00:00:00.350',
@@ -127,17 +128,18 @@ const optimizeAnimatedImages = async () => {
   for (const image of animatedImages) {
     const output = join(imageOutputDir, `${image.name}-${image.width}.webp`);
 
-    await sharp(image.src, {
-      animated: true,
-      limitInputPixels: false,
-      pages: -1,
-    })
-      .resize({ width: image.width, withoutEnlargement: true })
-      .webp({
-        effort: 5,
-        quality: image.quality,
-      })
-      .toFile(output);
+    await runFfmpeg([
+      '-y',
+      '-i', image.src,
+      '-vf', `fps=${image.fps},scale=${image.width}:-1:flags=lanczos`,
+      '-loop', '0',
+      '-an',
+      '-c:v', 'libwebp',
+      '-lossless', '0',
+      '-compression_level', '6',
+      '-q:v', String(image.quality),
+      output,
+    ]);
   }
 };
 
@@ -190,6 +192,7 @@ const optimizeVideos = async () => {
       '-ss', video.posterAt,
       '-i', video.src,
       '-frames:v', '1',
+      '-update', '1',
       '-vf', 'scale=640:-2',
       posterPng,
     ]);
