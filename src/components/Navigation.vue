@@ -988,11 +988,11 @@ onUnmounted(() => {
   transition:
 
     opacity
-      0.7s
+      160ms
       ease-in-out,
 
     clip-path
-      0.65s
+      160ms
       cubic-bezier(
         0.22,
         1,
@@ -1086,7 +1086,7 @@ onUnmounted(() => {
 
   transition:
     border-radius
-      0.45s
+      160ms
       ease-in-out;
 
 }
@@ -1202,11 +1202,11 @@ div.boton {
   transition:
 
     transform
-      0.4s
+      160ms
       ease-in-out,
 
     margin-bottom
-      0.4s
+      160ms
       ease-in-out;
 
 }
@@ -1258,7 +1258,7 @@ div.boton.active::before {
 
   animation:
     menu-x-in-before
-    0.40s
+    160ms
     ease-out
     both;
 
@@ -1273,7 +1273,7 @@ div.boton.active::after {
 
   animation:
     menu-x-in-after
-    0.40s
+    160ms
     ease-out
     both;
 
@@ -1423,7 +1423,7 @@ div.boton.active {
 
   transition:
     all
-    0.3s
+    160ms
     ease-in-out;
 
   opacity: 1;
@@ -1468,8 +1468,8 @@ div.boton.active {
   z-index: 1000;
 
   transition:
-    opacity 0.3s ease-in-out,
-    transform 0.3s ease-in-out;
+    opacity 160ms ease-in-out,
+    transform 160ms ease-in-out;
 }
 
 

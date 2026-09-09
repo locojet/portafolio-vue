@@ -600,7 +600,6 @@ onUnmounted(() => {
 
   .contact-action-shell {
     --mobile-menu-height: 4.15rem;
-    --mobile-menu-background-extra: 5rem;
     --mobile-menu-background-fade: 3rem;
 
     --kontakt-duration: 160ms;
@@ -771,11 +770,7 @@ onUnmounted(() => {
       env(safe-area-inset-bottom);
 
     height:
-      calc(
-        var(--mobile-menu-height)
-        +
-        var(--mobile-menu-background-extra)
-      );
+      var(--mobile-menu-height);
 
     background:
       rgba(
