@@ -777,12 +777,20 @@ onUnmounted(() => {
         var(--mobile-menu-background-extra)
       );
 
+    /*
+     * Esta capa es independiente del contenido que queda detrás.
+     * Permanece visible con Kontakt cerrado para que el borde superior
+     * nunca dependa de la sección activa.
+     */
     background:
-      rgba(
-        214,
-        147,
-        147,
-        .75
+      linear-gradient(
+        to bottom,
+        rgba(214, 147, 147, 0) 0%,
+        rgba(214, 147, 147, .08) 14%,
+        rgba(214, 147, 147, .2) 32%,
+        rgba(214, 147, 147, .48) 55%,
+        rgba(214, 147, 147, .72) 75%,
+        rgba(214, 147, 147, .84) 100%
       );
 
     backdrop-filter:
@@ -819,68 +827,11 @@ onUnmounted(() => {
         #000 100%
       );
 
-    clip-path:
-      inset(
-        0
-        0
-        0
-        100%
-      );
-
-    opacity: 0;
+    clip-path: inset(0);
+    opacity: 1;
     pointer-events: none;
 
-    transition:
-      clip-path
-      var(--menu-duration)
-      cubic-bezier(.22, 1, .36, 1),
-
-      opacity
-      20ms linear;
-
     z-index: 2090;
-  }
-
-  .contact-action-shell--opening-menu
-  .contact-action-menu-background,
-
-  .contact-action-shell--open
-  .contact-action-menu-background {
-    clip-path:
-      inset(
-        0
-        0
-        0
-        0
-      );
-
-    opacity: 1;
-  }
-
-  .contact-action-shell--closing-menu
-  .contact-action-menu-background {
-    clip-path:
-      inset(
-        0
-        0
-        0
-        100%
-      );
-
-    opacity: 1;
-  }
-
-  .contact-action-shell--closing-contact
-  .contact-action-menu-background {
-    clip-path:
-      inset(
-        0
-        0
-        0
-        100%
-      );
-
-    opacity: 0;
   }
 
   .contact-action-options,
