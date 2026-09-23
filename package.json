@@ -6,13 +6,15 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "postbuild": "node scripts/create-spa-fallback.mjs",
     "optimize:media": "node scripts/optimize-media.mjs",
     "preview": "vite preview",
     "deploy": "gh-pages -d dist",
     "update": "git add . && git commit -m 'Automatisiertes Update' && git push origin main && npm run build && npm run deploy"
   },
   "dependencies": {
-    "vue": "^3.5.13"
+    "vue": "^3.5.13",
+    "vue-router": "^4.6.4"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "5.2.1",

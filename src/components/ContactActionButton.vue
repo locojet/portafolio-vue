@@ -97,12 +97,12 @@
         </svg>
       </a>
 
-      <a
+      <RouterLink
         class="contact-action-option contact-action-option--impressum"
-        :href="impressumHref"
+        :to="impressumHref"
       >
         Impressum
-      </a>
+      </RouterLink>
 
       <button
         class="contact-action-option contact-action-option--close"
@@ -153,7 +153,7 @@ const props = defineProps({
 
   impressumHref: {
     type: String,
-    default: '#footer-contact',
+    default: '/impressum',
   },
 });
 

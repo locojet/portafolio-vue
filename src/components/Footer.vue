@@ -8,6 +8,7 @@
         <a href="#presence">Leistungen</a>
         <a href="#media">Foto & Video</a>
         <a href="#contact">Projekt besprechen</a>
+        <RouterLink to="/impressum">Impressum</RouterLink>
       </nav>
 
       <small>© 2026 Digitale Präsenz. Alle Rechte vorbehalten.</small>
