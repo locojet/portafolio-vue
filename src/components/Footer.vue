@@ -8,10 +8,15 @@
         <a href="#presence">Leistungen</a>
         <a href="#media">Foto & Video</a>
         <a href="#contact">Projekt besprechen</a>
-        <RouterLink to="/impressum">Impressum</RouterLink>
       </nav>
 
-      <small>© 2026 Digitale Präsenz. Alle Rechte vorbehalten.</small>
+      <small class="footer-legal">
+        <span>© 2026 Digital Kontext</span>
+        <span aria-hidden="true">·</span>
+        <RouterLink to="/impressum">Impressum</RouterLink>
+        <span aria-hidden="true">·</span>
+        <RouterLink to="/datenschutz">Datenschutz</RouterLink>
+      </small>
     </div>
   </footer>
 </template>
@@ -65,5 +70,25 @@ small {
 
 a:hover {
   color: var(--secondary-color);
+}
+
+.footer-legal {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  justify-content: center;
+}
+
+.footer-legal a {
+  color: inherit;
+  margin: 0;
+  scale: 1;
+}
+
+.footer-legal a:hover,
+.footer-legal a:focus-visible {
+  color: var(--secondary-color);
+  outline: none;
 }
 </style>

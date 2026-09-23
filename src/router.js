@@ -31,6 +31,16 @@ const router = createRouter({
         title: 'Impressum | Digital Kontext',
       },
     },
+    {
+      path: '/datenschutz',
+      name: 'datenschutz',
+      component: () => import(
+        './views/DatenschutzView.vue'
+      ),
+      meta: {
+        title: 'Datenschutz | Digital Kontext',
+      },
+    },
   ],
 
   scrollBehavior(to, from, savedPosition) {
