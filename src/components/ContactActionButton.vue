@@ -1108,7 +1108,9 @@ onUnmounted(() => {
   }
 
   .contact-action-option--icon {
+    align-items: center;
     flex: .9 1 0;
+    justify-content: center;
   }
 
   .contact-action-icon {
@@ -1117,18 +1119,18 @@ onUnmounted(() => {
 
     height:
       clamp(
-        1.75rem,
-        5.4vw,
-        2.15rem
+        2rem,
+        6vw,
+        2.4rem
       );
 
     pointer-events: none;
 
     width:
       clamp(
-        1.75rem,
-        5.4vw,
-        2.15rem
+        2rem,
+        6vw,
+        2.4rem
       );
   }
 
