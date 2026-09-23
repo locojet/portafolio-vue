@@ -934,9 +934,14 @@ onUnmounted(() => {
         100%
       );
 
-    display: flex;
-    flex-direction: row;
+    display: grid;
     gap: 0;
+    grid-template-columns:
+      .9fr
+      .9fr
+      .9fr
+      1.48fr
+      .56fr;
 
     height:
       var(--mobile-menu-height);
@@ -1028,17 +1033,20 @@ onUnmounted(() => {
 
     border: none;
     border-radius: 0;
+    box-sizing: border-box;
     box-shadow: none;
     color: #fff;
     cursor: pointer;
     display: flex;
-    flex: 1 1 0;
+    flex: none;
     height: 100%;
     justify-content: center;
     margin: 0;
     min-height: 0;
     min-width: 0;
     opacity: 0;
+    scale: 1;
+    width: 100%;
 
     padding:
       0
@@ -1109,8 +1117,11 @@ onUnmounted(() => {
 
   .contact-action-option--icon {
     align-items: center;
+    box-sizing: border-box;
     flex: .9 1 0;
     justify-content: center;
+    padding: 0;
+    position: relative;
   }
 
   .contact-action-icon {
@@ -1119,18 +1130,22 @@ onUnmounted(() => {
 
     height:
       clamp(
-        2rem,
-        6vw,
-        2.4rem
+        2.15rem,
+        6.5vw,
+        2.6rem
       );
 
+    left: 50%;
     pointer-events: none;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
 
     width:
       clamp(
-        2rem,
-        6vw,
-        2.4rem
+        2.15rem,
+        6.5vw,
+        2.6rem
       );
   }
 
