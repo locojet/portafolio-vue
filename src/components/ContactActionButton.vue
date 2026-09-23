@@ -1160,9 +1160,9 @@ onUnmounted(() => {
 
     font-size:
       clamp(
-        1.28rem,
-        4.5vw,
-        1.6rem
+        1.05rem,
+        3.8vw,
+        1.3rem
       );
 
     font-style: normal;
