@@ -80,6 +80,24 @@
       </a>
 
       <a
+        class="contact-action-option contact-action-option--icon"
+        :href="whatsappHref"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="WhatsApp öffnen"
+      >
+        <svg
+          class="contact-action-icon"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path
+            d="M12 2a9.8 9.8 0 0 0-8.47 14.72L2 22l5.44-1.5A9.8 9.8 0 1 0 12 2Zm0 17.8a8 8 0 0 1-4.08-1.12l-.29-.17-3.23.89.87-3.14-.19-.3A8 8 0 1 1 12 19.8Zm4.4-5.96c-.24-.12-1.43-.7-1.65-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.02-.38-1.94-1.2-.72-.64-1.2-1.43-1.34-1.67-.14-.24-.01-.37.1-.49.1-.1.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.3-.74-1.78-.2-.47-.4-.4-.54-.41h-.46c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2s.86 2.32.98 2.48c.12.16 1.69 2.58 4.09 3.62.57.25 1.02.4 1.37.51.58.18 1.1.16 1.51.1.46-.07 1.43-.58 1.63-1.14.2-.56.2-1.04.14-1.14-.06-.1-.22-.16-.46-.28Z"
+          />
+        </svg>
+      </a>
+
+      <a
         class="contact-action-option contact-action-option--impressum"
         :href="impressumHref"
       >
@@ -125,7 +143,12 @@ const props = defineProps({
 
   phone: {
     type: String,
-    default: '+49 000 00000000',
+    default: '+49 176 40137484',
+  },
+
+  whatsapp: {
+    type: String,
+    default: '',
   },
 
   impressumHref: {
@@ -151,6 +174,12 @@ const emailHref = computed(() => {
 
 const phoneHref = computed(() => {
   return `tel:${props.phone.replace(/[^\d+]/g, '')}`;
+});
+
+const whatsappHref = computed(() => {
+  const number = (props.whatsapp || props.phone).replace(/\D/g, '');
+
+  return `https://wa.me/${number}`;
 });
 
 const clearAnimationTimers = () => {
@@ -1034,23 +1063,28 @@ onUnmounted(() => {
   }
 
   .contact-action-shell--opening-menu
-  .contact-action-option:nth-child(4) {
+  .contact-action-option:nth-child(5) {
     transition-delay: 0ms;
   }
 
   .contact-action-shell--opening-menu
-  .contact-action-option:nth-child(3) {
+  .contact-action-option:nth-child(4) {
     transition-delay: 15ms;
   }
 
   .contact-action-shell--opening-menu
-  .contact-action-option:nth-child(2) {
+  .contact-action-option:nth-child(3) {
     transition-delay: 30ms;
   }
 
   .contact-action-shell--opening-menu
-  .contact-action-option:nth-child(1) {
+  .contact-action-option:nth-child(2) {
     transition-delay: 45ms;
+  }
+
+  .contact-action-shell--opening-menu
+  .contact-action-option:nth-child(1) {
+    transition-delay: 60ms;
   }
 
   .contact-action-shell--closing-menu

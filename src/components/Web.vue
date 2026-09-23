@@ -1,18 +1,10 @@
 <template>
   <div id="contact" class="hero">
-    <picture class="background-picture">
-      <source type="image/avif" :srcset="backgroundImage.avif" sizes="100vw" />
-      <source type="image/webp" :srcset="backgroundImage.webp" sizes="100vw" />
-      <img
-        class="background"
-        :src="backgroundImage.fallback"
-        alt="Fondo hero"
-        width="1536"
-        height="1024"
-        loading="lazy"
-        decoding="async"
-      />
-    </picture>
+    <img
+      class="background"
+      src="../assets/img/compuviejo.png"
+      alt="Fondo hero"
+    />
 
     <div class="overlay">
       <div class="left">
@@ -31,20 +23,14 @@
           modernen digitalen Auftritt.
         </p>
 
+        <button>Projekt besprechen</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { imageAssets } from '../assets/optimized/media';
-
 export default {
-  data() {
-    return {
-      backgroundImage: imageAssets.compuviejo,
-    };
-  },
   mounted() {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -52,10 +38,10 @@ export default {
           if (entry.isIntersecting) {
             const h1 = entry.target.querySelector("h1");
             const pElements = entry.target.querySelectorAll("p");
-            const contactAction = entry.target.querySelector(".contact-action-shell");
+            const button = entry.target.querySelector("button");
 
             // Reset de las animaciones
-            [h1, ...pElements, contactAction].forEach((el) => {
+            [h1, ...pElements, button].forEach((el) => {
               if (el) {
                 el.style.opacity = "0";
                 el.style.transform = "translateY(20px)";
@@ -95,14 +81,14 @@ export default {
               }
             }, 500);
 
-            // Botón de contacto
+            // Botón
             setTimeout(() => {
-              if (contactAction) {
-                contactAction.style.transition =
+              if (button) {
+                button.style.transition =
                   "opacity 0.8s ease-out, transform 0.8s ease-out";
 
-                contactAction.style.opacity = "1";
-                contactAction.style.transform = "translateY(0)";
+                button.style.opacity = "1";
+                button.style.transform = "translateY(0)";
               }
             }, 700);
 
@@ -112,9 +98,9 @@ export default {
 
             const h1 = entry.target.querySelector("h1");
             const pElements = entry.target.querySelectorAll("p");
-            const contactAction = entry.target.querySelector(".contact-action-shell");
+            const button = entry.target.querySelector("button");
 
-            [h1, ...pElements, contactAction].forEach((el) => {
+            [h1, ...pElements, button].forEach((el) => {
               if (el) {
                 el.style.opacity = "0";
                 el.style.transform = "translateY(20px)";
@@ -159,12 +145,6 @@ export default {
   filter: brightness(0.6);
 }
 
-.background-picture {
-  display: block;
-  inset: 0;
-  position: absolute;
-}
-
 .overlay {
   position: relative;
 
@@ -189,10 +169,6 @@ export default {
   max-width: 500px;
 }
 
-.right {
-  transition-delay: 0.3s;
-}
-
 /* ==========================================
    ESTADO INICIAL DE LAS ANIMACIONES
 ========================================== */
@@ -200,7 +176,7 @@ export default {
 .left h1,
 .left p,
 .right p,
-.right :deep(.contact-action-shell) {
+.right button {
   opacity: 0;
   transform: translateY(20px);
 }
@@ -240,7 +216,7 @@ button:hover {
    TABLET Y MÓVIL
 ========================================== */
 
-@media (min-width: 640px) and (max-width: 1024px) {
+@media (max-width: 768px) {
   .hero {
     height: 150vh;
   }
@@ -281,12 +257,12 @@ button:hover {
 }
 
 /* ==========================================
-   MÓVILES
+   MÓVILES PEQUEÑOS
 ========================================== */
 
-@media (max-width: 639px) {
+@media (max-width: 480px) {
   .hero {
-    height: 150svh;
+    height: 150vh;
   }
 
   .overlay {
@@ -297,13 +273,13 @@ button:hover {
 
     text-align: center;
 
-    gap: clamp(1.5rem, 4vw, 2rem);
+    gap: 1.5rem;
 
     /*
       El primer valor controla qué tan abajo
       comienza todo el contenido.
     */
-    padding: clamp(5rem, 20vw, 6rem) 1.2rem 2rem;
+    padding: 6rem 1.2rem 2rem;
   }
 
   .left,
@@ -313,12 +289,12 @@ button:hover {
   }
 
   h1 {
-    font-size: clamp(1.6rem, 5vw, 1.8rem);
+    font-size: 1.6rem;
     line-height: 1.2;
   }
 
   p {
-    font-size: clamp(0.95rem, 2.8vw, 1rem);
+    font-size: 0.95rem;
     line-height: 1.5;
   }
 
@@ -327,4 +303,13 @@ button:hover {
   }
 }
 
-</style>
+/* ==========================================
+   DESKTOP
+========================================== */
+
+@media (min-width: 769px) {
+  .right {
+    transition-delay: 0.3s;
+  }
+}
+</style>npm
