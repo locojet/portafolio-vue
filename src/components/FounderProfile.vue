@@ -35,15 +35,6 @@ const defaultTeamMembers = [
     photo: imageAssets.fotoJuan,
     signature: imageAssets.firma,
   },
-  {
-    id: 'ann-katrin',
-    headingId: 'ann-katrin-title',
-    eyebrow: 'Client & Operations',
-    name: 'Ann-Katrin Jahn',
-    role: 'Client & Operations Manager',
-    copy: 'Ann-Katrin begleitet Kunden, organisiert Abläufe und hält Projekte klar, verbindlich und nah an dem, was Unternehmen wirklich brauchen.',
-    photo: imageAssets.fotoJuan,
-  },
 ];
 
 const defaultVisionItems = [

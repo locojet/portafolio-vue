@@ -1,23 +1,28 @@
 <script setup>
 import { nextTick, onMounted, onUnmounted, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import Navigation from '../components/Navigation.vue';
 import Logo from '../components/Logo.vue';
 import Navdesktop from '../components/Navdesktop.vue';
 import VideoInicio from '../components/VideoInicio.vue';
 import Whatup from '../components/Whatup.vue';
 import Mevideo from '../components/Mevideo.vue';
-import PhotoScroll from '../components/PhotoScroll.vue';
 import Globos from '../components/Globos.vue';
 import Web from '../components/Web.vue';
 import MediaShowcase from '../components/MediaShowcase.vue';
 import ProjectShowcase from '../components/ProjectShowcase.vue';
 import FounderProfile from '../components/FounderProfile.vue';
+import PhotoScroll from '../components/PhotoScroll.vue';
 import ContactActionButton from '../components/ContactActionButton.vue';
+import PriceActionButton from '../components/PriceActionButton.vue';
 import Footer from '../components/Footer.vue';
 import loaderGif from '../assets/optimized/img/preload-160.webp';
 
 const isPageReady = ref(false);
 const isDesktopNavigationEnabled = ref(false);
+const contactAction = ref(null);
+const route = useRoute();
+const router = useRouter();
 const mediaTimeouts = [];
 const autoplayRetryTimeouts = [];
 
@@ -92,6 +97,58 @@ const retryAutoplayWhenVisible = () => {
   }
 };
 
+const openRequestedContact = async () => {
+  const requestedContact = route.query.contact;
+
+  if (!['open', 'footer'].includes(requestedContact)) {
+    return;
+  }
+
+  await nextTick();
+
+  if (requestedContact === 'footer') {
+    await router.replace({
+      name: 'home',
+      hash: '#footer-contact',
+    });
+
+    await nextTick();
+
+    await new Promise((resolve) => {
+      setTimeout(resolve, 420);
+    });
+
+    const target = document.getElementById('footer-contact');
+
+    if (target) {
+      const offset = Math.min(
+        Math.max(window.innerHeight * 0.12, 96),
+        150
+      );
+
+      window.scrollTo({
+        top: Math.max(
+          target.getBoundingClientRect().top + window.scrollY - offset,
+          0
+        ),
+        behavior: 'smooth',
+      });
+    }
+
+    return;
+  }
+
+  const toggle = contactAction.value?.$el?.querySelector(
+    '.contact-action-toggle'
+  );
+
+  if (toggle instanceof HTMLButtonElement) {
+    toggle.click();
+  }
+
+  await router.replace({ name: 'home' });
+};
+
 onMounted(async () => {
   document.documentElement.classList.add('page-loading');
   document.body.classList.add('page-loading');
@@ -113,6 +170,7 @@ onMounted(async () => {
     startAutoplayVideos();
     scheduleAutoplayRetry(250);
     scheduleAutoplayRetry(900);
+    await openRequestedContact();
   }
 });
 
@@ -140,17 +198,21 @@ onUnmounted(() => {
       <Logo />
       <Navdesktop :visible="isDesktopNavigationEnabled" />
       <Navigation />
-      <VideoInicio />
+      <VideoInicio id="start" />
       <Whatup />
       <Mevideo />
       <Globos />
       <MediaShowcase />
       <ProjectShowcase />
       <FounderProfile />
-      <PhotoScroll />
+      <PhotoScroll class="desktop-only-prices" />
       <Web />
       <Footer />
+      <PriceActionButton
+        class="floating-price-action"
+      />
       <ContactActionButton
+        ref="contactAction"
         class="floating-contact-action"
         label="Kontakt"
       />
@@ -189,8 +251,13 @@ onUnmounted(() => {
   pointer-events: auto;
 }
 
+.desktop-only-prices {
+  display: block;
+}
+
 .site-shell.desktop-nav-mode :deep(.navkorb),
 .site-shell.desktop-nav-mode :deep(.fondo),
+.site-shell.desktop-nav-mode :deep(.floating-price-action),
 .site-shell.desktop-nav-mode :deep(.floating-contact-action) {
   display: none;
 }
@@ -223,6 +290,18 @@ onUnmounted(() => {
 :global(html.page-loading),
 :global(body.page-loading) {
   overflow: hidden;
+}
+
+@media (min-width: 640px) and (max-width: 1024px) {
+  .desktop-only-prices {
+    display: none;
+  }
+}
+
+@media (max-width: 639px) {
+  .desktop-only-prices {
+    display: none;
+  }
 }
 
 html, body {

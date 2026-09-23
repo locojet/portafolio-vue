@@ -1,5 +1,10 @@
 <template>
-  <section class="package-scroll wraperr" aria-label="Pakete">
+  <section
+    :id="sectionId"
+    class="package-scroll wraperr"
+    :class="{ 'package-scroll--embedded': embedded }"
+    aria-label="Pakete"
+  >
     <div class="package-scroll__sticky">
       <div class="package-scroll__track">
         <article
@@ -24,6 +29,18 @@
           </div>
 
           <p class="package-card__footer">{{ offer.footer }}</p>
+
+          <RouterLink
+            v-if="showDetails"
+            class="package-card__details"
+            :to="{
+              name: 'preis-detail',
+              params: { slug: offer.slug }
+            }"
+          >
+            Mehr erfahren
+            <span aria-hidden="true">→</span>
+          </RouterLink>
         </article>
       </div>
     </div>
@@ -31,40 +48,22 @@
 </template>
 
 <script setup>
-const offers = [
-  {
-    number: '01',
-    name: 'Starter Präsenz',
-    tag: 'Web',
-    price: 'ab 690 EUR',
-    items: ['Onepage Website', 'Mobile Design', 'Kontaktbereich'],
-    footer: 'Schneller Einstieg',
+import { pricingOffers as offers } from '../data/pricing';
+
+defineProps({
+  embedded: {
+    type: Boolean,
+    default: false,
   },
-  {
-    number: '02',
-    name: 'Website + Foto',
-    tag: 'Foto',
-    price: 'ab 1.490 EUR',
-    items: ['Website-Konzept', 'Foto-Session', 'Bildauswahl'],
-    footer: 'Echte Bilder',
+  sectionId: {
+    type: String,
+    default: 'prices-summary',
   },
-  {
-    number: '03',
-    name: 'Video Präsenz',
-    tag: 'Film',
-    price: 'ab 1.290 EUR',
-    items: ['Imagefilm', 'Reels', 'Schnitt'],
-    footer: 'Mehr Wirkung',
+  showDetails: {
+    type: Boolean,
+    default: false,
   },
-  {
-    number: '04',
-    name: 'Komplettauftritt',
-    tag: 'Full',
-    price: 'ab 2.900 EUR',
-    items: ['Website', 'Foto + Film', 'Launch'],
-    footer: 'Alles aus einer Hand',
-  },
-];
+});
 </script>
 
 <style scoped>
@@ -80,6 +79,10 @@ const offers = [
   padding: clamp(3.25rem, 5vw, 5.5rem) clamp(1.2rem, 4vw, 3rem);
   position: relative;
   width: 100vw;
+}
+
+.package-scroll--embedded {
+  margin-left: calc(50% - 50vw);
 }
 
 .package-scroll::before {
@@ -229,6 +232,41 @@ const offers = [
   margin: auto 0 0;
   padding-top: 0.8rem;
   text-transform: uppercase;
+}
+
+.package-card__details {
+  align-items: center;
+  background: rgba(214, 147, 147, 0.16);
+  border: 1px solid rgba(214, 147, 147, 0.9);
+  border-radius: 5px;
+  color: #fff;
+  display: flex;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: clamp(0.86rem, 3.8vw, 1rem);
+  font-style: normal;
+  font-weight: 600;
+  justify-content: space-between;
+  margin-top: 1rem;
+  min-height: 3.25rem;
+  padding: 0.9rem 1rem;
+  text-decoration: none;
+  transition:
+    background 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.package-card__details span {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 1.3rem;
+}
+
+.package-card__details:hover,
+.package-card__details:focus-visible {
+  background: var(--quaternary-color);
+  color: #fff;
+  outline: none;
+  transform: translateY(-2px);
 }
 
 @media (min-width: 640px) and (max-width: 1024px) {

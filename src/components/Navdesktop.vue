@@ -7,13 +7,16 @@
     <a
       v-for="(item, index) in navItems"
       :key="item.target"
-      :class="{ active: activeItem === index }"
+      :class="{
+        active: activeItem === index,
+        'desktop-nav__start': item.desktopOnly
+      }"
       :href="`#${item.target}`"
       :aria-current="activeItem === index ? 'true' : undefined"
       @click="navigateToSection($event, item.target, index)"
     >
       <span class="desktop-nav__number">
-        {{ String(index + 1).padStart(2, '0') }}
+        {{ item.desktopOnly ? '00' : String(index).padStart(2, '0') }}
       </span>
 
       {{ item.label }}
@@ -39,6 +42,11 @@ const activeItem = ref(null);
 
 const navItems = [
   {
+    label: 'Start',
+    target: 'start',
+    desktopOnly: true
+  },
+  {
     label: 'Leistungen',
     target: 'presence-services'
   },
@@ -49,6 +57,10 @@ const navItems = [
   {
     label: 'About',
     target: 'about'
+  },
+  {
+    label: 'Preise',
+    target: 'prices-summary'
   },
   {
     label: 'Kontakt',
@@ -79,7 +91,15 @@ const getNavItemIndex = (targetId) => (
   navItems.findIndex((item) => item.target === targetId)
 );
 
+const isNavItemAvailable = (item) => (
+  !item.desktopOnly || window.innerWidth > 1024
+);
+
 const getSectionOffset = (targetId) => {
+  if (targetId === 'start') {
+    return 0;
+  }
+
   const desktopOffset =
     window.innerHeight * 0.12;
 
@@ -151,6 +171,10 @@ const getActiveItemFromViewport = () => {
   let bestMatch = null;
 
   navItems.forEach((item, index) => {
+    if (!isNavItemAvailable(item)) {
+      return;
+    }
+
     const section =
       document.getElementById(item.target);
 
@@ -190,6 +214,10 @@ const getActiveItemFromViewport = () => {
   let nextActive = null;
 
   navItems.forEach((item, index) => {
+    if (!isNavItemAvailable(item)) {
+      return;
+    }
+
     const section =
       document.getElementById(item.target);
 
@@ -232,7 +260,10 @@ const syncActiveItemFromHash = () => {
   const hashIndex =
     getNavItemIndex(hashTarget);
 
-  if (hashIndex >= 0) {
+  if (
+    hashIndex >= 0 &&
+    isNavItemAvailable(navItems[hashIndex])
+  ) {
     activeItem.value = hashIndex;
   }
 
@@ -661,6 +692,12 @@ a:focus-visible
       147,
       0.85
     );
+}
+
+@media (min-width: 640px) and (max-width: 1024px) {
+  .desktop-nav.desktop-nav--visible .desktop-nav__start {
+    display: none;
+  }
 }
 
 </style>

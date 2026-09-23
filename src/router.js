@@ -7,6 +7,9 @@ import HomeView from './views/HomeView.vue';
 const defaultTitle =
   'Digitale Präsenz | Web. Foto. Film.';
 
+const defaultDescription =
+  'Digitale Präsenz für Unternehmen: Webdesign, Webentwicklung, Fotografie, Film und Content aus einer Hand.';
+
 const router = createRouter({
   history: createWebHistory(
     import.meta.env.BASE_URL
@@ -19,6 +22,30 @@ const router = createRouter({
       component: HomeView,
       meta: {
         title: defaultTitle,
+      },
+    },
+    {
+      path: '/preise',
+      name: 'preise',
+      component: () => import(
+        './views/PreiseView.vue'
+      ),
+      meta: {
+        title: 'Preise | Digital Kontext',
+        description:
+          'Preise und Leistungen für Websites, Unternehmensfotografie, Imagefilm und digitale Komplettauftritte von Digital Kontext.',
+      },
+    },
+    {
+      path: '/preise/:slug',
+      name: 'preis-detail',
+      component: () => import(
+        './views/PreiseView.vue'
+      ),
+      meta: {
+        title: 'Paketdetails | Digital Kontext',
+        description:
+          'Leistungsumfang und transparente Preisdetails für digitale Projekte von Digital Kontext.',
       },
     },
     {
@@ -61,9 +88,36 @@ const router = createRouter({
   },
 });
 
+router.beforeEach((to, from) => {
+  const isPriceRoute = (route) => (
+    ['preise', 'preis-detail'].includes(route.name)
+  );
+
+  if (isPriceRoute(to) && from.name && !isPriceRoute(from)) {
+    to.meta.transition = 'preise-open';
+    return;
+  }
+
+  if (isPriceRoute(from) && !isPriceRoute(to)) {
+    to.meta.transition = 'preise-close';
+    return;
+  }
+
+  to.meta.transition = '';
+});
+
 router.afterEach((to) => {
   document.title =
     to.meta.title || defaultTitle;
+
+  const description = document.querySelector(
+    'meta[name="description"]'
+  );
+
+  description?.setAttribute(
+    'content',
+    to.meta.description || defaultDescription
+  );
 });
 
 export default router;
