@@ -232,6 +232,15 @@ const closeMenu = () => {
   }, CONTACT_RETURN_DELAY);
 };
 
+const closeImmediately = () => {
+  clearAnimationTimers();
+  phase.value = 'closed';
+};
+
+defineExpose({
+  closeImmediately,
+});
+
 const closeContactOptions = (event) => {
   if (
     phase.value === 'open' &&

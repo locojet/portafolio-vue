@@ -20,11 +20,13 @@ import loaderGif from '../assets/optimized/img/preload-160.webp';
 
 const isPageReady = ref(false);
 const isDesktopNavigationEnabled = ref(false);
+const areFloatingActionsVisible = ref(false);
 const contactAction = ref(null);
 const route = useRoute();
 const router = useRouter();
 const mediaTimeouts = [];
 const autoplayRetryTimeouts = [];
+let floatingActionsFrame = 0;
 
 const runWithTimeout = (task, delay = 5500) => Promise.race([
   task,
@@ -36,6 +38,30 @@ const runWithTimeout = (task, delay = 5500) => Promise.race([
 
 const updateDesktopNavigationMode = () => {
   isDesktopNavigationEnabled.value = window.innerWidth >= 640;
+};
+
+const updateFloatingActionsVisibility = () => {
+  const shouldShow = window.scrollY > 32;
+
+  if (
+    areFloatingActionsVisible.value &&
+    !shouldShow
+  ) {
+    contactAction.value?.closeImmediately?.();
+  }
+
+  areFloatingActionsVisible.value = shouldShow;
+};
+
+const scheduleFloatingActionsVisibility = () => {
+  if (floatingActionsFrame) {
+    return;
+  }
+
+  floatingActionsFrame = requestAnimationFrame(() => {
+    floatingActionsFrame = 0;
+    updateFloatingActionsVisibility();
+  });
 };
 
 const prepareInlineAutoplayVideo = (video) => {
@@ -155,8 +181,12 @@ onMounted(async () => {
 
   try {
     updateDesktopNavigationMode();
+    updateFloatingActionsVisibility();
     document.addEventListener('visibilitychange', retryAutoplayWhenVisible);
     window.addEventListener('resize', updateDesktopNavigationMode);
+    window.addEventListener('scroll', scheduleFloatingActionsVisibility, {
+      passive: true,
+    });
     window.addEventListener('pageshow', retryAutoplayWhenVisible);
 
     await nextTick();
@@ -179,7 +209,11 @@ onUnmounted(() => {
   autoplayRetryTimeouts.forEach((timeout) => clearTimeout(timeout));
   document.removeEventListener('visibilitychange', retryAutoplayWhenVisible);
   window.removeEventListener('resize', updateDesktopNavigationMode);
+  window.removeEventListener('scroll', scheduleFloatingActionsVisibility);
   window.removeEventListener('pageshow', retryAutoplayWhenVisible);
+  if (floatingActionsFrame) {
+    cancelAnimationFrame(floatingActionsFrame);
+  }
   document.documentElement.classList.remove('page-loading');
   document.body.classList.remove('page-loading');
 });
@@ -191,7 +225,8 @@ onUnmounted(() => {
       class="site-shell"
       :class="{
         ready: isPageReady,
-        'desktop-nav-mode': isDesktopNavigationEnabled
+        'desktop-nav-mode': isDesktopNavigationEnabled,
+        'floating-actions-visible': areFloatingActionsVisible
       }"
       :aria-hidden="!isPageReady"
     >
@@ -301,6 +336,24 @@ onUnmounted(() => {
 @media (max-width: 639px) {
   .desktop-only-prices {
     display: none;
+  }
+
+  .site-shell :deep(.floating-price-action),
+  .site-shell :deep(.floating-contact-action) {
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      opacity 280ms ease,
+      visibility 0s linear 280ms;
+    visibility: hidden;
+  }
+
+  .site-shell.floating-actions-visible :deep(.floating-price-action),
+  .site-shell.floating-actions-visible :deep(.floating-contact-action) {
+    opacity: 1;
+    pointer-events: auto;
+    transition-delay: 0s;
+    visibility: visible;
   }
 }
 

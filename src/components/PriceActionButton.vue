@@ -14,7 +14,7 @@
   appearance: none;
   background: transparent;
   border: 1px solid rgba(214, 147, 147, 0.9);
-  border-radius: 8px;
+  border-radius: 8px 0 0 8px;
   bottom: calc(5rem + 7.25rem);
   color: #fff;
   cursor: pointer;

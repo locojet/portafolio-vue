@@ -10,6 +10,47 @@ const defaultTitle =
 const defaultDescription =
   'Digitale Präsenz für Unternehmen: Webdesign, Webentwicklung, Fotografie, Film und Content aus einer Hand.';
 
+const scrollPositions = new Map();
+
+const getScrollPositionKey = (route) => {
+  if (route.name === 'preis-detail') {
+    return `preis-detail:${route.params.slug}`;
+  }
+
+  return String(route.name || route.path);
+};
+
+const restoreScrollPosition = (position, delay = 0) => (
+  new Promise((resolve) => {
+    const finish = () => {
+      document.documentElement.classList.add(
+        'route-scroll-restore'
+      );
+
+      requestAnimationFrame(() => {
+        resolve({
+          left: position.left || 0,
+          top: position.top || 0,
+          behavior: 'auto',
+        });
+
+        requestAnimationFrame(() => {
+          document.documentElement.classList.remove(
+            'route-scroll-restore'
+          );
+        });
+      });
+    };
+
+    if (delay > 0) {
+      setTimeout(finish, delay);
+      return;
+    }
+
+    finish();
+  })
+);
+
 const router = createRouter({
   history: createWebHistory(
     import.meta.env.BASE_URL
@@ -82,6 +123,21 @@ const router = createRouter({
       };
     }
 
+    const rememberedPosition = scrollPositions.get(
+      getScrollPositionKey(to)
+    );
+
+    if (rememberedPosition) {
+      const transitionDelay = to.meta.transition === 'preise-open'
+        ? 420
+        : 0;
+
+      return restoreScrollPosition(
+        rememberedPosition,
+        transitionDelay
+      );
+    }
+
     return {
       top: 0,
     };
@@ -89,6 +145,16 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from) => {
+  if (from.name) {
+    scrollPositions.set(
+      getScrollPositionKey(from),
+      {
+        left: window.scrollX,
+        top: window.scrollY,
+      }
+    );
+  }
+
   const isPriceRoute = (route) => (
     ['preise', 'preis-detail'].includes(route.name)
   );

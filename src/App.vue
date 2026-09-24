@@ -22,13 +22,16 @@
   z-index: 4000;
 }
 
-.preise-open-leave-active,
-.preise-close-enter-active {
+.preise-open-leave-active {
   inset: 0;
   overflow: hidden;
   position: fixed;
   width: 100%;
   z-index: 0;
+}
+
+html.route-scroll-restore {
+  scroll-behavior: auto !important;
 }
 
 .preise-open-enter-from,
